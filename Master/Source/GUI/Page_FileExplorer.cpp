@@ -1,6 +1,6 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
-#include "SdFat.h"
+#include "FileManage.h"
 #include "LuaScript.h"
 #include "Module.h"
 
@@ -93,23 +93,36 @@ static bool MboxThorw(const char *text)
 /*File open way*/
 static void OpenTextFile(const char * filename)
 {
+    if(TextEditorGetLocked())
+    {
+        MboxThorw("text editor is running");
+        return;
+    }
+    
+    char str[50];
     SdFile file;
-    if(file.open(filename, O_RDONLY))
+    if(file.open(filename, O_RDWR))
     {
         if(file.available() < TextGetSize())
         {
             TextClear();
             file.read(TextGetBuff(), TextGetSize());
+            
             LuaCodeSet(TextGetBuff());
-            page.PagePush(PAGE_LuaScript);
+            //page.PagePush(PAGE_LuaScript);
+            TextEditorSet(TextGetBuff(), file);
+            page.PagePush(PAGE_TextEditor);
         }
         else
         {
-            char str[50];
             sprintf(str, "file size too large!\n(%0.2fKB > buffer size(%0.2fKB))", (float)file.available() / 1024.0f, TextGetSize() / 1024.0f);
             MboxThorw(str);
         }
         file.close();
+    }
+    else
+    {
+        MboxThorw("file open faild");
     }
 }
 

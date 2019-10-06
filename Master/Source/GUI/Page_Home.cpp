@@ -10,7 +10,7 @@
 #include "IMG/ImgSubApps.c"
 #include "IMG/ImgFiles.c"
 #include "IMG/ImgInternet.c"
-#include "IMG/ImgMessage.c"
+#include "IMG/ImgEditor.c"
 #include "IMG/ImgPlay.c"
 #include "IMG/ImgUSB.c"
 
@@ -43,12 +43,12 @@ static AppTab_TypeDef AppTab_Grp[] =
 static APP_TypeDef APP_Grp[] =
 {
     {&ImgSettings, "Settings", TYPE_PageJump, PAGE_Settings},
-    {&ImgCode,     "Editor",   TYPE_PageJump, PAGE_LuaScript},
+    {&ImgCode,     "IDE",      TYPE_PageJump, PAGE_LuaScript},
     {&ImgGame,     "Game"},
     {&ImgSubApps,  "APPs",     TYPE_PageJump, PAGE_SubAPPs},
     {&ImgFiles,    "Files",    TYPE_PageJump, PAGE_FileExplorer},
     {&ImgInternet, "Internet"},
-    {&ImgMessage,  "Message",  TYPE_PageJump, PAGE_TextEditor},
+    {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
     {&ImgPlay,     "Player"},
     {&ImgUSB,      "USB"},
 };

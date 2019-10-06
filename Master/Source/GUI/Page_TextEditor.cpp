@@ -1,6 +1,7 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
 #include "Module.h"
+#include "FileManage.h"
 
 static lv_obj_t * topBar;
 static lv_obj_t * ta_input;
@@ -11,6 +12,26 @@ static lv_obj_t * labelFileName;
 static lv_obj_t * keyboard;
 static lv_obj_t * labelEditState;
 static bool IsEditting = false;
+
+static char *TextBufferAddr = 0;
+static SdFile TextFile;
+static char TextFileNameBuff[50];
+
+static bool IsEditingLocked = false;
+
+bool TextEditorGetLocked()
+{
+    return IsEditingLocked;
+}
+
+void TextEditorSet(char* text, SdFile file)
+{
+    if(IsEditingLocked)
+        return;
+    
+    TextBufferAddr = text;
+    TextFile = file;
+}
 
 static void KeyboardEvent_Handler(lv_obj_t * kb, lv_event_t event);
 
@@ -30,6 +51,7 @@ static void BtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
             }
             else
             {
+                IsEditingLocked = false;
                 page.PagePop();
             }
         }
@@ -50,6 +72,11 @@ static void BtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
         }
         else if(obj == btnSave)
         {
+            Preloader_Activate(true, appWindow);
+            strcpy(TextBufferAddr, lv_ta_get_text(ta_input));
+            TextFile.rewind();
+            TextFile.print(TextBufferAddr);
+            Preloader_Activate(false, NULL);
         }
     }
 }
@@ -134,13 +161,13 @@ static void KeyboardEvent_Handler(lv_obj_t * kb, lv_event_t event)
     }
 }
 
-static void Creat_TextArea()
+static void Creat_TextArea(const char* text)
 {
     /*text area*/
     ta_input = lv_ta_create(appWindow, NULL);
     lv_obj_set_size(ta_input, APP_WIN_WIDTH, APP_WIN_HEIGHT - lv_obj_get_height(topBar));
     lv_obj_align(ta_input, topBar, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-    lv_ta_set_text(ta_input, "");
+    lv_ta_set_text(ta_input, text ? text : "");
     lv_ta_set_text_sel(ta_input, true);
     lv_ta_set_cursor_type(ta_input, LV_CURSOR_HIDDEN);
 }
@@ -152,8 +179,29 @@ static void Creat_TextArea()
   */
 static void Setup()
 {
-    Creat_TopBar("test.txt");
-    Creat_TextArea();
+    if(TextFile.isOpen())
+    {
+        TextFile.getName(TextFileNameBuff, sizeof(TextFileNameBuff));
+    }
+    else
+    {
+        strcpy(TextFileNameBuff, "no text");
+    }
+    
+    if(!IsEditingLocked)
+    {
+        Creat_TopBar(TextFileNameBuff);
+        Creat_TextArea(TextBufferAddr);
+    }
+    else
+    {
+        lv_obj_set_hidden(topBar, false);
+        lv_obj_set_hidden(ta_input, false);
+        if(keyboard)
+        {
+            lv_obj_set_hidden(keyboard, false);
+        }
+    }
 }
 
 /**
@@ -163,9 +211,23 @@ static void Setup()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&topBar);
-    lv_obj_del_safe(&ta_input);
-    lv_obj_del_safe(&keyboard);
+    if(!IsEditingLocked)
+    {
+        lv_obj_del_safe(&topBar);
+        lv_obj_del_safe(&ta_input);
+        lv_obj_del_safe(&keyboard);
+        TextBufferAddr = 0;
+        TextFile.close();
+    }
+    else
+    {
+        lv_obj_set_hidden(topBar, true);
+        lv_obj_set_hidden(ta_input, true);
+        if(keyboard)
+        {
+            lv_obj_set_hidden(keyboard, true);
+        }
+    }
 }
 
 /**
@@ -191,8 +253,13 @@ static void Event(int event, void* param)
             }
             else
             {
+                IsEditingLocked = true;
                 page.PagePop();
             }
+        }
+        if(btn == btnHome)
+        {
+            IsEditingLocked = true;
         }
     }
 }

@@ -32,12 +32,6 @@ void PageCreat_LuaScript()
  **********************/
 
 static const char *luaCode = "";
-//"while 1 do\n"
-//"  motor(1,100)\n"
-//"  print(millis())\n"
-//"  delay(1000)\n"
-//"end"
-//;
 
 void LuaCodeSet(const char* code)
 {
@@ -69,7 +63,8 @@ static void luaoutput_creat(lv_obj_t * parent)
     /*text area*/
     ta_output = lv_ta_create(parent, NULL);
     lv_obj_set_size(ta_output, lv_page_get_scrl_width(parent), lv_obj_get_height(parent));
-    lv_ta_set_cursor_type(ta_output, LV_CURSOR_NONE);
+    lv_obj_set_event_cb(ta_output, TextAreaEvent_Handler);
+    lv_ta_set_cursor_type(ta_output, LV_CURSOR_NONE);   
     lv_ta_set_text(ta_output, "");
 }
 
@@ -80,7 +75,14 @@ static void TextAreaEvent_Handler(lv_obj_t * text_area, lv_event_t event)
 
     if(event == LV_EVENT_CLICKED)
     {
-        Keyboard_Activate(&keyboard, true, parent, ta_input, KeyboardEvent_Handler);
+        if(text_area == ta_input)
+        {
+            Keyboard_Activate(&keyboard, true, parent, ta_input, KeyboardEvent_Handler);
+        }
+        else if(text_area == ta_output)
+        {
+            lv_ta_set_text(ta_output, "");
+        }
     }
 }
 
