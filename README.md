@@ -1,2 +1,3 @@
-# XC-OS
-Open source graphics operating system for microcontroller
+## XC-OS
+> 面向单片机的小型开源操作系统
+
