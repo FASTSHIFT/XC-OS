@@ -1,0 +1,20 @@
+{
+  "name": "arduino-async-duplex",
+  "keywords": "stream, duplex, at, modem",
+  "description": "Easily and asynchronously interact with a serial device requiring call-and-response style commands.",
+  "homepage": "https://github.com/coddingtonbear/arduino-async-duplex",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/coddingtonbear/arduino-async-duplex.git"
+  },
+  "version": "1.1.0",
+  "authors": {
+    "name": "Adam Coddington",
+    "url": "https://coddingtonbear.net/"
+  },
+  "exclude": [
+    "test"
+  ],
+  "frameworks": "arduino",
+  "platforms": "*"
+}
