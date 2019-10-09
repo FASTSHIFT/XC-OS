@@ -15,8 +15,8 @@ typedef enum{
 typedef struct
 {
     /*手动*/
-    const void* img_dsc;//图片
-    const char *lable_text;     //标签文本
+    const void* img_dsc;        //图片
+    const char* lable_text;     //标签文本
     Func_Type type;             //跳转类型
     int param;                  //附带参数
     

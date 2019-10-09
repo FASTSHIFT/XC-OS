@@ -148,6 +148,8 @@ static void Creat_Buttons(lv_obj_t** btn, const char *text, lv_align_t align)
 
     lv_btn_set_ink_in_time(*btn, 200);
     lv_btn_set_ink_out_time(*btn, 200);
+    
+    lv_obj_set_protect(*btn, LV_PROTECT_PRESS_LOST);
 }
 
 static void Creat_NavigationBar()

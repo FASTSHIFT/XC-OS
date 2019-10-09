@@ -41,6 +41,7 @@ typedef enum
     PAGE_FileExplorer,
     PAGE_SubAPPs,
     PAGE_TextEditor,
+    PAGE_AppBgManager,
     PAGE_MAX
 } Page_Type;
 
@@ -54,6 +55,7 @@ void PageRegister_SetDisplay(uint8_t pageID);
 void PageRegister_FileExplorer(uint8_t pageID);
 void PageRegister_SubAPPs(uint8_t pageID);
 void PageRegister_TextEditor(uint8_t pageID);
+void PageRegister_AppBgManager(uint8_t pageID);
 
 /*Bar*/
 void Init_Bar();

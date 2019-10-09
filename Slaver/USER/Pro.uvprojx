@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,ARDUINO=111</Define>
               <Undefine></Undefine>
-              <IncludePath>..\USER;..\ArduinoAPI;..\Core;..\Core\STM32F0xx_StdPeriph_Driver\inc;..\Core\CMSIS\Device\ST\STM32F0xx\Include;..\Core\CMSIS\Include</IncludePath>
+              <IncludePath>..\USER;..\ArduinoAPI;..\Core;..\Core\STM32F0xx_StdPeriph_Driver\inc;..\Core\CMSIS\Device\ST\STM32F0xx\Include;..\Core\CMSIS\Include;.\Basic</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -482,12 +482,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>USER</GroupName>
+          <GroupName>Basic</GroupName>
           <Files>
             <File>
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\main.cpp</FilePath>
+              <FilePath>.\Basic\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Initialization.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Basic\Initialization.cpp</FilePath>
             </File>
           </Files>
         </Group>

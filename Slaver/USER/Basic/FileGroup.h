@@ -25,4 +25,7 @@
 #include "pwm.h"
 #include "timer.h"
 
+void Init_BaseClocks(bool internal);
+void Init_IWDG(uint8_t prescaler, uint16_t reload);
+
 #endif

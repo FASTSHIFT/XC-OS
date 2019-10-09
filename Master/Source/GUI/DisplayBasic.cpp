@@ -23,6 +23,7 @@ static void Init_Pages()
     PageRegister_FileExplorer(PAGE_FileExplorer);
     PageRegister_SubAPPs(PAGE_SubAPPs);
     PageRegister_TextEditor(PAGE_TextEditor);
+    PageRegister_AppBgManager(PAGE_AppBgManager);
     
     page.PagePush(PAGE_Home);
 }

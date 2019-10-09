@@ -60,6 +60,7 @@ void loop()
   */
 int main(void)
 {
+    Init_BaseClocks(true);
     Delay_Init();
     ADCx_Init(ADC1);
     setup();

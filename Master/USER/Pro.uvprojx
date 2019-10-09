@@ -671,6 +671,11 @@
               <FileType>8</FileType>
               <FilePath>..\Source\GUI\Page_TextEditor.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Page_AppBgManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\GUI\Page_AppBgManager.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
