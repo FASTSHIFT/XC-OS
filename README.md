@@ -1,5 +1,5 @@
 # XC-OS
-> 面向单片机的小型嵌入式图形操作系统
+> 面向MCU的小型嵌入式图形操作系统
 
 ## 内核
 > [FreeRTOS Kernel V10.2.0](https://www.freertos.org)
