@@ -307,14 +307,11 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t ImgSettings_map[] = {
 };
 
 const lv_img_dsc_t ImgSettings = {
-  /*.header.cf = LV_IMG_CF_TRUE_COLOR,
+  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
   .header.always_zero = 0,
   .header.reserved = 0,
-  .header.w = 128,
-  .header.h = 128,
-  .data_size = 16384 * LV_COLOR_SIZE / 8,
-  .data = ImgSettings_map,*/
-  {LV_IMG_CF_TRUE_COLOR_ALPHA, 0, 0, 72, 72},
-  5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  ImgSettings_map
+  .header.w = 72,
+  .header.h = 72,
+  .data_size = 5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data = ImgSettings_map,
 };

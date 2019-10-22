@@ -311,7 +311,11 @@ const LV_ATTRIBUTE_MEM_ALIGN LV_ATTRIBUTE_IMG_IMGSUBAPPS uint8_t ImgSubApps_map[
 };
 
 const lv_img_dsc_t ImgSubApps = {
-  {LV_IMG_CF_TRUE_COLOR_ALPHA, 0, 0, 72, 72},
-  5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  ImgSubApps_map
+  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+  .header.always_zero = 0,
+  .header.reserved = 0,
+  .header.w = 72,
+  .header.h = 72,
+  .data_size = 5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data = ImgSubApps_map,
 };

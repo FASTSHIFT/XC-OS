@@ -3,17 +3,6 @@
 #include "TasksManage.h"
 #include "APP_Type.h"
 
-/*图片文件*/
-#include "IMG/ImgSettings.c"
-#include "IMG/ImgCode.c"
-#include "IMG/ImgGame.c"
-#include "IMG/ImgSubApps.c"
-#include "IMG/ImgFiles.c"
-#include "IMG/ImgInternet.c"
-#include "IMG/ImgEditor.c"
-#include "IMG/ImgPlay.c"
-#include "IMG/ImgUSB.c"
-
 /*主菜单视图*/
 static lv_obj_t * tabviewHome;
 
@@ -40,6 +29,18 @@ static AppTab_TypeDef AppTab_Grp[] =
     {""}
 };
 
+/*图片文件*/
+LV_IMG_DECLARE(ImgSettings);
+LV_IMG_DECLARE(ImgCode);
+LV_IMG_DECLARE(ImgGame);
+LV_IMG_DECLARE(ImgSubApps);
+LV_IMG_DECLARE(ImgFiles);
+LV_IMG_DECLARE(ImgInternet);
+LV_IMG_DECLARE(ImgEditor);
+LV_IMG_DECLARE(ImgPlay);
+LV_IMG_DECLARE(ImgUSB);
+
+/*APP组*/
 static APP_TypeDef APP_Grp[] =
 {
     {&ImgSettings, "Settings", TYPE_PageJump, PAGE_Settings},

@@ -302,8 +302,12 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t ImgMessage_map[] = {
 #endif
 };
 
-const lv_img_dsc_t ImgMessage = {    
-  {LV_IMG_CF_TRUE_COLOR_ALPHA, 0, 0, 78, 71},
-  5538 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  ImgMessage_map
+const lv_img_dsc_t ImgMessage = {
+  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+  .header.always_zero = 0,
+  .header.reserved = 0,
+  .header.w = 78,
+  .header.h = 71,
+  .data_size = 5538 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data = ImgMessage_map,
 };

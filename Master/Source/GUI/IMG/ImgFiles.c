@@ -302,8 +302,12 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t ImgFiles_map[] = {
 #endif
 };
 
-const lv_img_dsc_t ImgFiles = {    
-  {LV_IMG_CF_TRUE_COLOR_ALPHA, 0, 0, 85, 71},
-  6035 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  ImgFiles_map
+const lv_img_dsc_t ImgFiles = {
+  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+  .header.always_zero = 0,
+  .header.reserved = 0,
+  .header.w = 85,
+  .header.h = 71,
+  .data_size = 6035 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data = ImgFiles_map,
 };

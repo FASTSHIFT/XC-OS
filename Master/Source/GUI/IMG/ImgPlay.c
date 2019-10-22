@@ -306,8 +306,12 @@ const LV_ATTRIBUTE_MEM_ALIGN uint8_t ImgPlay_map[] = {
 #endif
 };
 
-const lv_img_dsc_t ImgPlay = {    
-  {LV_IMG_CF_TRUE_COLOR_ALPHA, 0, 0, 72, 72},
-  5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
-  ImgPlay_map
+const lv_img_dsc_t ImgPlay = {
+  .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+  .header.always_zero = 0,
+  .header.reserved = 0,
+  .header.w = 72,
+  .header.h = 72,
+  .data_size = 5184 * LV_IMG_PX_SIZE_ALPHA_BYTE,
+  .data = ImgPlay_map,
 };

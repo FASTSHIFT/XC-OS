@@ -679,6 +679,66 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>GUI\IMG</GroupName>
+          <Files>
+            <File>
+              <FileName>ImgCode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgCode.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgEditor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgEditor.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgExplorer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgExplorer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgFiles.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgFiles.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgGame.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgGame.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgInternet.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgInternet.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgMessage.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgMessage.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgPlay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgPlay.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgSettings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgSettings.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgSubApps.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgSubApps.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgUSB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgUSB.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Module</GroupName>
           <Files>
             <File>
