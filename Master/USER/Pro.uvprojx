@@ -312,7 +312,7 @@
           <Cads>
             <interw>1</interw>
             <Optim>4</Optim>
-            <oTime>0</oTime>
+            <oTime>1</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
             <Strict>0</Strict>
@@ -643,8 +643,13 @@
             </File>
             <File>
               <FileName>Page_BattInfo.cpp</FileName>
-              <FileType>8</FileType>
+              <FileType>5</FileType>
               <FilePath>..\Source\GUI\Page_BattInfo.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_BattInfoOld.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\GUI\Page_BattInfoOld.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_Settings.cpp</FileName>
@@ -675,6 +680,11 @@
               <FileName>Page_AppBgManager.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Source\GUI\Page_AppBgManager.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_WavPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\GUI\Page_WavPlayer.cpp</FilePath>
             </File>
           </Files>
         </Group>

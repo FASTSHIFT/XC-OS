@@ -3,99 +3,68 @@
 #include "LuaScript.h"
 #include "Module.h"
 
+/*电池信息更新任务*/
 static void Task_BattUpdate(lv_task_t * task);
-static void Task_GaugeUpdate(lv_task_t * task);
+static lv_task_t * taskBattUpdate;
 
-static lv_obj_t * chart;
-static lv_chart_series_t * serCurrent;
-static lv_chart_series_t * serVoltage;
-
-static lv_obj_t * gaugeCurrent;
-static lv_obj_t * gaugeVoltage;
+/*电流、电压数值显示*/
 static lv_obj_t * labelCurrent;
 static lv_obj_t * labelVoltage;
 
+/*充放电状态显示*/
 static lv_obj_t * labelStatus;
+static lv_obj_t * ledStatus;
 
-static lv_task_t * task_1;
-static lv_task_t * task_2;
+/*电量显示*/
+static lv_obj_t * arcBattUsage;
+static lv_obj_t * labelBattUsage;
 
-static void Creat_Label(lv_obj_t * parent, lv_obj_t** label)
+static void Creat_Label(
+    lv_obj_t** label,
+    lv_obj_t * alignObj,
+    lv_align_t align,
+    lv_coord_t x,
+    lv_coord_t y
+)
 {
-    *label = lv_label_create(parent, NULL);
+    *label = lv_label_create(appWindow, NULL);
     lv_label_set_text(*label, "");
-    lv_obj_align(*label, parent, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
+    lv_obj_align(*label, alignObj, align, x, y);
     lv_obj_set_auto_realign(*label, true);
 }
 
-static void Creat_Gauge()
+void Creat_ArcBatt(lv_obj_t** arc, lv_obj_t * parent, int16_t val)
 {
-    /*Describe the color for the needles*/
-    static lv_color_t needle_colors[] = {LV_COLOR_BLUE};
+    /*Create style for the Arcs*/
+    static lv_style_t style;
+    lv_style_copy(&style, &lv_style_plain);
+    style.line.color = LV_COLOR_NAVY;           /*Arc color*/
+    style.line.width = 8;                       /*Arc width*/
 
-    /*Create a gauge*/
-    gaugeCurrent = lv_gauge_create(appWindow, NULL);
-    lv_gauge_set_needle_count(gaugeCurrent, __Sizeof(needle_colors), needle_colors);
-    lv_gauge_set_range(gaugeCurrent, 0, 30);
-    lv_gauge_set_critical_value(gaugeCurrent, 24);
-    lv_obj_set_size(gaugeCurrent, 150, 150);
-    lv_obj_align(gaugeCurrent, barNavigation, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+    /*Create an Arc*/
+    *arc = lv_arc_create(parent, NULL);
+    lv_arc_set_style(*arc, LV_ARC_STYLE_MAIN, &style);
+    lv_obj_align(*arc, NULL, LV_ALIGN_CENTER, 0, 0);
 
-    /*Create a gauge*/
-    gaugeVoltage = lv_gauge_create(appWindow, NULL);
-    lv_gauge_set_needle_count(gaugeVoltage, __Sizeof(needle_colors), needle_colors);
-    lv_gauge_set_critical_value(gaugeVoltage, 39);
-    lv_gauge_set_range(gaugeVoltage, 26, 42);
-    lv_obj_set_size(gaugeVoltage, 150, 150);
-    lv_obj_align(gaugeVoltage, barNavigation, LV_ALIGN_OUT_TOP_RIGHT, 0, 0);
+    if(val >= 359) val = 359;
+    if(val < 180) lv_arc_set_angles(*arc, 180 - val, 180);
+    else lv_arc_set_angles(*arc, 540 - val, 180);
 }
 
-void Creat_Chart(lv_obj_t** chart)
-{
-    /*Create a chart*/
-    *chart = lv_chart_create(appWindow, NULL);
-    lv_obj_set_size(*chart, 200, 150);
-    lv_obj_align(*chart, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
-    lv_chart_set_type(*chart, LV_CHART_TYPE_POINT | LV_CHART_TYPE_LINE);   /*Show lines and points too*/
-    lv_chart_set_series_opa(*chart, LV_OPA_70);                            /*Opacity of the data series*/
-    lv_chart_set_series_width(*chart, 2);                                  /*Line width and point radious*/
-
-    lv_chart_set_range(*chart, 0, 100);
-    lv_chart_set_point_count(*chart, 20);
-
-    /*Add two data series*/
-    serCurrent = lv_chart_add_series(*chart, LV_COLOR_RED);
-    serVoltage = lv_chart_add_series(*chart, LV_COLOR_BLUE);
-}
-
-static int cur, vol;
-
-static void Task_GaugeUpdate(lv_task_t * task)
-{
-    static float curf, volf;
-    __ValueCloseTo(curf, cur, 1);
-    __ValueCloseTo(volf, vol, 1);
-
-    lv_gauge_set_value(gaugeCurrent, 0, __Map(curf, 0, 100, 0, 30));
-    lv_gauge_set_value(gaugeVoltage, 0, __Map(volf, 0, 100, 26, 42));
-}
+static int batCur, batVol;
 
 static void Task_BattUpdate(lv_task_t * task)
 {
-    cur = __Map(ABS(BattCurret), 0, 3000, 0, 100);
-    vol = __Map(BattVoltage, 2600, 4200, 0, 100);
-    
-    lv_chart_set_next(chart, serCurrent, cur);
-    lv_chart_set_next(chart, serVoltage, vol);
+    batCur = __Map(ABS(BattCurret), 0, 3000, 0, 100);
+    batVol = __Map(BattVoltage, 2600, 4200, 0, 100);
 
-    lv_chart_refresh(chart); /*Required after direct set*/
-    
+
     lv_label_set_text_format(labelCurrent, "%0.2fmA", BattCurret);
 //    lv_obj_align(labelCurrent, gaugeCurrent, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
-    
+
     lv_label_set_text_format(labelVoltage, "%0.2fmV", BattVoltage);
 //    lv_obj_align(labelVoltage, gaugeVoltage, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
-    
+
     float power = BattCurret * BattVoltage / 1000000.0f;
     if(BattCurret < 0.0f)
     {
@@ -105,7 +74,6 @@ static void Task_BattUpdate(lv_task_t * task)
     {
         lv_label_set_text_format(labelStatus, "Charge: %0.2fW", power);
     }
-    lv_obj_set_parent(labelStatus, appWindow);
 }
 
 /**
@@ -115,17 +83,10 @@ static void Task_BattUpdate(lv_task_t * task)
   */
 static void Setup()
 {
-    Creat_Chart(&chart);
-    Creat_Label(chart, &labelStatus);
-    lv_obj_set_parent(labelStatus, appWindow);
-    lv_obj_align(labelStatus, chart, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-    
-    Creat_Gauge();
-    Creat_Label(gaugeCurrent, &labelCurrent);
-    Creat_Label(gaugeVoltage, &labelVoltage);
+    Creat_ArcBatt(&arcBattUsage, appWindow, map(BattVoltageOc, 2600, 4200, 0, 360));
+    Creat_Label(&labelStatus, arcBattUsage, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
 
-    task_1 = lv_task_create(Task_BattUpdate, 500, LV_TASK_PRIO_MID, 0);
-    task_2 = lv_task_create(Task_GaugeUpdate, 50, LV_TASK_PRIO_MID, 0);
+    taskBattUpdate = lv_task_create(Task_BattUpdate, 500, LV_TASK_PRIO_MID, 0);
 }
 
 /**
@@ -135,12 +96,8 @@ static void Setup()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&chart);
     lv_obj_del_safe(&labelStatus);
-    lv_obj_del_safe(&gaugeCurrent);
-    lv_obj_del_safe(&gaugeVoltage);
-    lv_task_del(task_1);
-    lv_task_del(task_2);
+    lv_task_del(taskBattUpdate);
 }
 
 /**

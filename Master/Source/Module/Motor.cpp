@@ -21,7 +21,7 @@ void Task_MotorRunning(TimerHandle_t xTimer)
 {
     __ExecuteOnce(Init_Motor());
     
-    if(IsMotorRunning && millis()>= MotorStop_TimePoint)
+    if(IsMotorRunning && millis() >= MotorStop_TimePoint)
     {
         analogWrite(Motor_Pin, 0);
         IsMotorRunning = false;

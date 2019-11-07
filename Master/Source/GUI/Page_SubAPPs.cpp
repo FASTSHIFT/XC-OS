@@ -60,7 +60,7 @@ static bool ExecuteLuaFile(const char* path)
     SdFile file;
     if(file.open(path, O_RDONLY))
     {
-        file.read(TextGetBuff(), TextGetSize());
+        file.read(TextBuf_GetBuff(), TextBuf_GetSize());
         file.close();
         ret = true;
     }
@@ -72,7 +72,7 @@ static void APP_Call(const char *path)
     if(ExecuteLuaFile(path))
     {
         luaScript.registerStrOutput(NULL);
-        LuaScriptStart(TextGetBuff());
+        LuaScriptStart(TextBuf_GetBuff());
     }
 }
 

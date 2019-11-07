@@ -2,6 +2,7 @@
 #define __MOUDLE_H
 
 #include "stdint.h"
+#include "Arduino.h"
 
 /*Motor*/
 void Motor_Vibrate(float strength, uint32_t time);
@@ -12,13 +13,17 @@ void Power_Shutdown();
 
 /*Audio*/
 void Audio_SetEnable(bool en);
-void Wav_BufferUpdate();
-void Init_WaveTest();
+void WavPlayer_SetEnable(bool en);
+void WavPlayer_SetVolume(uint8_t volume);
+uint8_t WavPlayer_GetVolume();
+void WavPlayer_SetPlaying(bool en);
+bool WavPlayer_GetPlaying();
+bool WavPlayer_LoadFile(String path);
 
 /*Text*/
-char * TextGetBuff(uint32_t start = 0);
-uint32_t TextGetSize();
-void TextClear(uint8_t n = 0);
+char *   TextBuf_GetBuff(uint32_t start = 0);
+uint32_t TextBuf_GetSize();
+void     TextBuf_Clear(uint8_t n = 0);
 
 /*Brightness*/
 uint16_t BrightnessGet();

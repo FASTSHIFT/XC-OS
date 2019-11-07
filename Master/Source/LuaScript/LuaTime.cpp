@@ -16,20 +16,8 @@ static int Lua_micros(lua_State *L)
 
 static int Lua_delay(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    unsigned long DelayTime;
-    if(nValue != 1)
-    {
-        lua_pushstring(L, "Error! Example: delay(1000) -> delay 1000ms");
-        lua_error(L);
-    }
-    if (!lua_isinteger(L, 1))
-    {
-        lua_pushstring(L, "Error! Use Integer to delay");
-        lua_error(L);
-    }
-    DelayTime = lua_tonumber(L, 1);
-    vTaskDelay(DelayTime);
+    int time = luaL_checkinteger(L, 1);
+    vTaskDelay(time);
     return 0;
 }
 

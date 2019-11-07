@@ -19,7 +19,7 @@ extern "C" {
 
 int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, ...)
 {
-    char buff[50];
+    char buff[150];
 
     va_list args;
     va_start(args, __format);

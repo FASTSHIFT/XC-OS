@@ -18,12 +18,11 @@ static lv_obj_t * contDropDown;
 #define IS_DropDownShow (lv_obj_get_y(contDropDown)+lv_obj_get_height(contDropDown)>= 0)
 static void DropDownList_AnimDown(bool down);
 
-bool Is_BattCharging = false;
+static bool Is_BattCharging = false;
 
 static void Task_UpdateStatusBar(lv_task_t * task)
 {
     /*电池电量显示*/
-    extern float BattVoltageOc, BattCurret; 
     Is_BattCharging = BattCurret > 0 ? true : false;
 
     const char * battSymbol[] =
@@ -54,14 +53,6 @@ static void Task_UpdateStatusBar(lv_task_t * task)
     lv_label_set_text_format(labelCPUusage, "%d%%", FreeRTOS_GetCPUUsage());
 }
 
-static void StatusBarEvent_Handler(lv_obj_t * obj, lv_event_t event)
-{
-    if(event == LV_EVENT_PRESSED)
-    {
-        lv_obj_set_y(contDropDown, -lv_obj_get_height(contDropDown) + lv_obj_get_height(obj) * 3);
-        lv_obj_set_top(contDropDown, true);
-    }
-}
 
 static void Creat_StatusBar()
 {
@@ -95,7 +86,6 @@ static void Creat_StatusBar()
     
     lv_cont_set_fit2(barStatus, LV_FIT_NONE, LV_FIT_TIGHT);   /*Let the height set automatically*/
     lv_obj_set_pos(barStatus, 0, 0);
-    lv_obj_set_event_cb(barStatus, StatusBarEvent_Handler);
 
     lv_task_create(Task_UpdateStatusBar, 500, LV_TASK_PRIO_MID, 0);
 }
@@ -104,7 +94,7 @@ static void NaviButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
 {
     if(event == LV_EVENT_PRESSED)
     {
-        Motor_Vibrate(1, 50);
+        Motor_Vibrate(1, 20);
     }
     if(event == LV_EVENT_CLICKED)
     {
@@ -181,6 +171,14 @@ static void Creat_AppWindow()
     lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &lv_style_transp);
 }
 
+
+#define DropDownList_ExtArea (lv_obj_get_height(barStatus)*2)
+
+static void DropDownList_AnimEndEvent(lv_anim_t * a)
+{
+    lv_obj_set_ext_click_area(contDropDown, 0, 0, 0, IS_DropDownShow ? 0 : DropDownList_ExtArea);
+}
+
 static void DropDownList_AnimDown(bool down)
 {
     static lv_anim_t a;
@@ -189,7 +187,7 @@ static void DropDownList_AnimDown(bool down)
     
     a.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y;
     a.path_cb = lv_anim_path_linear;
-//    a.ready_cb = DropDownList_AnimEnd;
+    a.ready_cb = DropDownList_AnimEndEvent;
     a.time = 300;
     if(down)
     {
@@ -205,7 +203,11 @@ static void DropDownList_AnimDown(bool down)
 
 static void DropDownListEvent_Handler(lv_obj_t * obj, lv_event_t event)
 {
-    if(event == LV_EVENT_RELEASED || event == LV_EVENT_DRAG_END)
+    if(event == LV_EVENT_PRESSED)
+    {
+        lv_obj_set_top(contDropDown, true);
+    }
+    else if(event == LV_EVENT_RELEASED || event == LV_EVENT_DRAG_END)
     {
         lv_coord_t ver = lv_disp_get_ver_res(NULL);
         lv_coord_t y = lv_obj_get_y(contDropDown) + lv_obj_get_height(contDropDown);
@@ -227,13 +229,14 @@ static void Creat_DropDownList()
     static lv_style_t style = *lv_obj_get_style(contDropDown);
     style.body.main_color = LV_COLOR_BLACK;
     style.body.grad_color = LV_COLOR_BLACK;
-    style.body.opa = LV_OPA_70;
+    style.body.opa = LV_OPA_80;
     lv_cont_set_style(contDropDown, LV_CONT_STYLE_MAIN, &style);
     
     lv_obj_set_size(contDropDown, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL) - lv_obj_get_height(barNavigation));
-    lv_obj_set_drag_dir(contDropDown, LV_DRAG_DIR_VER);
     lv_obj_set_drag(contDropDown, true);
+    lv_obj_set_drag_dir(contDropDown, LV_DRAG_DIR_VER);
 //    lv_obj_set_drag_throw(contDropDown, true);
+    lv_obj_set_ext_click_area(contDropDown, 0, 0, 0, DropDownList_ExtArea);
     lv_obj_set_event_cb(contDropDown, DropDownListEvent_Handler);
     lv_obj_align(contDropDown, barStatus, LV_ALIGN_OUT_TOP_MID, 0, -5);
     

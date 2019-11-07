@@ -24,6 +24,7 @@ static void Init_Pages()
     PageRegister_SubAPPs(PAGE_SubAPPs);
     PageRegister_TextEditor(PAGE_TextEditor);
     PageRegister_AppBgManager(PAGE_AppBgManager);
+    PageRegister_WavPlayer(PAGE_WavPlayer);
     
     page.PagePush(PAGE_Home);
 }

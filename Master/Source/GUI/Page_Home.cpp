@@ -2,6 +2,7 @@
 #include "DisplayPrivate.h"
 #include "TasksManage.h"
 #include "APP_Type.h"
+#include "Module.h"
 
 /*主菜单视图*/
 static lv_obj_t * tabviewHome;
@@ -50,7 +51,7 @@ static APP_TypeDef APP_Grp[] =
     {&ImgFiles,    "Files",    TYPE_PageJump, PAGE_FileExplorer},
     {&ImgInternet, "Internet"},
     {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
-    {&ImgPlay,     "Player"},
+    {&ImgPlay,     "Player",   TYPE_PageJump, PAGE_WavPlayer},
     {&ImgUSB,      "USB"},
 };
 
@@ -81,6 +82,10 @@ static void ImgbtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
                 );
             }
         }
+    }
+    if(event == LV_EVENT_LONG_PRESSED)
+    {
+        Motor_Vibrate(1, 20);
     }
 }
 
@@ -127,9 +132,9 @@ void Creat_APP(APP_TypeDef &app, lv_obj_t * parent, uint8_t index, lv_event_cb_t
 
     /*APP容器布局*/
     #define MOD_OFFSET 20//边缘偏移量
-    lv_coord_t mod[3] = {MOD_OFFSET, 0, -MOD_OFFSET};
+    const lv_coord_t mod_grp[3] = {MOD_OFFSET, 0, -MOD_OFFSET};
     /*对齐模式组*/
-    lv_align_t align[] = {
+    const lv_align_t align_grp[] = {
         LV_ALIGN_IN_TOP_LEFT,
         LV_ALIGN_IN_TOP_MID,
         LV_ALIGN_IN_TOP_RIGHT,
@@ -140,7 +145,13 @@ void Creat_APP(APP_TypeDef &app, lv_obj_t * parent, uint8_t index, lv_event_cb_t
         LV_ALIGN_IN_BOTTOM_MID,
         LV_ALIGN_IN_BOTTOM_RIGHT
     };
-    lv_obj_align(app.cont, parent, align[index], mod[index % 3], mod[index / 3]);
+    lv_obj_align(
+        app.cont, 
+        parent, 
+        align_grp[index], 
+        mod_grp[index % 3], 
+        mod_grp[index / 3]
+    );
 }
 
 /**
@@ -244,6 +255,7 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
     {
         /*反转起点终点设定*/
 #define SWAP_ANIM(anim) {int temp;temp=anim.start,anim.start=anim.end,anim.end=temp;}
+        
         SWAP_ANIM(a_opa);
         SWAP_ANIM(a_w);
         SWAP_ANIM(a_h);
@@ -280,6 +292,8 @@ static void Setup()
     
     /*在主Tab创建APP组*/
     __LoopExecute(Creat_APP(APP_Grp[i], AppTab_Grp[tabHomeIndex].tab, i, ImgbtnEvent_Handler), __Sizeof(APP_Grp));
+    
+    //lv_cont_set_layout(AppTab_Grp[1].tab, LV_LAYOUT_PRETTY);
     
     /*Tab滑动至主页面*/
     __ExecuteOnce(lv_tabview_set_tab_act(tabviewHome, tabHomeIndex, LV_ANIM_ON));

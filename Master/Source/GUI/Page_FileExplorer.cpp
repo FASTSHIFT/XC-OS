@@ -151,18 +151,18 @@ static void OpenTextFile(const char * filename)
     if(file.open(filename, O_RDWR))
     {
         /*文件长度是否大于缓冲区长度*/
-        if(file.available() < TextGetSize())
+        if(file.available() < TextBuf_GetSize())
         {
             /*清缓冲区*/
-            TextClear();
+            TextBuf_Clear();
             /*载入缓冲区*/
-            file.read(TextGetBuff(), TextGetSize());
+            file.read(TextBuf_GetBuff(), TextBuf_GetSize());
             
             /*Lua解释器指向文本缓冲区*/
-            LuaCodeSet(TextGetBuff());
+            LuaCodeSet(TextBuf_GetBuff());
             //page.PagePush(PAGE_LuaScript);
             /*文本编辑器指向文本缓冲区*/
-            TextEditorSet(TextGetBuff(), file);
+            TextEditorSet(TextBuf_GetBuff(), file);
             /*切换文本编辑器页面*/
             page.PagePush(PAGE_TextEditor);
         }
@@ -173,7 +173,7 @@ static void OpenTextFile(const char * filename)
             sprintf(
                 str, 
                 "file size too large!\n(%0.2fKB > buffer size(%0.2fKB))", 
-                (float)file.available() / 1024.0f, TextGetSize() / 1024.0f
+                (float)file.available() / 1024.0f, TextBuf_GetSize() / 1024.0f
             );
             MboxThorw(str);
         }
@@ -343,6 +343,15 @@ static void FileEvent_Handler(lv_obj_t * obj, lv_event_t event)
             String path = NowFilePath + "/" + FileInfo_Grp[index].name;
             /*打开文本文件*/
             OpenTextFile(path.c_str());
+        }
+        /*如果为音频类型文件*/
+        else if(FileInfo_Grp[index].type == FT_AUDIO)
+        {
+            /*加载文件路径*/
+            extern String WavFilePath;
+            WavFilePath = NowFilePath + "/" + FileInfo_Grp[index].name;
+            /*跳转至音频播放器页面*/
+            page.PagePush(PAGE_WavPlayer);
         }
         /*是否为文件夹*/
         else if(FileInfo_Grp[index].type == FT_DIR)

@@ -4,6 +4,8 @@
 #include "lua.hpp"
 #include "stdint.h"
 
+#define registerFUNC(func) registerFunc(#func,func)
+
 /*Class*/
 class LuaScript
 {

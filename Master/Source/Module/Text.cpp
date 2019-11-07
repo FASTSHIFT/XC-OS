@@ -2,17 +2,17 @@
 
 static char GlobalTextBuff[5 * 1024];
 
-char * TextGetBuff(uint32_t start)
+char * TextBuf_GetBuff(uint32_t start)
 {
     return (GlobalTextBuff + start);
 }
 
-uint32_t TextGetSize()
+uint32_t TextBuf_GetSize()
 {
     return sizeof(GlobalTextBuff);
 }
 
-void TextClear(uint8_t n)
+void TextBuf_Clear(uint8_t n)
 {
     for(uint32_t i = 0; i < sizeof(GlobalTextBuff); i++)
     {

@@ -5,6 +5,8 @@
 #include "wav_decoder.h"
 #include "SdFat.h"
 
+#define TIM_WAVPLAYER TIM2
+
 #define DAC_CH1_Pin PA4
 #define DAC_CH2_Pin PA5
 
@@ -43,88 +45,152 @@ void Audio_SetEnable(bool en)
     digitalWrite(AudioMute_Pin, en);
 }
 
+/*WAV缓冲队列*/
 #define FIFO_Size 6000
 char waveBuff[FIFO_Size];
-FifoQueue<char> WaveBuffer(sizeof(waveBuff), waveBuff);
+FifoQueue<char> WaveFifo(sizeof(waveBuff), waveBuff);
 
-File wavFile;
-WAV_TypeDef wav;
-int WavAvailable;
+/*WAV文件信息*/
+File WavFile;
+WAV_TypeDef Wav_Handle;
 
+/*WAV播放控制*/
+#define WAV_VOLUME_MAX 0.7f
+static float Wav_Volume = WAV_VOLUME_MAX;
+static bool Wav_Playing = true;
+
+/*WAV播放任务句柄*/
 TaskHandle_t TaskHandle_WavPlayer;
 
 static void SendDataToDAC()
 {
-    WavAvailable = WaveBuffer.available();
+    int WavAvailable = WaveFifo.available();
     if(WavAvailable < 16)
     {
         return;
     }
     else
     {
-        Wav_Next_16Bit2Channel(&wav);
-        DAC_SetChannel1Data(DAC_Align_12b_R, ((wav.CurrentData.LeftVal + 32768) >> 6) * 0.7f);
+        Wav_Next_16Bit2Channel(&Wav_Handle);
+        DAC_SetChannel1Data(DAC_Align_12b_R, ((Wav_Handle.CurrentData.LeftVal + 32768) >> 6) * Wav_Volume);
     }
 }
 
-static uint8_t Wav_TestInterface(HWAVEFILE handle, uint8_t size, uint8_t **buffer)
+static uint8_t WavFileLoader(HWAVEFILE handle, uint8_t size, uint8_t **buffer)
 {
     static uint8_t BUFFER[32];
     int bufferPos = 0;
     while(size --)
     {
-        BUFFER[bufferPos ++] = WaveBuffer.read();
+        BUFFER[bufferPos ++] = WaveFifo.read();
     }
     *buffer = BUFFER;
     return 0;
 }
 
-static void Wav_BufferUpdate()
+static void WavBufferUpdate()
 {
-    while(WaveBuffer.available() < FIFO_Size - 16)
+    while(WaveFifo.available() < FIFO_Size - 16)
     {
         uint8_t buffer[4];
-        wavFile.read(buffer, sizeof(buffer));
+        WavFile.read(buffer, sizeof(buffer));
         for(int i = 0; i < sizeof(buffer); i++)
         {
-            WaveBuffer.write(buffer[i]);
+            WaveFifo.write(buffer[i]);
         }
     }
 }
 
-static void Init_WaveTest()
+bool WavPlayer_LoadFile(String path)
 {
-    wavFile = SD.open("Music/UNTALG.wav");
-    while(WaveBuffer.available() < FIFO_Size - 16)
+    WavFile = SD.open(path);
+    if(!WavFile)
     {
-        Wav_BufferUpdate();
+        return false;
+    }
+    
+    while(WaveFifo.available() < FIFO_Size - 16)
+    {
+        WavBufferUpdate();
     }
 
-    Wav_StructInit(&wav, Wav_TestInterface);
-    Wav_Open(&wav);
+    Wav_StructInit(&Wav_Handle, WavFileLoader);
+    Wav_Open(&Wav_Handle);
 
-    TimerSet(TIM2, 1000000 / wav.Header.SampleFreq, SendDataToDAC);
-    TIM_Cmd(TIM2, ENABLE);
+    TimerSet(TIM_WAVPLAYER, 1000000 / Wav_Handle.Header.SampleFreq, SendDataToDAC);
+    return true;
+}
+
+void WavPlayer_SetEnable(bool en)
+{
+    Audio_SetEnable(en);
+    TIM_Cmd(TIM_WAVPLAYER, (FunctionalState)en);
+    if(en)
+    {
+        xTaskNotifyGive(TaskHandle_WavPlayer);
+    }
+    else
+    {
+        WaveFifo.flush();
+        Wav_Handle.IsEnd = true;
+    }
+}
+
+void WavPlayer_SetVolume(uint8_t volume)
+{
+    if(volume > 100)
+        volume = 100;
+    
+    Wav_Volume = __Map(volume, 0, 100, 0.0f, WAV_VOLUME_MAX);
+}
+
+uint8_t WavPlayer_GetVolume()
+{
+    return __Map(Wav_Volume, 0, WAV_VOLUME_MAX, 0, 100);
+}
+
+void WavPlayer_SetPlaying(bool en)
+{
+    Wav_Playing = en;
+}
+
+bool WavPlayer_GetPlaying()
+{
+    return Wav_Playing;
 }
 
 void Task_WavPlayer(void *pvParameters)
 {
+    /*检测SD卡是否插入*/
     pinMode(SD_CD_Pin, INPUT_PULLUP);
-    
     if(digitalRead(SD_CD_Pin))
     {
-        while(1);
+        vTaskSuspend(TaskHandle_WavPlayer);
     }
     
+    /*检测SD卡是否初始化成功*/
     if(!SD.begin(SD_CS_Pin, SD_SCK_MHZ(50))) 
     {
-        while(1);
+        vTaskSuspend(TaskHandle_WavPlayer);
     }
-    Audio_SetEnable(true);
-    Init_WaveTest();
     
     for(;;)
     {
-        Wav_BufferUpdate();
+        /*等待播放命令任务通知*/
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        
+        /*缓冲区更新*/
+        while(!Wav_Handle.IsEnd)
+        {
+            if(Wav_Playing)
+            {
+                WavBufferUpdate();
+            }
+        }
+
+        /*播放器失能*/
+        WavPlayer_SetEnable(false);
+        /*文件关闭*/
+        WavFile.close();
     }
 }
