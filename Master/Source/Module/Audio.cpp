@@ -99,7 +99,7 @@ static void WavBufferUpdate()
             WaveFifo.write(buffer[i]);
         }
     }
-}
+} 
 
 bool WavPlayer_LoadFile(String path)
 {
@@ -117,7 +117,10 @@ bool WavPlayer_LoadFile(String path)
     Wav_StructInit(&Wav_Handle, WavFileLoader);
     Wav_Open(&Wav_Handle);
 
-    TimerSet(TIM_WAVPLAYER, 1000000 / Wav_Handle.Header.SampleFreq, SendDataToDAC);
+    Timer_SetInterrupt(TIM_WAVPLAYER, 1000000 / Wav_Handle.Header.SampleFreq, SendDataToDAC);
+    Timer_SetInterruptFreqUpdate(TIM_WAVPLAYER, Wav_Handle.Header.SampleFreq);
+//    clock_out = Timer_GetClockOut(TIM_WAVPLAYER);
+  
     return true;
 }
 

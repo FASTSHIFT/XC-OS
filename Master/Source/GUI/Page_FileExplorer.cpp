@@ -4,6 +4,9 @@
 #include "LuaScript.h"
 #include "Module.h"
 
+#define FILENAME_LEN_MAX 64
+#define FILE_CNT_MAX     64
+
 /*文件根路径*/
 static SdFile root;
 
@@ -169,7 +172,7 @@ static void OpenTextFile(const char * filename)
         else
         {
             /*文件过大*/
-            char str[50];
+            char str[FILENAME_LEN_MAX + 50];
             sprintf(
                 str, 
                 "file size too large!\n(%0.2fKB > buffer size(%0.2fKB))", 
@@ -202,7 +205,7 @@ typedef struct{
     const char* sym;
     String name;
 }FileInfo_TypeDef;
-FileInfo_TypeDef FileInfo_Grp[50];//一个目录最多50个文件
+FileInfo_TypeDef FileInfo_Grp[FILE_CNT_MAX];//一个目录最多50个文件
 
 /*文件图标*/
 typedef struct{
@@ -219,6 +222,7 @@ FileExtSym_TypeDef ExtSym_Grp[] = {
     {".txt", LV_SYMBOL_EDIT,   FT_TEXT},
     {".html",LV_SYMBOL_EDIT,   FT_TEXT},
     {".log", LV_SYMBOL_EDIT,   FT_TEXT},
+    {".xtrc",LV_SYMBOL_EDIT,   FT_TEXT},
     {".png", LV_SYMBOL_IMAGE,  FT_IMG},
     {".jpg", LV_SYMBOL_IMAGE,  FT_IMG},
     {".gif", LV_SYMBOL_IMAGE,  FT_IMG},
@@ -294,7 +298,7 @@ static bool FileInfoLoadNext(SdFile &file, int index)
         return false;
     
     /*文件名获取*/
-    char fileName[50];
+    char fileName[FILENAME_LEN_MAX];
     file.getName(fileName, sizeof(fileName));
     FileInfo_Grp[index].name = String(fileName);
     
