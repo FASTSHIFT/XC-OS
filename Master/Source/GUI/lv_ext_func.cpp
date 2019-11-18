@@ -19,7 +19,7 @@ extern "C" {
 
 int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, ...)
 {
-    char buff[150];
+    char buff[200];
 
     va_list args;
     va_start(args, __format);
@@ -29,6 +29,12 @@ int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, 
     lv_label_set_text(label, buff);
 
     return ret_status;
+}
+
+void lv_label_set_text_add(lv_obj_t * label, const char * text)
+{
+    String new_text = String(lv_label_get_text(label)) + String(text);
+    lv_label_set_text(label, new_text.c_str());
 }
 
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj)

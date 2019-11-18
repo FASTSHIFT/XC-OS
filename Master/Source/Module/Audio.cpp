@@ -109,6 +109,9 @@ bool WavPlayer_LoadFile(String path)
         return false;
     }
     
+    path.replace(".wav", ".xtrc");
+    XTRC_Setup(path);
+    
     while(WaveFifo.available() < FIFO_Size - 16)
     {
         WavBufferUpdate();
@@ -187,6 +190,8 @@ void Task_WavPlayer(void *pvParameters)
         {
             if(Wav_Playing)
             {
+                uint32_t tick = Wav_Handle.DataPosition * 1000.0f / Wav_Handle.Header.BytePerSecond ;
+                XTRC_Loop(tick);
                 WavBufferUpdate();
             }
         }
@@ -195,5 +200,7 @@ void Task_WavPlayer(void *pvParameters)
         WavPlayer_SetEnable(false);
         /*文件关闭*/
         WavFile.close();
+        /*歌词解析器退出*/
+        XTRC_Exit();
     }
 }

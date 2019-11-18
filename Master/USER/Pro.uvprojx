@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Source\Basic;..\Source\GUI;..\Source\LuaScript;..\Source\Module;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Source\Basic;..\Source\GUI;..\Source\LuaScript;..\Source\Module;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -505,6 +505,11 @@
               <FileName>wav_decoder.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>XTRC_Analyzer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\XTRC_Analyzer\XTRC_Analyzer.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -780,6 +785,11 @@
               <FileName>Text.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Source\Module\Text.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Xtrc.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\Module\Xtrc.cpp</FilePath>
             </File>
           </Files>
         </Group>

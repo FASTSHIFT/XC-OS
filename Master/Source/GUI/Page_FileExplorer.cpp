@@ -172,7 +172,7 @@ static void OpenTextFile(const char * filename)
         else
         {
             /*文件过大*/
-            char str[FILENAME_LEN_MAX + 50];
+            char str[50];
             sprintf(
                 str, 
                 "file size too large!\n(%0.2fKB > buffer size(%0.2fKB))", 
@@ -447,11 +447,11 @@ static void Setup()
     lv_obj_set_hidden(tabviewFm, false);
     PathChange(tabFileList, &listFiles, NowFilePath.c_str()); 
     
-    __ExecuteOnce((
-        Preloader_Activate(true, tabDrive),
-        Creat_TabDrive(tabDrive),
-        Preloader_Activate(false, NULL)
-    ));
+//    __ExecuteOnce((
+//        Preloader_Activate(true, tabDrive),
+//        Creat_TabDrive(tabDrive),
+//        Preloader_Activate(false, NULL)
+//    ));
 }
 
 /**

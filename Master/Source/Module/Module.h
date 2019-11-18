@@ -29,4 +29,9 @@ void     TextBuf_Clear(uint8_t n = 0);
 uint16_t BrightnessGet();
 void BrightnessSet(uint16_t val);
 
+/*Xtrc*/
+bool XTRC_Setup(String path);
+void XTRC_Loop(uint32_t tick);
+void XTRC_Exit();
+
 #endif

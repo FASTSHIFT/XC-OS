@@ -20,6 +20,38 @@ static lv_obj_t * labelWavVolume;
 static lv_obj_t * btnWavCtrl;
 static lv_obj_t * symWavCtrl;
 
+static lv_obj_t * labelLrc;
+static String LrcDisplay;
+
+void Task_LabelLrcUpdate(const char* str)
+{
+    static bool readyBreak = false;
+    
+    if(readyBreak)
+    {
+        LrcDisplay = "";
+        readyBreak = false;
+    }
+    
+    String s = String(str);
+    if(s.endsWith("\n"))
+    {
+        readyBreak = true;
+    }
+    LrcDisplay += s;
+    lv_label_set_text(labelLrc, LrcDisplay.c_str());
+}
+
+static void Creat_LabelLrc()
+{
+    labelLrc = lv_label_create(appWindow, NULL);
+    lv_obj_align(labelLrc, sliderWavVolume, LV_ALIGN_OUT_BOTTOM_MID, -10, 10);
+    lv_obj_set_auto_realign(labelLrc, true);
+    
+    LrcDisplay = "";
+    lv_label_set_text_format(labelLrc, "<no xtrc file>");
+}
+
 static void Creat_WavFileInfo()
 {
     labelWavInfo = lv_label_create(appWindow, NULL);
@@ -32,7 +64,7 @@ static void Creat_WavFileInfo()
         "ChuckLength:%d\n"
         "EncodeType:%x\n"
         "ChannelCnt:%d\n"
-        "SampleFreq:%d\n"
+        "SampleFreq:%d(%d)\n"
         "SampleBits:%d\n"
         "BytePerSecond:%d\n"
         "BytePerFrame:%d\n",
@@ -42,7 +74,7 @@ static void Creat_WavFileInfo()
         Wav_Handle.Header.ChuckLength,
         Wav_Handle.Header.EncodeType,
         Wav_Handle.Header.ChannelCnt,
-        Wav_Handle.Header.SampleFreq,
+        Wav_Handle.Header.SampleFreq,Timer_GetClockOut(TIM2),
         Wav_Handle.Header.SampleBits,
         Wav_Handle.Header.BytePerSecond,
         Wav_Handle.Header.BytePerFrame
@@ -151,6 +183,7 @@ static void Setup()
     Creat_WavBar();
     Creat_VolumeSlider();
     Creat_BtnWavCtrl();
+    Creat_LabelLrc();
 }
 
 /**
@@ -173,6 +206,7 @@ static void Exit()
     lv_obj_del_safe(&labelWavVolume);
     
     lv_obj_del_safe(&btnWavCtrl);
+    lv_obj_del_safe(&labelLrc);
 }
 
 /**
