@@ -35,21 +35,23 @@
 >
 > 8.待续...
 ## 硬件配置
-> 主控:STM32F405RGT6(超频216MHz)
+> 主控: STM32F405RGT6(RAM:192KB ROM:1024KB 超频216MHz)
 >
-> 屏幕:LCD ILI9488(3.5inch 480x320 16bit总线)
+> 屏幕: LCD ILI9488(3.5inch 480x320 16bit总线 70Hz刷新率)
 >
-> 触控:GT911
+> 触控: GT911
 >
-> 功放:PAM8403(3W)
+> 功放: PAM8403(3W)
 >
-> 扬声器:华为荣耀8扬声器总成
+> 扬声器: 华为荣耀8扬声器总成
 >
-> 电源管理:IP5108(5V 2A)
+> 电源管理: IP5108(5V 2A)
 >
-> 加速度传感器:MPU6050
+> 加速度传感器: MPU6050
 >
-> 外置储存器:Micro SD
+> 外置储存器: Micro SD
+>
+> 通信: NRF24L01+PA(外置)
 ## 成品展示
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Top.jpg)
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Bottom.jpg)
