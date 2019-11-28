@@ -8,7 +8,7 @@
 > [LittlevGL V6.0](https://github.com/littlevgl/lvgl)
 
 ## 文件系统
-> [SdFat](https://github.com/greiman/SdFat)
+> [SdFat V1.1.0](https://github.com/greiman/SdFat)
 
 ## 特点
 > 1.无需外扩**RAM**和**FLASH**
@@ -45,6 +45,8 @@
 >
 > 扬声器: 华为荣耀8扬声器总成
 >
+> 电池: Li-ion 3.7v 2000maH
+>
 > 电源管理: IP5108(5V 2A)
 >
 > 加速度传感器: MPU6050
@@ -52,6 +54,8 @@
 > 外置储存器: Micro SD
 >
 > 通信: NRF24L01+PA / USART x2
+>
+> 壳体: PLA 1.75 3D打印
 ## 成品展示
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Top.jpg)
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Bottom.jpg)
