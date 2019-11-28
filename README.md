@@ -16,7 +16,7 @@
 >
 > 4.系统自动识别新设备，安装驱动程序，并生成图形界面
 ## APPs
-> 1.系统设置(显示器亮度、电池信息、电源)
+> 1.系统设置(显示器亮度、电池信息、电源控制)
 >
 > 2.Lua代码编辑器+调试终端
 >
@@ -26,9 +26,11 @@
 >
 > 5.文本编辑器
 >
-> 6.音乐播放器(支持同步显示xtrc歌词)
+> 6.音乐播放器(支持同步显示xtrc、xlrc歌词)
 >
-> 7.待续...
+> 7.视频播放器(BmpVideo)
+>
+> 8.待续...
 ## 成品展示
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Top.jpg)
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Bottom.jpg)
