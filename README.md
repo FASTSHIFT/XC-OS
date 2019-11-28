@@ -51,7 +51,7 @@
 >
 > 外置储存器: Micro SD
 >
-> 通信: NRF24L01+PA(外置)
+> 通信: NRF24L01+PA / USART x2
 ## 成品展示
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Top.jpg)
 ![image](https://github.com/FASTSHIFT/XC-OS/blob/master/Images/Box_Bottom.jpg)
