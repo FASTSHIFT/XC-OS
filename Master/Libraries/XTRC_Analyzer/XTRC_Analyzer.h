@@ -40,10 +40,17 @@ public:
         XTRC_Update_Callback_t update_Callback
     );
     typedef enum{
-        Mode_Single,
-        Mode_Full
+        OutputMode_Single,
+        OutputMode_Full
     }XTRC_OutputMode_t;
-    void Start(XTRC_OutputMode_t mode = Mode_Single);
+    typedef enum{
+        DecodeMode_XTRC,
+        DecodeMode_XLRC
+    }XTRC_DecodeMode_t;
+    void Start(
+        XTRC_OutputMode_t outputmode = OutputMode_Single, 
+        XTRC_DecodeMode_t decodemode = DecodeMode_XTRC
+    );
     void Running(uint32_t tick = millis());
 private:
     XTRC_GetNext_Callback_t GetNext_Callback;
@@ -51,16 +58,18 @@ private:
 
     XTRC_Status_t NowStatus;
     XTRC_OutputMode_t OutputMode;
+    XTRC_DecodeMode_t DecodeMode;
     uint32_t StartTime;
     uint32_t NowLineTime;
     uint32_t NextLrcTime;
     uint32_t NowTick;
     
     String StrCurrent;
+    bool StrCurrent_BeginLoaded;
 
     String GetNextLineStr();
     bool AnalyzeCurrentLine();
-    bool AnalyzeLrc();
+    bool AnalyzeXtrcLrc();
     void Update(String lrc);
 
     bool Begin();

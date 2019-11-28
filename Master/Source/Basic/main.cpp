@@ -20,8 +20,7 @@ void setup()
     Serial.begin(115200);
     Serial2.begin(115200);
     Serial3.begin(115200);
-    
-    //Serial.printf("\r\nXC-OS(%s) init...\r\n",__DATE__);
+
     Wire.begin();
     
     /*Task Create*/

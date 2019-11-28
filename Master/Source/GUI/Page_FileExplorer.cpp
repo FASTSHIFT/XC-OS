@@ -223,6 +223,7 @@ FileExtSym_TypeDef ExtSym_Grp[] = {
     {".html",LV_SYMBOL_EDIT,   FT_TEXT},
     {".log", LV_SYMBOL_EDIT,   FT_TEXT},
     {".xtrc",LV_SYMBOL_EDIT,   FT_TEXT},
+    {".xlrc",LV_SYMBOL_EDIT,   FT_TEXT},
     {".png", LV_SYMBOL_IMAGE,  FT_IMG},
     {".jpg", LV_SYMBOL_IMAGE,  FT_IMG},
     {".gif", LV_SYMBOL_IMAGE,  FT_IMG},
@@ -340,22 +341,28 @@ static void FileEvent_Handler(lv_obj_t * obj, lv_event_t event)
         /*获取被点击的文件索引*/
         int index = lv_list_get_btn_index(listFiles, obj);
         
+        /*将当前工作路径后边加上文件名*/
+        String filePath =  NowFilePath + "/" + FileInfo_Grp[index].name;
+        
         /*如果为纯文本类型文件*/
         if(FileInfo_Grp[index].type == FT_TEXT)
         {
-            /*将当前工作路径后边加上文件名*/
-            String path = NowFilePath + "/" + FileInfo_Grp[index].name;
             /*打开文本文件*/
-            OpenTextFile(path.c_str());
+            OpenTextFile(filePath.c_str());
         }
         /*如果为音频类型文件*/
         else if(FileInfo_Grp[index].type == FT_AUDIO)
         {
-            /*加载文件路径*/
-            extern String WavFilePath;
-            WavFilePath = NowFilePath + "/" + FileInfo_Grp[index].name;
+            extern void Wav_SetFilePath(String path);
+            Wav_SetFilePath(filePath);
             /*跳转至音频播放器页面*/
             page.PagePush(PAGE_WavPlayer);
+        }
+        else if(FileInfo_Grp[index].type == FT_VIDEO)
+        {
+            extern void Bv_SetFilePath(String path);
+            Bv_SetFilePath(filePath);
+            page.PagePush(PAGE_BvPlayer);
         }
         /*是否为文件夹*/
         else if(FileInfo_Grp[index].type == FT_DIR)

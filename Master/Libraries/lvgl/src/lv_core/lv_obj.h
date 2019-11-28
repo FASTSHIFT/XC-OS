@@ -80,13 +80,13 @@ enum {
                                        `LV_INDEV_LONG_PRESS_REP_TIME` ms.  Not called if dragged.*/
     LV_EVENT_CLICKED,             /**< Called on release if not dragged (regardless to long press)*/
     LV_EVENT_RELEASED,            /**< Called in every cases when the object has been released*/                                    
-    LV_EVENT_DRAG_BEGIN,  
+    LV_EVENT_DRAG_BEGIN,		  
     LV_EVENT_DRAG_END,
     LV_EVENT_DRAG_THROW_BEGIN,
     LV_EVENT_KEY,
     LV_EVENT_FOCUSED,
     LV_EVENT_DEFOCUSED,
-    LV_EVENT_VALUE_CHANGED,       /**< The object's value has changed (i.e. slider moved) */
+    LV_EVENT_VALUE_CHANGED,		 /**< The object's value has changed (i.e. slider moved) */
     LV_EVENT_INSERT,
     LV_EVENT_REFRESH,
     LV_EVENT_APPLY,  /**< "Ok", "Apply" or similar specific button has clicked*/

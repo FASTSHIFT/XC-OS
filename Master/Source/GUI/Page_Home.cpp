@@ -36,9 +36,9 @@ LV_IMG_DECLARE(ImgCode);
 LV_IMG_DECLARE(ImgGame);
 LV_IMG_DECLARE(ImgSubApps);
 LV_IMG_DECLARE(ImgFiles);
-LV_IMG_DECLARE(ImgInternet);
 LV_IMG_DECLARE(ImgEditor);
-LV_IMG_DECLARE(ImgPlay);
+LV_IMG_DECLARE(ImgVideo);
+LV_IMG_DECLARE(ImgMusic);
 LV_IMG_DECLARE(ImgUSB);
 
 /*APP×é*/
@@ -49,9 +49,9 @@ static APP_TypeDef APP_Grp[] =
     {&ImgGame,     "Game"},
     {&ImgSubApps,  "APPs",     TYPE_PageJump, PAGE_SubAPPs},
     {&ImgFiles,    "Files",    TYPE_PageJump, PAGE_FileExplorer},
-    {&ImgInternet, "Internet"},
+    {&ImgVideo,    "Video",    TYPE_PageJump, PAGE_BvPlayer},
     {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
-    {&ImgPlay,     "Player",   TYPE_PageJump, PAGE_WavPlayer},
+    {&ImgMusic,    "Music",    TYPE_PageJump, PAGE_WavPlayer},
     {&ImgUSB,      "USB"},
 };
 

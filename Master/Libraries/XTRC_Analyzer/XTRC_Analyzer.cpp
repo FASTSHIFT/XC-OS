@@ -34,11 +34,12 @@ void XTRC_Analyzer::Update(String lrc)
 bool XTRC_Analyzer::Begin()
 {
     StrCurrent = GetNextLineStr();
-    if(StrCurrent.startsWith("[offset"))
+    if(StrCurrent.startsWith("[00:"))
     {
         NowStatus = LoadNextLine;
         StartTime = NowTick;
         DEBUG("-->>begin(time%d)\r\n", NowTick);
+        StrCurrent_BeginLoaded = true;
         return true;
     }
     return false;
@@ -53,7 +54,7 @@ void XTRC_Analyzer::WaitNowTime(uint32_t ms)
 void XTRC_Analyzer::LrcDelay(uint32_t ms)
 {
     NextLrcTime = NowTime() + ms;
-    NowStatus = (OutputMode == Mode_Single) ? WaitNextLrc : LoadNextLrc;
+    NowStatus = (OutputMode == OutputMode_Single) ? WaitNextLrc : LoadNextLrc;
 }
 
 bool XTRC_Analyzer::AnalyzeCurrentLine()
@@ -84,7 +85,7 @@ bool XTRC_Analyzer::AnalyzeCurrentLine()
     return true;
 }
 
-bool XTRC_Analyzer::AnalyzeLrc()
+bool XTRC_Analyzer::AnalyzeXtrcLrc()
 {
     /*是否为最后一个单词*/
     bool isLastLrc = false;
@@ -125,9 +126,13 @@ bool XTRC_Analyzer::AnalyzeLrc()
     return true;
 }
 
-void XTRC_Analyzer::Start(XTRC_OutputMode_t mode)
+void XTRC_Analyzer::Start(
+    XTRC_OutputMode_t outputmode, 
+    XTRC_DecodeMode_t decodemode
+)
 {
-    OutputMode = mode;
+    OutputMode = outputmode;
+    DecodeMode = decodemode;
     NowStatus = LoadBegin;
 }
 
@@ -156,7 +161,14 @@ void XTRC_Analyzer::Running(uint32_t tick)
         Begin();
         break;
     case LoadNextLine:
-        StrCurrent = GetNextLineStr();
+        if(StrCurrent_BeginLoaded)
+        {
+            StrCurrent_BeginLoaded = false;
+        }
+        else
+        {
+            StrCurrent = GetNextLineStr();
+        }
         /*判断是否有新数据*/
         if(StrCurrent == "")
         {
@@ -170,13 +182,22 @@ void XTRC_Analyzer::Running(uint32_t tick)
             //DEBUG("-->>jump");
             break;
         }
-        /*提取当行信息*/
+        /*提取当行信息，分离时间点和歌词数据*/
         AnalyzeCurrentLine();
         break;
     case LoadNextLrc:
         /*单词分析*/
-        if(!AnalyzeLrc())
+        if(DecodeMode == DecodeMode_XTRC)
         {
+            if(!AnalyzeXtrcLrc())
+            {
+                NowStatus = LoadNextLine;
+            }
+        }
+        else if(DecodeMode == DecodeMode_XLRC)
+        {
+            StrCurrent += "\r\n";
+            Update(StrCurrent.c_str());
             NowStatus = LoadNextLine;
         }
         break;

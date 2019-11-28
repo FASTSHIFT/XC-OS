@@ -162,6 +162,23 @@ lv_obj_t * lv_ta_create(lv_obj_t * par, const lv_obj_t * copy)
         ext->cursor.pos        = copy_ext->cursor.pos;
         ext->cursor.valid_x    = copy_ext->cursor.valid_x;
         ext->cursor.type       = copy_ext->cursor.type;
+
+        if(ext->pwd_mode != 0) pwd_char_hider( new_ta);
+
+        if(copy_ext->placeholder != NULL)
+            ext->placeholder = lv_label_create(new_ta, copy_ext->placeholder);
+        else
+            ext->placeholder = NULL;
+
+        if(copy_ext->pwd_tmp) {
+            uint16_t len = lv_mem_get_size(copy_ext->pwd_tmp);
+            ext->pwd_tmp = lv_mem_alloc(len);
+            lv_mem_assert(ext->pwd_tmp);
+            if(ext->pwd_tmp == NULL) return NULL;
+
+            memcpy(ext->pwd_tmp, copy_ext->pwd_tmp, len);
+        }
+
         if(copy_ext->one_line) lv_ta_set_one_line(new_ta, true);
 
         lv_ta_set_style(new_ta, LV_TA_STYLE_CURSOR, lv_ta_get_style(copy, LV_TA_STYLE_CURSOR));
@@ -524,6 +541,9 @@ void lv_ta_set_placeholder_text(lv_obj_t * ta, const char * txt)
 
     lv_label_set_text(ext->placeholder, txt);
 
+    /*Refresh the placeholder's align*/
+    lv_ta_set_text_align(ta, lv_label_get_align(ext->label));
+
     placeholder_update(ta);
 }
 
@@ -652,7 +672,8 @@ void lv_ta_set_pwd_mode(lv_obj_t * ta, bool en)
         strcpy(ext->pwd_tmp, txt);
 
         uint16_t i;
-        for(i = 0; i < len; i++) {
+        uint16_t encoded_len = lv_txt_get_encoded_length(txt); 
+        for(i = 0; i < encoded_len; i++) {
             txt[i] = '*'; /*All char to '*'*/
         }
         txt[i] = '\0';
@@ -726,12 +747,14 @@ void lv_ta_set_text_align(lv_obj_t * ta, lv_label_align_t align)
     lv_obj_t * label  = lv_ta_get_label(ta);
     if(!ext->one_line) {
         lv_label_set_align(label, align);
+        if(ext->placeholder) lv_label_set_align(ext->placeholder, align);
     } else {
         /*Normal left align. Just let the text expand*/
         if(align == LV_LABEL_ALIGN_LEFT) {
             lv_label_set_long_mode(label, LV_LABEL_LONG_EXPAND);
             lv_page_set_scrl_fit2(ta, LV_FIT_TIGHT, LV_FIT_FLOOD);
             lv_label_set_align(label, align);
+            if(ext->placeholder) lv_label_set_align(ext->placeholder, align);
 
         }
         /*Else use fix label width equal to the Text area width*/
@@ -739,6 +762,7 @@ void lv_ta_set_text_align(lv_obj_t * ta, lv_label_align_t align)
             lv_label_set_long_mode(label, LV_LABEL_LONG_CROP);
             lv_page_set_scrl_fit2(ta, LV_FIT_FLOOD, LV_FIT_FLOOD);
             lv_label_set_align(label, align);
+            if(ext->placeholder) lv_label_set_align(ext->placeholder, align);
 
             lv_obj_set_width(label, lv_page_get_fit_width(ta));
         }
@@ -917,7 +941,7 @@ const char * lv_ta_get_placeholder_text(lv_obj_t * ta)
 
     const char * txt = NULL;
 
-    if(ext->placeholder) txt = lv_label_get_text(ext->label);
+    if(ext->placeholder) txt = lv_label_get_text(ext->placeholder);
 
     return txt;
 }
@@ -1328,6 +1352,7 @@ static lv_res_t lv_ta_signal(lv_obj_t * ta, lv_signal_t sign, void * param)
                 /*In one line mode refresh the Text Area height because 'vpad' can modify it*/
                 const lv_style_t * style_label = lv_obj_get_style(ext->label);
                 lv_coord_t font_h              = lv_font_get_line_height(style_label->text.font);
+                lv_obj_set_height(ext->label, font_h);
                 lv_obj_set_height(ta, font_h + style_ta->body.padding.top + style_ta->body.padding.bottom +
                                           style_scrl->body.padding.top + style_scrl->body.padding.bottom);
             } else {

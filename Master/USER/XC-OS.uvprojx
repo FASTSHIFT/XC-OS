@@ -48,14 +48,14 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>..\OBJ\</OutputDirectory>
+          <OutputDirectory>.\Objects\</OutputDirectory>
           <OutputName>Pro</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
-          <ListingPath>..\LIST\</ListingPath>
+          <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
           <CreateBatchFile>0</CreateBatchFile>
@@ -337,7 +337,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Source\Basic;..\Source\GUI;..\Source\LuaScript;..\Source\Module;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Source\Basic;..\Source\GUI;..\Source\LuaScript;..\Source\Module;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer;..\Source\Communication;..\Libraries\BV_Player</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -379,181 +379,6 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>ArduinoAPI</GroupName>
-          <Files>
-            <File>
-              <FileName>Arduino.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ArduinoAPI\Arduino.c</FilePath>
-            </File>
-            <File>
-              <FileName>dtostrf.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ArduinoAPI\dtostrf.c</FilePath>
-            </File>
-            <File>
-              <FileName>itoa.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\ArduinoAPI\itoa.c</FilePath>
-            </File>
-            <File>
-              <FileName>Print.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\Print.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Stream.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\Stream.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WString.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\WString.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WMath.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\WMath.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>HardwareSerial.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\HardwareSerial.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WireBase.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\WireBase.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Wire.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\Wire.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Tone.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\Tone.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Libraries</GroupName>
-          <Files>
-            <File>
-              <FileName>SPI.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\ArduinoAPI\SPI.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Adafruit_GFX.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>GT911.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\GT911\GT911.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>GTIIC.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\GT911\GTIIC.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IP5108.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\IP5108\IP5108.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>I2Cdev.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\I2Cdev\I2Cdev.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>MPU6050.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\MPU6050\MPU6050.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>NRF.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\NRF\NRF.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>StrPrinter.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\StrPrinter\StrPrinter.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TFT_ILI9488.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\TFT_ILI9488\TFT_ILI9488.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>touch.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\GT911\touch.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>PageManager.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\LightGUI\PageManager\PageManager.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>wav_decoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>XTRC_Analyzer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\XTRC_Analyzer\XTRC_Analyzer.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Core</GroupName>
-          <Files>
-            <File>
-              <FileName>adc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\adc.c</FilePath>
-            </File>
-            <File>
-              <FileName>delay.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\CORE\delay.c</FilePath>
-            </File>
-            <File>
-              <FileName>exti.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\exti.c</FilePath>
-            </File>
-            <File>
-              <FileName>gpio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\gpio.c</FilePath>
-            </File>
-            <File>
-              <FileName>pwm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\pwm.c</FilePath>
-            </File>
-            <File>
-              <FileName>rng.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\rng.c</FilePath>
-            </File>
-            <File>
-              <FileName>timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\timer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>Basic</GroupName>
           <Files>
             <File>
@@ -570,16 +395,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Source\Basic\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ComBasic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Source\Basic\ComBasic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ComHandshake.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Source\Basic\ComHandshake.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -617,14 +432,14 @@
               <FilePath>..\Source\GUI\lv_conf.h</FilePath>
             </File>
             <File>
-              <FileName>lv_user.cpp</FileName>
+              <FileName>lv_port_disp.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\Source\GUI\lv_user.cpp</FilePath>
+              <FilePath>..\Source\GUI\lv_port_disp.cpp</FilePath>
             </File>
             <File>
-              <FileName>lv_user_fs.cpp</FileName>
+              <FileName>lv_port_fs.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\Source\GUI\lv_user_fs.cpp</FilePath>
+              <FilePath>..\Source\GUI\lv_port_fs.cpp</FilePath>
             </File>
             <File>
               <FileName>lv_ext_func.cpp</FileName>
@@ -691,6 +506,11 @@
               <FileType>8</FileType>
               <FilePath>..\Source\GUI\Page_WavPlayer.cpp</FilePath>
             </File>
+            <File>
+              <FileName>Page_BvPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\GUI\Page_BvPlayer.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -751,6 +571,16 @@
               <FileType>1</FileType>
               <FilePath>..\Source\GUI\IMG\ImgUSB.c</FilePath>
             </File>
+            <File>
+              <FileName>ImgVideo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgVideo.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgMusic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Source\GUI\IMG\ImgMusic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -794,6 +624,21 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Communication</GroupName>
+          <Files>
+            <File>
+              <FileName>ComBasic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\Communication\ComBasic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ComHandshake.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Source\Communication\ComHandshake.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>LuaScript</GroupName>
           <Files>
             <File>
@@ -825,6 +670,255 @@
               <FileName>LuaCom.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Source\LuaScript\LuaCom.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>lua-5.3.2</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>2</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>1</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>lapi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lapi.c</FilePath>
+            </File>
+            <File>
+              <FileName>lauxlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lauxlib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lbaselib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lbaselib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lbitlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lbitlib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lcode.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcorolib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lcorolib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lctype.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lctype.c</FilePath>
+            </File>
+            <File>
+              <FileName>ldblib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ldblib.c</FilePath>
+            </File>
+            <File>
+              <FileName>ldebug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ldebug.c</FilePath>
+            </File>
+            <File>
+              <FileName>ldo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ldo.c</FilePath>
+            </File>
+            <File>
+              <FileName>ldump.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ldump.c</FilePath>
+            </File>
+            <File>
+              <FileName>lfunc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lfunc.c</FilePath>
+            </File>
+            <File>
+              <FileName>lgc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lgc.c</FilePath>
+            </File>
+            <File>
+              <FileName>linit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\linit.c</FilePath>
+            </File>
+            <File>
+              <FileName>liolib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\liolib.c</FilePath>
+            </File>
+            <File>
+              <FileName>llex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\llex.c</FilePath>
+            </File>
+            <File>
+              <FileName>lmathlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lmathlib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lmem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lmem.c</FilePath>
+            </File>
+            <File>
+              <FileName>loadlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\loadlib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lobject.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lobject.c</FilePath>
+            </File>
+            <File>
+              <FileName>lopcodes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lopcodes.c</FilePath>
+            </File>
+            <File>
+              <FileName>loslib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\loslib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lparser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lparser.c</FilePath>
+            </File>
+            <File>
+              <FileName>lstate.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lstate.c</FilePath>
+            </File>
+            <File>
+              <FileName>lstring.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lstring.c</FilePath>
+            </File>
+            <File>
+              <FileName>lstrlib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lstrlib.c</FilePath>
+            </File>
+            <File>
+              <FileName>ltable.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ltable.c</FilePath>
+            </File>
+            <File>
+              <FileName>ltablib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ltablib.c</FilePath>
+            </File>
+            <File>
+              <FileName>ltm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\ltm.c</FilePath>
+            </File>
+            <File>
+              <FileName>lua.c</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lua.c</FilePath>
+            </File>
+            <File>
+              <FileName>luac.c</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\luac.c</FilePath>
+            </File>
+            <File>
+              <FileName>lundump.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lundump.c</FilePath>
+            </File>
+            <File>
+              <FileName>lutf8lib.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lutf8lib.c</FilePath>
+            </File>
+            <File>
+              <FileName>lvm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lvm.c</FilePath>
+            </File>
+            <File>
+              <FileName>lzio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lua-5.3.2\src\lzio.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1443,251 +1537,182 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>lua-5.3.2</GroupName>
-          <GroupOption>
-            <CommonProperty>
-              <UseCPPCompiler>0</UseCPPCompiler>
-              <RVCTCodeConst>0</RVCTCodeConst>
-              <RVCTZI>0</RVCTZI>
-              <RVCTOtherData>0</RVCTOtherData>
-              <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>2</IncludeInBuild>
-              <AlwaysBuild>2</AlwaysBuild>
-              <GenerateAssemblyFile>2</GenerateAssemblyFile>
-              <AssembleAssemblyFile>2</AssembleAssemblyFile>
-              <PublicsOnly>2</PublicsOnly>
-              <StopOnExitCode>11</StopOnExitCode>
-              <CustomArgument></CustomArgument>
-              <IncludeLibraryModules></IncludeLibraryModules>
-              <ComprImg>1</ComprImg>
-            </CommonProperty>
-            <GroupArmAds>
-              <Cads>
-                <interw>2</interw>
-                <Optim>0</Optim>
-                <oTime>2</oTime>
-                <SplitLS>2</SplitLS>
-                <OneElfS>2</OneElfS>
-                <Strict>2</Strict>
-                <EnumInt>2</EnumInt>
-                <PlainCh>2</PlainCh>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <wLevel>1</wLevel>
-                <uThumb>2</uThumb>
-                <uSurpInc>2</uSurpInc>
-                <uC99>2</uC99>
-                <uGnu>2</uGnu>
-                <useXO>2</useXO>
-                <v6Lang>0</v6Lang>
-                <v6LangP>0</v6LangP>
-                <vShortEn>2</vShortEn>
-                <vShortWch>2</vShortWch>
-                <v6Lto>2</v6Lto>
-                <v6WtE>2</v6WtE>
-                <v6Rtti>2</v6Rtti>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Cads>
-              <Aads>
-                <interw>2</interw>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <thumb>2</thumb>
-                <SplitLS>2</SplitLS>
-                <SwStkChk>2</SwStkChk>
-                <NoWarn>2</NoWarn>
-                <uSurpInc>2</uSurpInc>
-                <useXO>2</useXO>
-                <uClangAs>2</uClangAs>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Aads>
-            </GroupArmAds>
-          </GroupOption>
+          <GroupName>Libraries</GroupName>
           <Files>
             <File>
-              <FileName>lapi.c</FileName>
+              <FileName>SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Adafruit_GFX.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BV_Player.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\BV_Player\BV_Player.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GT911.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\GT911\GT911.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GTIIC.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\GT911\GTIIC.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IP5108.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\IP5108\IP5108.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>I2Cdev.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\I2Cdev\I2Cdev.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MPU6050.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\MPU6050\MPU6050.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NRF.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\NRF\NRF.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>StrPrinter.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\StrPrinter\StrPrinter.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TFT_ILI9488.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\TFT_ILI9488\TFT_ILI9488.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>touch.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\GT911\touch.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PageManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\LightGUI\PageManager\PageManager.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>wav_decoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>XTRC_Analyzer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\XTRC_Analyzer\XTRC_Analyzer.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ArduinoAPI</GroupName>
+          <Files>
+            <File>
+              <FileName>Arduino.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lapi.c</FilePath>
+              <FilePath>..\ArduinoAPI\Arduino.c</FilePath>
             </File>
             <File>
-              <FileName>lauxlib.c</FileName>
+              <FileName>dtostrf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lauxlib.c</FilePath>
+              <FilePath>..\ArduinoAPI\dtostrf.c</FilePath>
             </File>
             <File>
-              <FileName>lbaselib.c</FileName>
+              <FileName>itoa.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lbaselib.c</FilePath>
+              <FilePath>..\ArduinoAPI\itoa.c</FilePath>
             </File>
             <File>
-              <FileName>lbitlib.c</FileName>
+              <FileName>Print.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\Print.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Stream.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\Stream.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WString.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\WString.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WMath.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\WMath.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HardwareSerial.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\HardwareSerial.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WireBase.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\WireBase.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Wire.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\Wire.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Tone.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\ArduinoAPI\Tone.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Core</GroupName>
+          <Files>
+            <File>
+              <FileName>adc.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lbitlib.c</FilePath>
+              <FilePath>..\Core\adc.c</FilePath>
             </File>
             <File>
-              <FileName>lcode.c</FileName>
+              <FileName>delay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lcode.c</FilePath>
+              <FilePath>..\CORE\delay.c</FilePath>
             </File>
             <File>
-              <FileName>lcorolib.c</FileName>
+              <FileName>exti.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lcorolib.c</FilePath>
+              <FilePath>..\Core\exti.c</FilePath>
             </File>
             <File>
-              <FileName>lctype.c</FileName>
+              <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lctype.c</FilePath>
+              <FilePath>..\Core\gpio.c</FilePath>
             </File>
             <File>
-              <FileName>ldblib.c</FileName>
+              <FileName>pwm.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ldblib.c</FilePath>
+              <FilePath>..\Core\pwm.c</FilePath>
             </File>
             <File>
-              <FileName>ldebug.c</FileName>
+              <FileName>rng.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ldebug.c</FilePath>
+              <FilePath>..\Core\rng.c</FilePath>
             </File>
             <File>
-              <FileName>ldo.c</FileName>
+              <FileName>timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ldo.c</FilePath>
-            </File>
-            <File>
-              <FileName>ldump.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ldump.c</FilePath>
-            </File>
-            <File>
-              <FileName>lfunc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lfunc.c</FilePath>
-            </File>
-            <File>
-              <FileName>lgc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lgc.c</FilePath>
-            </File>
-            <File>
-              <FileName>linit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\linit.c</FilePath>
-            </File>
-            <File>
-              <FileName>liolib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\liolib.c</FilePath>
-            </File>
-            <File>
-              <FileName>llex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\llex.c</FilePath>
-            </File>
-            <File>
-              <FileName>lmathlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lmathlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lmem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lmem.c</FilePath>
-            </File>
-            <File>
-              <FileName>loadlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\loadlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lobject.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lobject.c</FilePath>
-            </File>
-            <File>
-              <FileName>lopcodes.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lopcodes.c</FilePath>
-            </File>
-            <File>
-              <FileName>loslib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\loslib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lparser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lparser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lstate.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstring.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lstring.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstrlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lstrlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ltable.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltablib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ltablib.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\ltm.c</FilePath>
-            </File>
-            <File>
-              <FileName>lua.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lua.c</FilePath>
-            </File>
-            <File>
-              <FileName>luac.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\luac.c</FilePath>
-            </File>
-            <File>
-              <FileName>lundump.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lundump.c</FilePath>
-            </File>
-            <File>
-              <FileName>lutf8lib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lutf8lib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lvm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lvm.c</FilePath>
-            </File>
-            <File>
-              <FileName>lzio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.3.2\src\lzio.c</FilePath>
+              <FilePath>..\Core\timer.c</FilePath>
             </File>
           </Files>
         </Group>

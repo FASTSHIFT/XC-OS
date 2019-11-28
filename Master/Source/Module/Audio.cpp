@@ -5,8 +5,6 @@
 #include "wav_decoder.h"
 #include "SdFat.h"
 
-#define TIM_WAVPLAYER TIM2
-
 #define DAC_CH1_Pin PA4
 #define DAC_CH2_Pin PA5
 
@@ -16,26 +14,26 @@ static void Audio_Init()
 {
     pinMode(AudioMute_Pin, OUTPUT);
     
-    if(IS_DAC_Pin(Speaker_Pin))
+    if(!IS_DAC_Pin(Speaker_Pin))
+        return;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
+    DAC_InitTypeDef dacConfig;
+    DAC_StructInit(&dacConfig);
+    dacConfig.DAC_OutputBuffer = DAC_OutputBuffer_Disable;
+    dacConfig.DAC_Trigger = DAC_Trigger_None;
+    dacConfig.DAC_WaveGeneration = DAC_WaveGeneration_None;
+    if(Speaker_Pin == DAC_CH1_Pin)
     {
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-        DAC_InitTypeDef dacConfig;
-        DAC_StructInit(&dacConfig);
-        dacConfig.DAC_OutputBuffer = DAC_OutputBuffer_Disable;
-        dacConfig.DAC_Trigger = DAC_Trigger_None;
-        dacConfig.DAC_WaveGeneration = DAC_WaveGeneration_None;
-        if(Speaker_Pin == DAC_CH1_Pin)
-        {
-            DAC_Init(DAC_Channel_1, &dacConfig);
-            DAC_Cmd(DAC_Channel_1, ENABLE);
-        }
-        else if(Speaker_Pin == DAC_CH2_Pin)
-        {
-            DAC_Init(DAC_Channel_2, &dacConfig);
-            DAC_Cmd(DAC_Channel_2, ENABLE);
-        }
-        pinMode(Speaker_Pin, OUTPUT_AF);
+        DAC_Init(DAC_Channel_1, &dacConfig);
+        DAC_Cmd(DAC_Channel_1, ENABLE);
     }
+    else if(Speaker_Pin == DAC_CH2_Pin)
+    {
+        DAC_Init(DAC_Channel_2, &dacConfig);
+        DAC_Cmd(DAC_Channel_2, ENABLE);
+    }
+    pinMode(Speaker_Pin, OUTPUT_AF);
 }
 
 void Audio_SetEnable(bool en)
@@ -110,7 +108,11 @@ bool WavPlayer_LoadFile(String path)
     }
     
     path.replace(".wav", ".xtrc");
-    XTRC_Setup(path);
+    if(!XTRC_Setup(path))
+    {
+        path.replace(".xtrc", ".xlrc");
+        XTRC_Setup(path);
+    }
     
     while(WaveFifo.available() < FIFO_Size - 16)
     {

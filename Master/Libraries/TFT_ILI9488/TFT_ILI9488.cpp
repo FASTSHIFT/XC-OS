@@ -393,6 +393,14 @@ void TFT_ILI9488::drawFastRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int1
 void TFT_ILI9488::fillScreen(uint16_t color)
 {
     setAddrWindow(0, 0, _width - 1, _height - 1);
-    for(uint32_t i = 0; i < (_width * _height); i++)
-        writeData(color);
+    uint32_t size = _width * _height;
+    TFT_CS_CLR;
+    TFT_RS_SET;
+    for(uint32_t i = 0; i < size; i++)
+    {
+        *TFT_Port = color;
+        TFT_RW_CLR;
+        TFT_RW_SET;
+    }
+    TFT_CS_SET;
 }

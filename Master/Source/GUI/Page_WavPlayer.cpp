@@ -4,7 +4,8 @@
 #include "TasksManage.h"
 #include "wav_decoder.h"
 
-String WavFilePath = "Music/UntAlg.wav";
+static String WavFilePath;
+static bool WavError;
 extern WAV_TypeDef Wav_Handle;
 #define WavProgress (((float)Wav_Handle.DataPosition/Wav_Handle.DataSize)*1000)
 
@@ -23,7 +24,12 @@ static lv_obj_t * symWavCtrl;
 static lv_obj_t * labelLrc;
 static String LrcDisplay;
 
-void Task_LabelLrcUpdate(const char* str)
+void Wav_SetFilePath(String path)
+{
+    WavFilePath = path;
+}
+
+void Wav_LabelLrcUpdate(const char* str)
 {
     static bool readyBreak = false;
     
@@ -45,11 +51,11 @@ void Task_LabelLrcUpdate(const char* str)
 static void Creat_LabelLrc()
 {
     labelLrc = lv_label_create(appWindow, NULL);
-    lv_obj_align(labelLrc, sliderWavVolume, LV_ALIGN_OUT_BOTTOM_MID, -10, 10);
+    lv_obj_align(labelLrc, barWav, LV_ALIGN_OUT_BOTTOM_MID, 0, 60);
     lv_obj_set_auto_realign(labelLrc, true);
     
     LrcDisplay = "";
-    lv_label_set_text_format(labelLrc, "<no xtrc file>");
+    lv_label_set_text_format(labelLrc, LrcDisplay.c_str());
 }
 
 static void Creat_WavFileInfo()
@@ -74,7 +80,7 @@ static void Creat_WavFileInfo()
         Wav_Handle.Header.ChuckLength,
         Wav_Handle.Header.EncodeType,
         Wav_Handle.Header.ChannelCnt,
-        Wav_Handle.Header.SampleFreq,Timer_GetClockOut(TIM2),
+        Wav_Handle.Header.SampleFreq,Timer_GetClockOut(TIM_WAVPLAYER),
         Wav_Handle.Header.SampleBits,
         Wav_Handle.Header.BytePerSecond,
         Wav_Handle.Header.BytePerFrame
@@ -88,7 +94,7 @@ static void Task_WavBarUpdate(lv_task_t * task)
     int min = sec / 60;
     lv_label_set_text_format(labelWavTime, "%02d:%02d ", min, sec % 60);
     
-    if(Wav_Handle.IsEnd)
+    if(Wav_Handle.IsEnd || WavError)
         page.PagePop();
 }
 
@@ -173,7 +179,8 @@ void Creat_BtnWavCtrl()
   */
 static void Setup()
 {
-    if(WavPlayer_LoadFile(WavFilePath))
+    WavError = !WavPlayer_LoadFile(WavFilePath);
+    if(!WavError)
     {
         WavPlayer_SetEnable(true);
         WavPlayer_SetPlaying(true);

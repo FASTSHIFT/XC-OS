@@ -2,6 +2,7 @@
 #include "DisplayPrivate.h"
 #include "TasksManage.h"
 #include "Module.h"
+#include "terminal.h"
 
 TaskHandle_t TaskHandle_Display = 0;
 TaskHandle_t TaskHandle_PageRun = 0;
@@ -15,16 +16,17 @@ PageManager page(PAGE_MAX);
 
 static void Init_Pages()
 {
-    PageRegister_Home(PAGE_Home);
-    PageRegister_Settings(PAGE_Settings);
-    PageRegister_BattInfo(PAGE_BattInfo);
-    PageRegister_LuaScript(PAGE_LuaScript);
-    PageRegister_SetDisplay(PAGE_SetDisplay);
-    PageRegister_FileExplorer(PAGE_FileExplorer);
-    PageRegister_SubAPPs(PAGE_SubAPPs);
-    PageRegister_TextEditor(PAGE_TextEditor);
-    PageRegister_AppBgManager(PAGE_AppBgManager);
-    PageRegister_WavPlayer(PAGE_WavPlayer);
+    PAGE_REG(Home);
+    PAGE_REG(Settings);
+    PAGE_REG(BattInfo);
+    PAGE_REG(LuaScript);
+    PAGE_REG(SetDisplay);
+    PAGE_REG(FileExplorer);
+    PAGE_REG(SubAPPs);
+    PAGE_REG(TextEditor);
+    PAGE_REG(AppBgManager);
+    PAGE_REG(WavPlayer);
+    PAGE_REG(BvPlayer);
     
     page.PagePush(PAGE_Home);
 }
@@ -53,7 +55,7 @@ void Task_Dispaly(void *pvParameters)
     
     Init_Bar();
     Init_Pages();
-    
+
     for(;;)
     {
         lv_task_handler();

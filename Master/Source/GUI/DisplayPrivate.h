@@ -44,21 +44,16 @@ typedef enum
     PAGE_TextEditor,
     PAGE_AppBgManager,
     PAGE_WavPlayer,
+    PAGE_BvPlayer,
     PAGE_MAX
 } Page_Type;
 
 extern PageManager page;
-
-void PageRegister_Home(uint8_t pageID);
-void PageRegister_BattInfo(uint8_t pageID);
-void PageRegister_LuaScript(uint8_t pageID);
-void PageRegister_Settings(uint8_t pageID);
-void PageRegister_SetDisplay(uint8_t pageID);
-void PageRegister_FileExplorer(uint8_t pageID);
-void PageRegister_SubAPPs(uint8_t pageID);
-void PageRegister_TextEditor(uint8_t pageID);
-void PageRegister_AppBgManager(uint8_t pageID);
-void PageRegister_WavPlayer(uint8_t pageID);
+#define PAGE_REG(name)\
+do{\
+    extern void PageRegister_##name(uint8_t pageID);\
+    PageRegister_##name(PAGE_##name);\
+}while(0)
 
 /*Bar*/
 void Init_Bar();

@@ -30,4 +30,6 @@
 //CSN   CE
 //VCC   GND
 
+#define TIM_WAVPLAYER TIM8
+
 #endif

@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Component Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'Pro' 
+ * Project: 'XC-OS' 
  * Target:  'XC-OS' 
  */
 
