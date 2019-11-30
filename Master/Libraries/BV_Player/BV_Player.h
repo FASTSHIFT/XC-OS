@@ -6,11 +6,11 @@
 
 class BV_Player
 {
-    typedef void(*DrawFrame_16bit_CallbackFunction_t)(uint16_t*, BvHeader_TypeDef*, int16_t*, int16_t*);
-    typedef void(*DrawFrame_8bit_CallbackFunction_t)(uint8_t*, BvHeader_TypeDef*, int16_t*, int16_t*);
+    typedef void(*DrawPic_16bit_CallbackFunction_t)(int16_t, int16_t, uint16_t*, int16_t, int16_t);
+    typedef void(*DrawPic_8bit_CallbackFunction_t)(int16_t, int16_t, uint8_t*, int16_t, int16_t);
 public:
-    DrawFrame_16bit_CallbackFunction_t DrawFrame_16bit;
-    DrawFrame_8bit_CallbackFunction_t  DrawFrame_8bit;
+    DrawPic_16bit_CallbackFunction_t DrawPic_16bit;
+    DrawPic_8bit_CallbackFunction_t  DrawPic_8bit;
 
     int16_t BaseX, BaseY;
     BvHeader_TypeDef Head;
@@ -44,8 +44,9 @@ private:
     File BvFile;
 
     uint8_t* Buffer;
-    uint32_t BufferSize;
     uint32_t BufferSizeMax;
+    uint32_t FrameSize;
+    uint32_t FrameTime;
 
     State_t PlayerState;
     State_t PlayerStateSet;
@@ -53,6 +54,8 @@ private:
     uint32_t PlayVideo_RGB565();
     uint32_t PlayVideo_RGB232();
     uint32_t PlayVideo_BIN();
+
+    void DrawOneFrame();
 };
 
 #endif

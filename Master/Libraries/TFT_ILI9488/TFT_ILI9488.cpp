@@ -390,6 +390,29 @@ void TFT_ILI9488::drawFastRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int1
     TFT_CS_SET;
 }
 
+void TFT_ILI9488::drawFastBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h)
+{
+    setAddrWindow(x, y, x + w - 1, y + h - 1);
+
+    int16_t byteWidth = (w + 7) / 8;
+    uint8_t b = 0;
+
+    TFT_CS_CLR;
+    TFT_RS_SET;
+    for(int16_t j = 0; j < h; j++)
+    {
+        for(int16_t i = 0; i < w; i++ )
+        {
+            if(i & 7) b <<= 1;
+            else      b   = bitmap[j * byteWidth + i / 8];
+            *TFT_Port = (b & 0x80) ? White : Black;
+            TFT_RW_CLR;
+            TFT_RW_SET;
+        }
+    }
+    TFT_CS_SET;
+}
+
 void TFT_ILI9488::fillScreen(uint16_t color)
 {
     setAddrWindow(0, 0, _width - 1, _height - 1);

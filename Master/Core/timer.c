@@ -79,10 +79,24 @@ void Timer_ClockCmd(TIM_TypeDef* TIMx, FunctionalState NewState)
     }
 }
 
-/*包含math用于计算sqrt()*/
-#include "math.h"
 /*取绝对值*/
 #define CLOCK_ABS(x) (((x)>0)?(x):-(x))
+
+/*快速求平方根*/
+static float Qsqrt(float number)
+{
+    long i;
+    float x2, y;
+    const float threehalfs = 1.5f;
+    x2 = number * 0.5f;
+    y  = number;
+    i  = *(long*)&y;
+    i  = 0x5f3759df - (i >> 1);
+    y  = *(float*)&i;
+    y  = y * (threehalfs - (x2 * y * y));
+    y  = y * (threehalfs - (x2 * y * y));
+    return 1.0f / y;
+}
 
 /**
   * @brief  将定时中断频率转换为重装值和时钟分频值
@@ -93,23 +107,23 @@ void Timer_ClockCmd(TIM_TypeDef* TIMx, FunctionalState NewState)
   * @retval 误差值(Hz)
   */
 static int32_t Timer_FreqToArrPsc(
-    uint32_t freq, uint32_t clock, 
+    uint32_t freq, uint32_t clock,
     uint16_t *period, uint16_t *prescaler
 )
 {
     uint32_t prodect;
     uint16_t psc, arr;
     uint16_t max_error = 0xFFFF;
- 
+
     if(freq == 0 || freq > clock)
         goto failed;
-    
+
     /*获取arr和psc目标乘积*/
     prodect = clock / freq;
-    
-    /*从sqrt(prodect)开始计算*/
-    psc = sqrt(prodect);
-    
+
+    /*从prodect的平方根开始计算*/
+    psc = Qsqrt(prodect);
+
     /*遍历，使arr*psc足够接近prodect*/
     for(; psc > 1; psc--)
     {
@@ -131,11 +145,11 @@ static int32_t Timer_FreqToArrPsc(
             }
         }
     }
-    
+
     /*计算成功*/
 success:
     return (freq - clock / ((*period) * (*prescaler)));
-    
+
     /*失败*/
 failed:
     return (freq - clock);
@@ -154,10 +168,10 @@ static void Timer_TimeToArrPsc(
     uint16_t *period, uint16_t *prescaler
 )
 {
-    uint32_t cyclesPerMicros = clock / 1000000U; 
+    uint32_t cyclesPerMicros = clock / 1000000U;
     uint32_t prodect = time * cyclesPerMicros;
     uint16_t arr, psc;
-    
+
     if(prodect < cyclesPerMicros * 30)
     {
         arr = 10;
@@ -188,25 +202,25 @@ void Timer_SetInterrupt(TIM_TypeDef* TIMx, uint32_t time, Timer_CallbackFunction
 {
     uint16_t period, prescaler;
     uint32_t clock = (IS_APB2_TIM(TIMx) ? F_CPU : (F_CPU / 2));
-    
+
     if(!IS_TIM_ALL_PERIPH(TIMx) || time == 0)
         return;
-    
+
     /*将定时中断时间转换为重装值和时钟分频值*/
     Timer_TimeToArrPsc(
         time,
         clock,
-        &period, 
+        &period,
         &prescaler
     );
-    
+
     /*定时中断配置*/
     Timer_SetInterruptBase(
-        TIMx, 
+        TIMx,
         period,
         prescaler,
-        function, 
-        Timer_PreemptionPriority_Default, 
+        function,
+        Timer_PreemptionPriority_Default,
         Timer_SubPriority_Default
     );
 }
@@ -221,14 +235,14 @@ void Timer_SetInterruptFreqUpdate(TIM_TypeDef* TIMx, uint32_t freq)
 {
     uint16_t period, prescaler;
     uint32_t clock = (IS_APB2_TIM(TIMx) ? F_CPU : (F_CPU / 2));
-    
+
     if(!IS_TIM_ALL_PERIPH(TIMx) || freq == 0)
         return;
 
     Timer_FreqToArrPsc(
-        freq, 
+        freq,
         clock,
-        &period, 
+        &period,
         &prescaler
     );
     TIM_SetAutoreload(TIMx, period - 1);
@@ -245,7 +259,7 @@ uint32_t Timer_GetClockOut(TIM_TypeDef* TIMx)
     uint32_t clock = (IS_APB2_TIM(TIMx) ? F_CPU : (F_CPU / 2));
     if(!IS_TIM_ALL_PERIPH(TIMx))
         return 0;
-    
+
     return (clock / ((TIMx->ARR + 1) * (TIMx->PSC + 1)));
 }
 
@@ -266,7 +280,7 @@ void Timer_SetInterruptTimeUpdate(TIM_TypeDef* TIMx, uint32_t time)
     Timer_TimeToArrPsc(
         time,
         clock,
-        &period, 
+        &period,
         &prescaler
     );
 
@@ -285,9 +299,9 @@ void Timer_SetInterruptTimeUpdate(TIM_TypeDef* TIMx, uint32_t time)
   * @retval 无
   */
 void Timer_SetInterruptBase(
-    TIM_TypeDef* TIMx, 
-    uint16_t period, uint16_t prescaler, 
-    Timer_CallbackFunction_t function, 
+    TIM_TypeDef* TIMx,
+    uint16_t period, uint16_t prescaler,
+    Timer_CallbackFunction_t function,
     uint8_t PreemptionPriority, uint8_t SubPriority
 )
 {
