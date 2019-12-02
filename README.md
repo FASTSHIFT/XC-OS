@@ -4,7 +4,7 @@
 ## 内核
 > [FreeRTOS Kernel V10.2.0](https://www.freertos.org)
 
-## 图形引擎
+## UI框架
 > [LittlevGL V6.0](https://github.com/littlevgl/lvgl)
 
 ## 文件系统
