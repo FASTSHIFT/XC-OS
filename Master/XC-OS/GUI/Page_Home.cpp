@@ -46,7 +46,7 @@ static APP_TypeDef APP_Grp[] =
 {
     {&ImgSettings, "Settings", TYPE_PageJump, PAGE_Settings},
     {&ImgCode,     "IDE",      TYPE_PageJump, PAGE_LuaScript},
-    {&ImgGame,     "Game"},
+    {&ImgGame,     "Game",     TYPE_PageJump, PAGE_Game},
     {&ImgSubApps,  "APPs",     TYPE_PageJump, PAGE_SubAPPs},
     {&ImgFiles,    "Files",    TYPE_PageJump, PAGE_FileExplorer},
     {&ImgVideo,    "Video",    TYPE_PageJump, PAGE_BvPlayer},
@@ -271,6 +271,21 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
     lv_anim_create(&a_y);
 }
 
+static void FirstInit()
+{
+    /*初始化主Tabview页面*/
+    Creat_Page(&tabviewHome);
+    
+    /*创建Tab*/
+    __LoopExecute(Creat_Tab(tabviewHome, AppTab_Grp[i]), __Sizeof(AppTab_Grp));
+    
+    /*在主Tab创建APP组*/
+    __LoopExecute(Creat_APP(APP_Grp[i], AppTab_Grp[tabHomeIndex].tab, i, ImgbtnEvent_Handler), __Sizeof(APP_Grp));
+    
+    /*Tab滑动至主页面*/
+    lv_tabview_set_tab_act(tabviewHome, tabHomeIndex, LV_ANIM_ON);
+}
+
 /**
   * @brief  页面初始化事件
   * @param  无
@@ -278,25 +293,11 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
   */
 static void Setup()
 {
-    /*初始化主Tabview页面，只执行一次*/
-    __ExecuteOnce((Creat_Page(&tabviewHome)));
+    /*创建Tab组，只初始化一次*/
+    __ExecuteOnce(FirstInit());
     
-    /*显示按钮*/
-    lv_tabview_set_btns_hidden(tabviewHome, false);
-    
-    /*使能滑动*/
-    lv_tabview_set_sliding(tabviewHome, true);
-
-    /*创建Tab组*/
-    __ExecuteOnce(__LoopExecute(Creat_Tab(tabviewHome, AppTab_Grp[i]), __Sizeof(AppTab_Grp)));
-    
-    /*在主Tab创建APP组*/
-    __LoopExecute(Creat_APP(APP_Grp[i], AppTab_Grp[tabHomeIndex].tab, i, ImgbtnEvent_Handler), __Sizeof(APP_Grp));
-    
-    //lv_cont_set_layout(AppTab_Grp[1].tab, LV_LAYOUT_PRETTY);
-    
-    /*Tab滑动至主页面*/
-    __ExecuteOnce(lv_tabview_set_tab_act(tabviewHome, tabHomeIndex, LV_ANIM_ON));
+    /*显示tabview*/
+    lv_obj_set_hidden(tabviewHome, false);
     
     /*为上一个APP退出播放动画*/
     static bool first = true;
@@ -319,17 +320,20 @@ static void Exit()
     /*为APP开启动画延时*/
     vTaskDelay(AnimCloseTime_Default + 100);
     
-    /*置于顶层关闭*/
-    lv_obj_set_top(contAppSw, false);
+//    /*隐藏按钮*/
+//    lv_tabview_set_btns_hidden(tabviewHome, true);
+//    
+//    /*禁止滑动*/
+//    lv_tabview_set_sliding(tabviewHome, false);
+//    
+//    /*删除APP组，释放内存*/
+//    __LoopExecute(lv_obj_del_safe(&APP_Grp[i].cont), __Sizeof(APP_Grp));
     
-    /*隐藏按钮*/
-    lv_tabview_set_btns_hidden(tabviewHome, true);
+    /*隐藏tabview*/
+    lv_obj_set_hidden(tabviewHome, true);
     
-    /*禁止滑动*/
-    lv_tabview_set_sliding(tabviewHome, false);
-    
-    /*删除APP组，释放内存*/
-    __LoopExecute(lv_obj_del_safe(&APP_Grp[i].cont), __Sizeof(APP_Grp));
+    /*动画容器隐藏*/
+    lv_obj_set_hidden(contAppSw, true);
 }
 
 /**

@@ -335,9 +335,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
+              <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,PLL_M=8,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer;..\Libraries\BV_Player;..\XC-OS\Basic;..\XC-OS\Communication;..\XC-OS\GUI;..\XC-OS\LuaScript;..\XC-OS\Module</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer;..\Libraries\BV_Player;..\XC-OS\Basic;..\XC-OS\Communication;..\XC-OS\GUI;..\XC-OS\LuaScript;..\XC-OS\Module;..\XC-OS\Game</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -462,11 +462,6 @@
               <FilePath>..\XC-OS\GUI\lv_conf.h</FilePath>
             </File>
             <File>
-              <FileName>lv_ext_func.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\lv_ext_func.cpp</FilePath>
-            </File>
-            <File>
               <FileName>lv_port_disp.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\lv_port_disp.cpp</FilePath>
@@ -475,6 +470,11 @@
               <FileName>lv_port_fs.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\lv_port_fs.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>lv_ext_func.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\lv_ext_func.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_EXAMPLE.cpp</FileName>
@@ -495,6 +495,11 @@
               <FileName>Page_BvPlayer.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page_BvPlayer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_Game.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page_Game.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_FileExplorer.cpp</FileName>
@@ -1728,6 +1733,100 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Game\doom-nano</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>1</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>doom-nano.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\doom-nano.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>entities.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\entities.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>input.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\input.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>types.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\types.cpp</FilePath>
             </File>
           </Files>
         </Group>

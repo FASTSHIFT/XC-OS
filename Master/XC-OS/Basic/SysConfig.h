@@ -1,6 +1,8 @@
 #ifndef __SYSCONFIG_H
 #define __SYSCONFIG_H
 
+#define NULL_PIN PD0
+
 #define Motor_Pin           PA0
 #define SD_CS_Pin           PA1
 #define SD_CD_Pin           PB0

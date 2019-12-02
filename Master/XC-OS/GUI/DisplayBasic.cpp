@@ -26,6 +26,7 @@ static void Init_Pages()
     PAGE_REG(AppBgManager);
     PAGE_REG(WavPlayer);
     PAGE_REG(BvPlayer);
+    PAGE_REG(Game);
     
     page.PagePush(PAGE_Home);
 }

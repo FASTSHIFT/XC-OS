@@ -166,13 +166,16 @@ static void Creat_AppWindow()
 {
 #define PAGE_HIEGHT (lv_disp_get_ver_res(NULL) - lv_obj_get_height(barStatus) - lv_obj_get_height(barNavigation))
 #define PAGE_WIDTH  (lv_disp_get_hor_res(NULL))
+    
     appWindow = lv_cont_create(lv_scr_act(), NULL);
+
     lv_obj_set_size(appWindow, PAGE_WIDTH, PAGE_HIEGHT);
     lv_obj_align(appWindow, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
     lv_cont_set_fit(appWindow, LV_FIT_NONE);
-    lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &lv_style_transp);
+    
+    static lv_style_t styleAppWindow = lv_style_transp;//lv_style_plain_color;
+    lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &styleAppWindow);
 }
-
 
 #define DropDownList_ExtArea (lv_obj_get_height(barStatus)*2)
 

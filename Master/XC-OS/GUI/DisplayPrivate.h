@@ -27,6 +27,7 @@ int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, 
 void lv_label_set_text_add(lv_obj_t * label, const char * text);
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
 lv_coord_t lv_obj_get_y_center(lv_obj_t * obj);
+void lv_obj_set_color(lv_obj_t * obj, lv_color_t color);
 
 /*Page*/
 #include "PageManager.h"
@@ -45,6 +46,7 @@ typedef enum
     PAGE_AppBgManager,
     PAGE_WavPlayer,
     PAGE_BvPlayer,
+    PAGE_Game,
     PAGE_MAX
 } Page_Type;
 
