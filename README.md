@@ -33,7 +33,9 @@
 >
 > 7.视频播放器(BmpVideo)
 >
-> 8.待续...
+> 8.毁灭战士nano 3D ([doom-nano](https://github.com/daveruiz/doom-nano))
+>
+> 9.待续...
 ## 硬件配置
 > 主控: STM32F405RGT6(RAM:192KB ROM:1024KB 超频216MHz)
 >
@@ -43,7 +45,7 @@
 >
 > 功放: PAM8403(3W)
 >
-> 扬声器: 华为荣耀8扬声器总成
+> 扬声器: HUAWEI HONOR 8 扬声器总成
 >
 > 电池: Li-ion 3.7v 2000maH
 >
