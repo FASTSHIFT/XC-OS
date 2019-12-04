@@ -24,6 +24,8 @@ class PageManager {
 public:
     PageManager(uint8_t pageMax, uint8_t pageStackSize = 10);
     uint8_t NowPage, LastPage, NextPage;
+    uint8_t NewPage, OldPage;
+
     bool PageRegister(
         uint8_t pageID,
         CallbackFunction_t setupCallback,
@@ -43,10 +45,7 @@ private:
     uint8_t *PageStack;
     uint8_t PageStackSize;
     uint8_t PageStackTop;
-
     uint8_t MaxPage;
-    uint8_t NewPage;
-    uint8_t OldPage;
     bool IsPageBusy;
 };
 

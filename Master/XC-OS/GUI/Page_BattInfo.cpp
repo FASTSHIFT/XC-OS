@@ -60,10 +60,7 @@ static void Task_BattUpdate(lv_task_t * task)
 
 
     lv_label_set_text_format(labelCurrent, "%0.2fmA", BattCurret);
-//    lv_obj_align(labelCurrent, gaugeCurrent, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
-
     lv_label_set_text_format(labelVoltage, "%0.2fmV", BattVoltage);
-//    lv_obj_align(labelVoltage, gaugeVoltage, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
 
     float power = BattCurret * BattVoltage / 1000000.0f;
     if(BattCurret < 0.0f)

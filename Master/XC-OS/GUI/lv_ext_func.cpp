@@ -19,6 +19,9 @@ extern "C" {
 
 int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, ...)
 {
+    if(!label)
+        return 0;
+    
     char buff[200];
 
     va_list args;
@@ -33,6 +36,9 @@ int lv_label_set_text_format(lv_obj_t * label, const char *__restrict __format, 
 
 void lv_label_set_text_add(lv_obj_t * label, const char * text)
 {
+    if(!label)
+        return;
+    
     String new_text = String(lv_label_get_text(label)) + String(text);
     lv_label_set_text(label, new_text.c_str());
 }

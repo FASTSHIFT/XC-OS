@@ -53,9 +53,10 @@ static void Setup()
     gameWinStyle.body.opa = LV_OPA_COVER;
     lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &gameWinStyle);
     
-    task_doom = lv_task_create(Task_DoomUpdate, 10, LV_TASK_PRIO_HIGH, 0);
-    doom_setup();
     Creat_DoomKeys();
+    task_doom = lv_task_create(Task_DoomUpdate, 10, LV_TASK_PRIO_HIGH, 0);
+    
+    doom_setup();
 }
 
 /**

@@ -1,9 +1,21 @@
 #include "DisplayPrivate.h"
 #include "TasksManage.h"
+#include "cm_backtrace.h"
+
+void InfoPrintf(const char *__restrict __format, ...)
+{
+    char printf_buff[256];
+
+    va_list args;
+    va_start(args, __format);
+    int ret_status = vsnprintf(printf_buff, sizeof(printf_buff), __format, args);
+    va_end(args);
+    Serial.print(printf_buff);
+}
 
 #define BlueScreeDelayTime 10000
 
-static void SoftDealy(uint32_t ms)
+static void SoftDelay(uint32_t ms)
 {
     volatile uint32_t i = F_CPU / 1000 * ms / 5;
     while(i--);
@@ -34,7 +46,7 @@ static void ShowCrashReports(const char* report)
     screen.printf("HFSR=0x%x\r\n", SCB->HFSR);
     screen.printf("DFSR=0x%x\r\n", SCB->DFSR);
     
-    SoftDealy(BlueScreeDelayTime);
+    SoftDelay(BlueScreeDelayTime);
     NVIC_SystemReset();
 }
 
@@ -54,23 +66,21 @@ extern "C"
         ShowCrashReports("malloc failed");
     }
     
-    void UsageFault_Handler()
+    void vApplicationHardFaultHook()
     {
-        ShowCrashReports("usage fault");
+        ShowCrashReports("FXXK HardFault!");
     }
     
-    void BusFault_Handler()
+    __asm void HardFault_Handler()
     {
-        ShowCrashReports("bus fault");
-    }
-    
-    void MemManage_Handler()
-    {
-        ShowCrashReports("memory manage fault");
-    }
-    
-    void HardFault_Handler()
-    {
-        ShowCrashReports("fuck! hard fault");
+        extern vApplicationHardFaultHook
+        extern cm_backtrace_fault
+            
+        mov r0, lr
+        mov r1, sp
+        bl cm_backtrace_fault
+        bl vApplicationHardFaultHook
+Fault_Loop
+        b Fault_Loop
     }
 }

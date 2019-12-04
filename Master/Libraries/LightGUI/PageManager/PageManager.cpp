@@ -12,7 +12,8 @@ PageManager::PageManager(uint8_t pageMax, uint8_t pageStackSize)
 {
     MaxPage = pageMax;
     NewPage = 0;
-    OldPage = 0xFF;
+    OldPage = 0;
+    IsPageBusy = false;
 
     /* 申请内存，清空列表 */
     PageList = new PageList_TypeDef[MaxPage];
@@ -78,6 +79,7 @@ bool PageManager::PageRegister(uint8_t pageID,
   */
 void PageManager::PageEventTransmit(int event, void* param)
 {
+    /*将事件传递到当前页面*/
     if(PageList[NowPage].EventCallback)
         PageList[NowPage].EventCallback(event, param);
 }
@@ -92,10 +94,13 @@ void PageManager::PageChangeTo(uint8_t pageID)
     if(!IS_PAGE(pageID))
         return;
     
+    /*检查页面是否忙碌*/
     if(!IsPageBusy)
     {
+        /*新页面ID*/
         NextPage = NewPage = pageID;
 
+        /*标记为忙碌状态*/
         IsPageBusy = true;
     }
 }
@@ -109,6 +114,10 @@ bool PageManager::PagePush(uint8_t pageID)
 {
     if(!IS_PAGE(pageID))
         return false;
+    
+    /*检查页面是否忙碌*/
+    if(IsPageBusy)
+       return false; 
     
     /*防止栈溢出*/
     if(PageStackTop >= PageStackSize - 1)
@@ -137,6 +146,10 @@ bool PageManager::PagePush(uint8_t pageID)
   */
 bool PageManager::PagePop()
 {
+    /*检查页面是否忙碌*/
+    if(IsPageBusy)
+       return false; 
+    
     /*防止栈溢出*/
     if(PageStackTop == 0)
         return false;
@@ -160,6 +173,10 @@ bool PageManager::PagePop()
   */
 void PageManager::PageStackClear()
 {
+    /*检查页面是否忙碌*/
+    if(IsPageBusy)
+       return; 
+    
     for(uint8_t i = 0; i < PageStackSize; i++)
     {
         PageStack[i] = 0;
@@ -177,21 +194,32 @@ void PageManager::Running()
     /*页面切换事件*/
     if(NewPage != OldPage)
     {
+        /*标记为忙碌状态*/
         IsPageBusy = true;
 
+        /*执行旧页面的退出函数*/
         if(PageList[OldPage].ExitCallback && IS_PAGE(OldPage))
             PageList[OldPage].ExitCallback();
         
+        /*标记旧页面*/
         LastPage = OldPage;
+        
+        /*标记新页面为当前页面*/
+        NowPage = NewPage;
 
+        /*执行新页面初始化函数*/
         if(PageList[NewPage].SetupCallback && IS_PAGE(NewPage))
             PageList[NewPage].SetupCallback();
 
-        NowPage = OldPage = NewPage;
+        /*新页面初始化完成，标记为旧页面*/
+        OldPage = NewPage;
     }
     else
     {
+        /*页面不忙碌*/
         IsPageBusy = false;
+        
+        /*页面循环事件*/
         if(PageList[NowPage].LoopCallback && IS_PAGE(NowPage))
             PageList[NowPage].LoopCallback();
     }

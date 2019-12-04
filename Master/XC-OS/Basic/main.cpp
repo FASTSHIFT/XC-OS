@@ -1,9 +1,13 @@
 #include "FileGroup.h"
 #include "TasksManage.h"
+#include "cm_backtrace.h"
 
 void setup()
 {
+    cm_backtrace_init("XC-OS", "v1.0", "v1.0");
     Serial.begin(115200);
+    Serial.printf("XC-OS(%s %s Build) init...\r\n", __DATE__, __TIME__);
+
     Serial2.begin(115200);
     Serial3.begin(115200);
 
@@ -26,6 +30,8 @@ void setup()
 //  TimerHandle_IMU_Claculate = xTimerReg(Task_IMU_Claculate, 500);
 //  xTimerStartSafe(TimerHandle_IMU_Claculate);
 
+    Serial.println("OS Running...");
+    Delay_Init();
     vTaskStartScheduler();
 }
 
@@ -41,7 +47,6 @@ void loop()
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-    Delay_Init();
     setup();
     for(;;)loop();
 }
