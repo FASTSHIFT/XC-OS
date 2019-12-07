@@ -14,7 +14,6 @@ void my_print(lv_log_level_t level, const char * file, uint32_t line, const char
 /* Display flushing */
 static void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
-    
     screen.drawFastRGBBitmap(area->x1, area->y1, (uint16_t*)color_p, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1));
     lv_disp_flush_ready(disp); /* tell lvgl that flushing is done */
 //    static uint16_t color; 

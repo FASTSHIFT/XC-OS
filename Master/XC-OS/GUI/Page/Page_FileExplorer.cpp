@@ -64,7 +64,7 @@ static void Creat_TabDrive(lv_obj_t * tab)
     /*已使用空间百分比*/
     int16_t dispUseage = usageSize / totalSize * 100.0f;
     lv_lmeter_set_value(lmeter, dispUseage);
-    lv_label_set_text_format(lmeterLabel, "%d%%", dispUseage);
+    lv_label_set_text_fmt(lmeterLabel, "%d%%", dispUseage);
 
     /*标签样式为大字体*/
     static lv_style_t labelStyle = *lv_obj_get_style(lmeterLabel);
@@ -76,7 +76,7 @@ static void Creat_TabDrive(lv_obj_t * tab)
 
     /*SD Size*/
     lv_obj_t * labelSD = lv_label_create(lmeter, NULL);
-    lv_label_set_text_format(labelSD, "%0.2fGB / %0.2fGB", usageSize, totalSize);
+    lv_label_set_text_fmt(labelSD, "%0.2fGB / %0.2fGB", usageSize, totalSize);
     lv_obj_align(labelSD, lmeter, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
 }
 
@@ -451,8 +451,6 @@ static void Setup()
     
     lv_obj_set_hidden(tabviewFm, false);
     PathChange(tabFileList, &listFiles, NowFilePath.c_str()); 
-    
-
 }
 
 /**
@@ -483,7 +481,6 @@ static void Loop()
   */
 static void Exit()
 {
-    //lv_obj_del_safe(&tabviewFm);  
     lv_obj_del_safe(&listFiles);
     lv_obj_set_hidden(tabviewFm, true);
 }

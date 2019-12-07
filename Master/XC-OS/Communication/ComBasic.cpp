@@ -248,7 +248,6 @@ void Task_TransferData(void *pvParameters)
         
         if(State_RF)
         {
-        
             LoadDataPack();//打包数据包
 
             if(ConnectState.Pattern == Pattern_NRF)

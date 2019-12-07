@@ -24,6 +24,7 @@ static void SoftDelay(uint32_t ms)
 #include "Fonts\FreeMono24pt7b.h"
 static void ShowCrashReports(const char* report)
 {
+    noInterrupts();
     screen.fillScreen(screen.Blue);
     screen.setTextColor(screen.White);
     screen.setFont(&FreeMono24pt7b);

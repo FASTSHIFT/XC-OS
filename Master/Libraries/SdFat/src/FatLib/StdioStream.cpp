@@ -433,8 +433,7 @@ int StdioStream::fillGet() {
 //------------------------------------------------------------------------------
 // private
 bool StdioStream::fillBuf() {
-  if (!(m_status &
-        S_SRD)) {  // check for S_ERR and S_EOF ??/////////////////
+  if (!(m_status & S_SRD)) {  // check for S_ERR and S_EOF ??
     if (!(m_status & S_SRW)) {
       m_status |= S_ERR;
       return false;
@@ -461,8 +460,7 @@ bool StdioStream::fillBuf() {
 //------------------------------------------------------------------------------
 // private
 bool StdioStream::flushBuf() {
-  if (!(m_status &
-        S_SWR)) {  // check for S_ERR ??////////////////////////
+  if (!(m_status & S_SWR)) {  // check for S_ERR ??
     if (!(m_status & S_SRW)) {
       m_status |= S_ERR;
       return false;

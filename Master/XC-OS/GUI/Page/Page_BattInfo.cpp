@@ -59,18 +59,12 @@ static void Task_BattUpdate(lv_task_t * task)
     batVol = __Map(BattVoltage, 2600, 4200, 0, 100);
 
 
-    lv_label_set_text_format(labelCurrent, "%0.2fmA", BattCurret);
-    lv_label_set_text_format(labelVoltage, "%0.2fmV", BattVoltage);
+    lv_label_set_text_fmt(labelCurrent, "%0.2fmA", BattCurret);
+    lv_label_set_text_fmt(labelVoltage, "%0.2fmV", BattVoltage);
 
     float power = BattCurret * BattVoltage / 1000000.0f;
-    if(BattCurret < 0.0f)
-    {
-        lv_label_set_text_format(labelStatus, "Discharge: %0.2fW", power);
-    }
-    else
-    {
-        lv_label_set_text_format(labelStatus, "Charge: %0.2fW", power);
-    }
+    const char *state = BattCurret < 0.0f ? "Discharge" : "Charge";
+    lv_label_set_text_fmt(labelStatus, "%s: %0.2fW", state,power);
 }
 
 /**

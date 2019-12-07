@@ -49,10 +49,10 @@ static void Task_UpdateStatusBar(lv_task_t * task)
     lv_label_set_text(symBatt, battSymbol[symIndex]);
     uint8_t batUsage = map(BattVoltageOc, 2600, 4200, 0, 100);
     if(batUsage > 100)batUsage = 100;
-    lv_label_set_text_format(labelBattUsage, "%d%", batUsage);
+    lv_label_set_text_fmt(labelBattUsage, "%d%", batUsage);
     
     /*CPU’º”√œ‘ æ*/
-    lv_label_set_text_format(labelCPUusage, "%d%%", FreeRTOS_GetCPUUsage());
+    lv_label_set_text_fmt(labelCPUusage, "%d%%", FreeRTOS_GetCPUUsage());
 }
 
 

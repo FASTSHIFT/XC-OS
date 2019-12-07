@@ -1,7 +1,10 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
-#include "LuaScript.h"
 #include "Module.h"
+
+#if( XC_USE_LUA == 1)
+#include "LuaScript.h"
+#endif
 
 static void write_create(lv_obj_t * parent);
 static void luaoutput_creat(lv_obj_t * parent);
@@ -124,15 +127,19 @@ static void KeyboardEvent_Handler(lv_obj_t * kb, lv_event_t event)
     
     if(event == LV_EVENT_APPLY)
     {
+#if( XC_USE_LUA == 1 )
         luaScript.registerStrOutput(LuaPrintCallback);
         LuaScriptStart(lv_ta_get_text(ta_input));
+#endif
         lv_tabview_set_tab_act(tv, 1, true);
         lv_ta_add_text(ta_output, "\n> ");
     }
     
     if(event == LV_EVENT_CANCEL)
     {
+#if( XC_USE_LUA == 1 )
         luaScript.end();
+#endif
         Keyboard_Activate(&keyboard, false, NULL, NULL, NULL);
     }
     
@@ -161,7 +168,9 @@ static void Setup()
   */
 static void Exit()
 {
+#if( XC_USE_LUA == 1 )
     luaScript.end();
+#endif
     lv_obj_set_hidden(tv, true);
     //lv_obj_del_safe(&tv);
 }

@@ -334,10 +334,10 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,PLL_M=8,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\XTRC_Analyzer;..\Libraries\BV_Player;..\XC-OS\Basic;..\XC-OS\Communication;..\XC-OS\GUI;..\XC-OS\LuaScript;..\XC-OS\Module;..\XC-OS\Game;..\Libraries\cm_backtrace</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\Lyric_Analyzer;..\Libraries\BV_Player;..\Libraries\FastFFT;..\Libraries\cm_backtrace;..\XC-OS\Basic;..\XC-OS\Communication;..\XC-OS\GUI;..\XC-OS\LuaScript;..\XC-OS\Module;..\XC-OS\Game;..\XC-OS\GUI\Page</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -476,25 +476,15 @@
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\lv_ext_func.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI\Page</GroupName>
+          <Files>
             <File>
               <FileName>Page_EXAMPLE.cpp</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\XC-OS\GUI\Page_EXAMPLE.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_AppBgManager.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_AppBgManager.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_BattInfoOld.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_BattInfoOld.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_BattInfo.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_BattInfo.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_EXAMPLE.cpp</FilePath>
               <FileOption>
                 <CommonProperty>
                   <UseCPPCompiler>2</UseCPPCompiler>
@@ -548,54 +538,120 @@
               </FileOption>
             </File>
             <File>
-              <FileName>Page_BvPlayer.cpp</FileName>
+              <FileName>Page_AppBgManager.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_BvPlayer.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_AppBgManager.cpp</FilePath>
             </File>
             <File>
-              <FileName>Page_Game.cpp</FileName>
+              <FileName>Page_BattInfo.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_Game.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_BattInfo.cpp</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <uGnu>2</uGnu>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>Page_BattInfoOld.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page\Page_BattInfoOld.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_BvPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page\Page_BvPlayer.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_FileExplorer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_FileExplorer.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_FileExplorer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_Game.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page\Page_Game.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_Home.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_Home.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_Home.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_LuaScript.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_LuaScript.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_LuaScript.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_SetDisplay.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_SetDisplay.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_SetDisplay.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_Settings.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_Settings.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_Settings.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_SubAPPs.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_SubAPPs.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_SubAPPs.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_TextEditor.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_TextEditor.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_TextEditor.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_WavPlayer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page_WavPlayer.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\Page\Page_WavPlayer.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -665,7 +721,170 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Game\doom-nano</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>1</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>doom-nano.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\doom-nano.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>entities.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\entities.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>input.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\input.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>types.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\types.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>LuaScript</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>LuaScript.h</FileName>
@@ -743,9 +962,19 @@
               <FilePath>..\XC-OS\Module\Text.cpp</FilePath>
             </File>
             <File>
-              <FileName>Xtrc.cpp</FileName>
+              <FileName>Lyric.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Xtrc.cpp</FilePath>
+              <FilePath>..\XC-OS\Module\Lyric.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WavPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Module\WavPlayer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Module\FFT.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -758,7 +987,7 @@
               <RVCTZI>0</RVCTZI>
               <RVCTOtherData>0</RVCTOtherData>
               <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>2</IncludeInBuild>
+              <IncludeInBuild>0</IncludeInBuild>
               <AlwaysBuild>2</AlwaysBuild>
               <GenerateAssemblyFile>2</GenerateAssemblyFile>
               <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -1071,6 +1300,11 @@
           </GroupOption>
           <Files>
             <File>
+              <FileName>lv_debug.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_core\lv_debug.c</FilePath>
+            </File>
+            <File>
               <FileName>lv_disp.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_core\lv_disp.c</FilePath>
@@ -1166,6 +1400,11 @@
               <FilePath>..\Libraries\lvgl\src\lv_font\lv_font_roboto_12.c</FilePath>
             </File>
             <File>
+              <FileName>lv_font_roboto_12_subpx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_font\lv_font_roboto_12_subpx.c</FilePath>
+            </File>
+            <File>
               <FileName>lv_font_roboto_16.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_font\lv_font_roboto_16.c</FilePath>
@@ -1179,6 +1418,11 @@
               <FileName>lv_font_roboto_28.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_font\lv_font_roboto_28.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_font_roboto_28_compressed.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_font\lv_font_roboto_28_compressed.c</FilePath>
             </File>
             <File>
               <FileName>lv_font_unscii_8.c</FileName>
@@ -1214,6 +1458,11 @@
               <FileName>lv_async.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_misc\lv_async.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_bidi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_misc\lv_bidi.c</FilePath>
             </File>
             <File>
               <FileName>lv_circ.c</FileName>
@@ -1254,6 +1503,11 @@
               <FileName>lv_mem.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_misc\lv_mem.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_printf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_misc\lv_printf.c</FilePath>
             </File>
             <File>
               <FileName>lv_task.c</FileName>
@@ -1319,6 +1573,11 @@
               <FileName>lv_cont.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lvgl\src\lv_objx\lv_cont.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_cpicker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\lvgl\src\lv_objx\lv_cpicker.c</FilePath>
             </File>
             <File>
               <FileName>lv_ddlist.c</FileName>
@@ -1681,9 +1940,72 @@
               <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
             </File>
             <File>
-              <FileName>XTRC_Analyzer.cpp</FileName>
+              <FileName>Lyric_Analyzer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\Libraries\XTRC_Analyzer\XTRC_Analyzer.cpp</FilePath>
+              <FilePath>..\Libraries\Lyric_Analyzer\Lyric_Analyzer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FastFFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\FastFFT\FastFFT.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CmBacktrace</GroupName>
+          <Files>
+            <File>
+              <FileName>cm_backtrace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Libraries\cm_backtrace\cm_backtrace.c</FilePath>
+            </File>
+            <File>
+              <FileName>cmb_fault.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\Libraries\cm_backtrace\fault_handler\keil\cmb_fault.S</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Aads>
+                    <interw>2</interw>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <thumb>2</thumb>
+                    <SplitLS>2</SplitLS>
+                    <SwStkChk>2</SwStkChk>
+                    <NoWarn>2</NoWarn>
+                    <uSurpInc>2</uSurpInc>
+                    <useXO>2</useXO>
+                    <uClangAs>2</uClangAs>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Aads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>cmb_cfg.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Libraries\cm_backtrace\cmb_cfg.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1789,158 +2111,6 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\timer.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Game\doom-nano</GroupName>
-          <GroupOption>
-            <CommonProperty>
-              <UseCPPCompiler>0</UseCPPCompiler>
-              <RVCTCodeConst>0</RVCTCodeConst>
-              <RVCTZI>0</RVCTZI>
-              <RVCTOtherData>0</RVCTOtherData>
-              <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>1</IncludeInBuild>
-              <AlwaysBuild>2</AlwaysBuild>
-              <GenerateAssemblyFile>2</GenerateAssemblyFile>
-              <AssembleAssemblyFile>2</AssembleAssemblyFile>
-              <PublicsOnly>2</PublicsOnly>
-              <StopOnExitCode>11</StopOnExitCode>
-              <CustomArgument></CustomArgument>
-              <IncludeLibraryModules></IncludeLibraryModules>
-              <ComprImg>1</ComprImg>
-            </CommonProperty>
-            <GroupArmAds>
-              <Cads>
-                <interw>2</interw>
-                <Optim>0</Optim>
-                <oTime>2</oTime>
-                <SplitLS>2</SplitLS>
-                <OneElfS>2</OneElfS>
-                <Strict>2</Strict>
-                <EnumInt>2</EnumInt>
-                <PlainCh>2</PlainCh>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <wLevel>0</wLevel>
-                <uThumb>2</uThumb>
-                <uSurpInc>2</uSurpInc>
-                <uC99>2</uC99>
-                <uGnu>2</uGnu>
-                <useXO>2</useXO>
-                <v6Lang>0</v6Lang>
-                <v6LangP>0</v6LangP>
-                <vShortEn>2</vShortEn>
-                <vShortWch>2</vShortWch>
-                <v6Lto>2</v6Lto>
-                <v6WtE>2</v6WtE>
-                <v6Rtti>2</v6Rtti>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Cads>
-              <Aads>
-                <interw>2</interw>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <thumb>2</thumb>
-                <SplitLS>2</SplitLS>
-                <SwStkChk>2</SwStkChk>
-                <NoWarn>2</NoWarn>
-                <uSurpInc>2</uSurpInc>
-                <useXO>2</useXO>
-                <uClangAs>2</uClangAs>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Aads>
-            </GroupArmAds>
-          </GroupOption>
-          <Files>
-            <File>
-              <FileName>doom-nano.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\doom-nano.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>entities.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\entities.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>input.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\input.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>types.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\types.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>CmBacktrace</GroupName>
-          <Files>
-            <File>
-              <FileName>cm_backtrace.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\cm_backtrace\cm_backtrace.c</FilePath>
-            </File>
-            <File>
-              <FileName>cmb_fault.S</FileName>
-              <FileType>2</FileType>
-              <FilePath>..\Libraries\cm_backtrace\fault_handler\keil\cmb_fault.S</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Aads>
-                    <interw>2</interw>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <thumb>2</thumb>
-                    <SplitLS>2</SplitLS>
-                    <SwStkChk>2</SwStkChk>
-                    <NoWarn>2</NoWarn>
-                    <uSurpInc>2</uSurpInc>
-                    <useXO>2</useXO>
-                    <uClangAs>2</uClangAs>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Aads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>cmb_cfg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Libraries\cm_backtrace\cmb_cfg.h</FilePath>
             </File>
           </Files>
         </Group>

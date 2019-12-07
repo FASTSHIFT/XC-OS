@@ -13,6 +13,8 @@ void Power_Shutdown();
 
 /*Audio*/
 void Audio_SetEnable(bool en);
+
+/*MusicWav*/
 void WavPlayer_SetEnable(bool en);
 void WavPlayer_SetVolume(uint8_t volume);
 uint8_t WavPlayer_GetVolume();
@@ -29,9 +31,14 @@ void     TextBuf_Clear(uint8_t n = 0);
 uint16_t BrightnessGet();
 void BrightnessSet(uint16_t val);
 
-/*Xtrc*/
-bool XTRC_Setup(String path);
-void XTRC_Loop(uint32_t tick);
-void XTRC_Exit();
+/*Lyric*/
+bool Lyric_Setup(String path);
+void Lyric_Loop(uint32_t tick);
+void Lyric_Exit();
+
+/*FFT*/
+void FFT_AddData(int32_t data);
+void FFT_Process();
+const float *FFT_GetStrength();
 
 #endif

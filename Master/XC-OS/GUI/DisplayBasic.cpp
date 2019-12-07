@@ -43,6 +43,7 @@ void Task_PageRun(void *pvParameters)
 void Task_Dispaly(void *pvParameters)
 {
     screen.begin();
+
     //screen.setRotation(0);
     screen.fillScreen(screen.Black);
     tp_dev.init();

@@ -2,9 +2,12 @@
 #include "DisplayPrivate.h"
 #include "APP_Type.h"
 #include "SdFat.h"
-#include "LuaScript.h"
 #include "TasksManage.h"
 #include "Module.h"
+
+#if( XC_USE_LUA == 1 )
+#include "LuaScript.h"
+#endif
 
 #define APP_MAX 9
 #define APP_NAME_MAX 20
@@ -71,8 +74,10 @@ static void APP_Call(const char *path)
 {
     if(ExecuteLuaFile(path))
     {
+#if( XC_USE_LUA == 1 )
         luaScript.registerStrOutput(NULL);
         LuaScriptStart(TextBuf_GetBuff());
+#endif
     }
 }
 
@@ -120,7 +125,9 @@ static void Setup()
 static void Exit()
 {
     lv_obj_del_safe(&contApp);
+#if( XC_USE_LUA == 1 )
     luaScript.end();
+#endif
 }
 
 /**

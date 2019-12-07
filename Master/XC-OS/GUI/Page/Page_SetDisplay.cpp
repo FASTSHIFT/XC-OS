@@ -11,7 +11,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
     if(event == LV_EVENT_VALUE_CHANGED)
     {
         int value = lv_slider_get_value(obj);
-        lv_label_set_text_format(labelBright, "%d%%", value / 10);
+        lv_label_set_text_fmt(labelBright, "%d%%", value / 10);
         BrightnessSet(value);
         __IntervalExecute(Serial3.printf("B%dE", value), 20);
     }
@@ -32,7 +32,7 @@ static void Creat_Slider(lv_obj_t** slider)
 static void Creat_Label(lv_obj_t** label)
 {
     *label = lv_label_create(appWindow, NULL);
-    lv_label_set_text_format(*label, "%d%%", BrightnessGet() / 10);
+    lv_label_set_text_fmt(*label, "%d%%", BrightnessGet() / 10);
     lv_obj_align(*label, sliderBright, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
 }
 

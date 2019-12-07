@@ -90,21 +90,15 @@ static void Task_BattUpdate(lv_task_t * task)
 
     lv_chart_refresh(chart); /*Required after direct set*/
     
-    lv_label_set_text_format(labelCurrent, "%0.2fmA", BattCurret);
+    lv_label_set_text_fmt(labelCurrent, "%0.2fmA", BattCurret);
 //    lv_obj_align(labelCurrent, gaugeCurrent, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
     
-    lv_label_set_text_format(labelVoltage, "%0.2fmV", BattVoltage);
+    lv_label_set_text_fmt(labelVoltage, "%0.2fmV", BattVoltage);
 //    lv_obj_align(labelVoltage, gaugeVoltage, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
     
     float power = BattCurret * BattVoltage / 1000000.0f;
-    if(BattCurret < 0.0f)
-    {
-        lv_label_set_text_format(labelStatus, "Discharge: %0.2fW", power);
-    }
-    else
-    {
-        lv_label_set_text_format(labelStatus, "Charge: %0.2fW", power);
-    }
+    const char *state = BattCurret < 0.0f ? "Discharge" : "Charge";
+    lv_label_set_text_fmt(labelStatus, "%s: %0.2fW", state, power);
     lv_obj_set_parent(labelStatus, appWindow);
 }
 

@@ -32,6 +32,7 @@
 //CSN   CE
 //VCC   GND
 
-#define TIM_WAVPLAYER TIM8
+#define XC_TIM_WAVPLAYER    TIM8
+#define XC_USE_LUA          0
 
 #endif

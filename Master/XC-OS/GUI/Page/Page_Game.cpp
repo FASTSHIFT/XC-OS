@@ -17,9 +17,18 @@ static void Task_DoomUpdate(lv_task_t * task)
     doom_updateScreen();
 }
 
-static void DoomKeys_EventHandler(lv_obj_t * obj, lv_event_t event)
+static void DoomButton_EventHandler(lv_obj_t * obj, lv_event_t event)
 {
     uint8_t bin_id = lv_btnm_get_active_btn(obj);
+    
+    if(bin_id >= 5)
+    {
+        for(uint8_t i = 0; i < __Sizeof(doomKey); i++)
+            doomKey[i] = false;
+        
+        return;
+    }
+    
     if(event == LV_EVENT_PRESSED)
     {
         doomKey[bin_id] = true;
@@ -30,12 +39,13 @@ static void DoomKeys_EventHandler(lv_obj_t * obj, lv_event_t event)
     }
 } 
 
-static void Creat_DoomKeys()
+static void Creat_DoomButton()
 {
     btnm = lv_btnm_create(appWindow, NULL);
     lv_btnm_set_map(btnm, btnm_map);
     lv_obj_align(btnm, barNavigation, LV_ALIGN_OUT_TOP_MID, 0, - 40);
-    lv_obj_set_event_cb(btnm, DoomKeys_EventHandler);
+    lv_obj_set_event_cb(btnm, DoomButton_EventHandler);
+    lv_obj_set_protect(btnm, LV_PROTECT_PRESS_LOST);
 }
 
 /**
@@ -53,7 +63,7 @@ static void Setup()
     gameWinStyle.body.opa = LV_OPA_COVER;
     lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &gameWinStyle);
     
-    Creat_DoomKeys();
+    Creat_DoomButton();
     task_doom = lv_task_create(Task_DoomUpdate, 10, LV_TASK_PRIO_HIGH, 0);
     
     doom_setup();

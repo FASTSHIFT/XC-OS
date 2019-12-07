@@ -19,7 +19,9 @@
  *      DEFINES
  *********************/
 /*Add memory junk on alloc (0xaa) and free(0xbb) (just for testing purposes)*/
-#define LV_MEM_ADD_JUNK 1
+#ifndef LV_MEM_ADD_JUNK
+#define LV_MEM_ADD_JUNK 0
+#endif
 
 #ifdef LV_MEM_ENV64
 #define MEM_UNIT uint64_t
@@ -105,7 +107,7 @@ void lv_mem_init(void)
  * @param size size of the memory to allocate in bytes
  * @return pointer to the allocated memory
  */
-void * lv_mem_alloc(uint32_t size)
+void * lv_mem_alloc(size_t size)
 {
     if(size == 0) {
         return &zero_mem;
@@ -220,7 +222,7 @@ void lv_mem_free(const void * data)
 
 #if LV_ENABLE_GC == 0
 
-void * lv_mem_realloc(void * data_p, uint32_t new_size)
+void * lv_mem_realloc(void * data_p, size_t new_size)
 {
     /*data_p could be previously freed pointer (in this case it is invalid)*/
     if(data_p != NULL) {

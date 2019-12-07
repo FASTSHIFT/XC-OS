@@ -1,4 +1,4 @@
-#include "XTRC_Analyzer.h"
+#include "Lyric_Analyzer.h"
 
 //#define DEBUG_SERIAL Serial
 
@@ -10,20 +10,20 @@
 
 #define NowTime() (NowTick - StartTime)
 
-XTRC_Analyzer::XTRC_Analyzer(
-    XTRC_GetNext_Callback_t getNextCallback,
-    XTRC_Update_Callback_t update_Callback)
+Lyric_Analyzer::Lyric_Analyzer(
+    Lyric_GetNext_Callback_t getNextCallback,
+    Lyric_Update_Callback_t update_Callback)
 {
     GetNext_Callback = getNextCallback;
     Update_Callback = update_Callback;
 }
 
-String XTRC_Analyzer::GetNextLineStr()
+String Lyric_Analyzer::GetNextLineStr()
 {
     return (GetNext_Callback ? GetNext_Callback() : "");
 }
 
-void XTRC_Analyzer::Update(String lrc)
+void Lyric_Analyzer::Update(String lrc)
 {
     if(Update_Callback)
     {
@@ -31,7 +31,7 @@ void XTRC_Analyzer::Update(String lrc)
     }
 }
 
-bool XTRC_Analyzer::Begin()
+bool Lyric_Analyzer::Begin()
 {
     StrCurrent = GetNextLineStr();
     if(StrCurrent.startsWith("[00:"))
@@ -45,19 +45,19 @@ bool XTRC_Analyzer::Begin()
     return false;
 }
 
-void XTRC_Analyzer::WaitNowTime(uint32_t ms)
+void Lyric_Analyzer::WaitNowTime(uint32_t ms)
 {
     NowLineTime = ms;
     NowStatus = WaitNowLine;
 }
 
-void XTRC_Analyzer::LrcDelay(uint32_t ms)
+void Lyric_Analyzer::LyricDelay(uint32_t ms)
 {
     NextLrcTime = NowTime() + ms;
     NowStatus = (OutputMode == OutputMode_Single) ? WaitNextLrc : LoadNextLrc;
 }
 
-bool XTRC_Analyzer::AnalyzeCurrentLine()
+bool Lyric_Analyzer::AnalyzeCurrentLine()
 {
     DEBUG("\r\n-------- Current:%s --------", StrCurrent.c_str());
 
@@ -85,7 +85,7 @@ bool XTRC_Analyzer::AnalyzeCurrentLine()
     return true;
 }
 
-bool XTRC_Analyzer::AnalyzeXtrcLrc()
+bool Lyric_Analyzer::AnalyzeXtrcLrc()
 {
     /*是否为最后一个单词*/
     bool isLastLrc = false;
@@ -122,13 +122,13 @@ bool XTRC_Analyzer::AnalyzeXtrcLrc()
     Update(StrLrc);
     
     StrCurrent = StrCurrent.substring(indexLrc);
-    LrcDelay(time_ms);
+    LyricDelay(time_ms);
     return true;
 }
 
-void XTRC_Analyzer::Start(
-    XTRC_OutputMode_t outputmode, 
-    XTRC_DecodeMode_t decodemode
+void Lyric_Analyzer::Start(
+    Lyric_OutputMode_t outputmode, 
+    Lyric_DecodeMode_t decodemode
 )
 {
     OutputMode = outputmode;
@@ -136,7 +136,7 @@ void XTRC_Analyzer::Start(
     NowStatus = LoadBegin;
 }
 
-void XTRC_Analyzer::Running(uint32_t tick)
+void Lyric_Analyzer::Running(uint32_t tick)
 {
     NowTick = tick;
     switch(NowStatus)

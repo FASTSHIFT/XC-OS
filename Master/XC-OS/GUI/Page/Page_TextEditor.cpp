@@ -61,11 +61,13 @@ static void BtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
             lv_label_set_text(labelEditState, IsEditting ? LV_SYMBOL_OK : LV_SYMBOL_EDIT);
             if(IsEditting)
             {
+                lv_ta_set_text_sel(ta_input, true);
                 lv_ta_set_cursor_type(ta_input, LV_CURSOR_LINE);
                 Keyboard_Activate(&keyboard, true, appWindow, ta_input, KeyboardEvent_Handler);
             }
             else
             {
+                lv_ta_set_text_sel(ta_input, false);
                 lv_event_send(keyboard, LV_EVENT_CANCEL, NULL);
                 lv_ta_set_cursor_type(ta_input, LV_CURSOR_HIDDEN);
             }
@@ -168,8 +170,8 @@ static void Creat_TextArea(const char* text)
     lv_obj_set_size(ta_input, APP_WIN_WIDTH, APP_WIN_HEIGHT - lv_obj_get_height(topBar));
     lv_obj_align(ta_input, topBar, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
     lv_ta_set_text(ta_input, text ? text : "");
-    lv_ta_set_text_sel(ta_input, true);
     lv_ta_set_cursor_type(ta_input, LV_CURSOR_HIDDEN);
+    lv_ta_set_edge_flash(ta_input, true);
 }
 
 /**

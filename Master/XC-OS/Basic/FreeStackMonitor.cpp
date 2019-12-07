@@ -1,3 +1,4 @@
+#include "SysConfig.h"
 #include "TasksManage.h"
 #include "CommonMacro.h"
 
@@ -10,7 +11,9 @@ StackCheck_TypeDef TaskStack_Grp[] = {
     {&TaskHandle_Display  },
     {&TaskHandle_WavPlayer},
     {&TaskHandle_PageRun  },
+#if( XC_USE_LUA == 1 )
     {&TaskHandle_LuaScript}
+#endif
 };
 
 void Task_FreeStackMonitor(TimerHandle_t xTimer)

@@ -1,6 +1,6 @@
 #include "PageManager.h"
 
-#define IS_PAGE(page)   (page<MaxPage)
+#define IS_PAGE(page)   ((page)<(MaxPage))
 
 /**
   * @brief  初始化页面调度器
@@ -26,6 +26,23 @@ PageManager::PageManager(uint8_t pageMax, uint8_t pageStackSize)
     PageStackSize = pageStackSize;
     PageStack = new uint8_t[PageStackSize];
     PageStackClear();
+}
+
+/**
+  * @brief  页面调度器析构
+  * @param  无
+  * @retval 无
+  */
+PageManager::~PageManager()
+{
+    if(PageList)
+    {
+        delete[] PageList;
+    }
+    if(PageStack)
+    {
+        delete[] PageStack;
+    }
 }
 
 /**
@@ -55,11 +72,13 @@ bool PageManager::PageClear(uint8_t pageID)
   * @param  eventCallback: 事件函数回调
   * @retval true:成功 false:失败
   */
-bool PageManager::PageRegister(uint8_t pageID,
-                                     CallbackFunction_t setupCallback,
-                                     CallbackFunction_t loopCallback,
-                                     CallbackFunction_t exitCallback,
-                                     EventFunction_t eventCallback)
+bool PageManager::PageRegister(
+    uint8_t pageID,
+    CallbackFunction_t setupCallback,
+    CallbackFunction_t loopCallback,
+    CallbackFunction_t exitCallback,
+    EventFunction_t eventCallback
+)
 {
     if(!IS_PAGE(pageID))
         return false;
@@ -157,10 +176,10 @@ bool PageManager::PagePop()
     /*清空当前页面*/
     PageStack[PageStackTop] = 0;
     
-    /*栈顶指针下移*/
+    /*弹栈，栈顶指针下移*/
     PageStackTop--;
     
-    /*页面弹栈，跳转*/
+    /*页面跳转*/
     PageChangeTo(PageStack[PageStackTop]);
     
     return true;
@@ -177,10 +196,12 @@ void PageManager::PageStackClear()
     if(IsPageBusy)
        return; 
     
+    /*清除栈中左右数据*/
     for(uint8_t i = 0; i < PageStackSize; i++)
     {
         PageStack[i] = 0;
     }
+    /*栈顶指针复位*/
     PageStackTop = 0;
 }
 
@@ -216,7 +237,7 @@ void PageManager::Running()
     }
     else
     {
-        /*页面不忙碌*/
+        /*标记页面不忙碌，处于循环状态*/
         IsPageBusy = false;
         
         /*页面循环事件*/
