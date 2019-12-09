@@ -6,6 +6,8 @@
 #include "LuaScript.h"
 #endif
 
+static lv_obj_t * appWindow;
+
 static void write_create(lv_obj_t * parent);
 static void luaoutput_creat(lv_obj_t * parent);
 static void TextAreaEvent_Handler(lv_obj_t * text_area, lv_event_t event);
@@ -156,6 +158,7 @@ static void KeyboardEvent_Handler(lv_obj_t * kb, lv_event_t event)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     __ExecuteOnce(PageCreat_LuaScript());
     lv_obj_set_hidden(tv, false);
     lv_ta_set_text(ta_input, luaCode);
@@ -172,7 +175,6 @@ static void Exit()
     luaScript.end();
 #endif
     lv_obj_set_hidden(tv, true);
-    //lv_obj_del_safe(&tv);
 }
 
 /**
@@ -207,6 +209,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_LuaScript(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }
 

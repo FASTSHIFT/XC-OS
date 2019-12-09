@@ -5,6 +5,7 @@
 
 TaskHandle_t TaskHandle_Display = 0;
 TaskHandle_t TaskHandle_PageRun = 0;
+QueueHandle_t SemHandle_FileSystem = 0;
 
 SCREEN_CLASS screen(
     TFT_PORT_Pin, TFT_RST_Pin, TFT_CS_Pin,
@@ -51,7 +52,11 @@ void Task_Dispaly(void *pvParameters)
     BrightnessSet(500);
 
     lv_user_init();
+    
     lv_user_fs_init();
+    SemHandle_FileSystem = xSemaphoreCreateBinary();
+    xSemaphoreGive(SemHandle_FileSystem);
+    
     lv_theme_set_current(lv_theme_material_init(200, LV_FONT_DEFAULT));
     
     Init_Bar();

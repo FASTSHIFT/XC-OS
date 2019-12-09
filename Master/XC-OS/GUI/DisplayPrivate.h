@@ -60,10 +60,13 @@ do{\
 void Init_Bar();
 extern lv_obj_t * barStatus;
 extern lv_obj_t * barNavigation;
-extern lv_obj_t * appWindow;
 extern lv_obj_t * btnMenu;
 extern lv_obj_t * btnHome;
 extern lv_obj_t * btnBack;
+
+/*AppWindow*/
+void Creat_AppWindow();
+lv_obj_t * AppWindow_PageGet(uint8_t pageID);
 
 #define APP_WIN_HEIGHT (lv_obj_get_height(appWindow))
 #define APP_WIN_WIDTH  (lv_obj_get_width(appWindow))

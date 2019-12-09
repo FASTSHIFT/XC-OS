@@ -9,6 +9,8 @@
 #include "LuaScript.h"
 #endif
 
+static lv_obj_t * appWindow;
+
 #define APP_MAX 9
 #define APP_NAME_MAX 20
 #define APP_PATH_MAX (APP_NAME_MAX+30)
@@ -108,10 +110,17 @@ static lv_obj_t * contApp;
   */
 static void Setup()
 {
+    /*获取到文件系统使用权*/
+    xSemaphoreTake(SemHandle_FileSystem, 1000);
+
+    lv_obj_move_foreground(appWindow);
     contApp = lv_cont_create(appWindow, NULL);
     lv_cont_set_fit(contApp, LV_FIT_FLOOD);
 
     int count = LoadFolderInfo("/APP");
+    
+    /*由于是在Page线程里创建APP，而图片显示在lvgl线程里，
+     *所以要进临界区，保证加载完毕*/
     taskENTER_CRITICAL();
     __LoopExecute(Creat_APP(APP_Grp[i], contApp, i, ImgbtnEvent_Handler), count);
     taskEXIT_CRITICAL();
@@ -124,10 +133,12 @@ static void Setup()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&contApp);
+    lv_obj_clean(appWindow);
 #if( XC_USE_LUA == 1 )
     luaScript.end();
 #endif
+    /*归还文件系统使用权*/
+    xSemaphoreGive(SemHandle_FileSystem);
 }
 
 /**
@@ -155,5 +166,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_SubAPPs(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

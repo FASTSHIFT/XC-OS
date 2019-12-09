@@ -2,6 +2,8 @@
 #include "DisplayPrivate.h"
 #include "BV_Player.h"
 
+static lv_obj_t * appWindow;
+
 static uint8_t BvBuffer[16 * 1024];
 
 BV_Player BvPlayer(BvBuffer, sizeof(BvBuffer));
@@ -39,6 +41,7 @@ static void Task_BvPlyaerUpdate(lv_task_t * task)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     taskBvPlayer = lv_task_create(Task_BvPlyaerUpdate, 33, LV_TASK_PRIO_MID, 0);
     memset(BvBuffer, 0, sizeof(BvBuffer));
     if(!BvPlayer.OpenVideo(BvFilePath))
@@ -88,5 +91,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_BvPlayer(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

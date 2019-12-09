@@ -4,6 +4,9 @@
 #include "TasksManage.h"
 #include "wav_decoder.h"
 
+static lv_obj_t * appWindow;
+
+/*WavParam*/
 static String WavFilePath;
 static bool WavError;
 extern WAV_TypeDef Wav_Handle;
@@ -17,6 +20,7 @@ static lv_task_t * taskSerFFT;
 
 static lv_obj_t * barWav;
 static lv_obj_t * labelWavTime;
+static lv_obj_t * labelWavTotalTime;
 static lv_task_t * taskWavBar;
 
 static lv_obj_t * sliderWavVolume;
@@ -113,7 +117,7 @@ static void Creat_WavFileInfo()
     );
 }
 
-#define ChartPointCount 20
+#define ChartPointCount 32
 
 static void Task_UpdateSerFFT(lv_task_t * task)
 {
@@ -139,7 +143,7 @@ static void Creat_ChartFFT()
     lv_chart_set_point_count(chartFFT, ChartPointCount);
     lv_chart_set_div_line_count(chartFFT, 0, 0);
 
-    serFFT = lv_chart_add_series(chartFFT, LV_COLOR_BLUE);
+    serFFT = lv_chart_add_series(chartFFT, lv_color_hex(0x487fb7));
 
     taskSerFFT = lv_task_create(Task_UpdateSerFFT, 50, LV_TASK_PRIO_MID, 0);
 }
@@ -170,7 +174,7 @@ static void Creat_WavBar()
     
     int sec = Wav_Handle.DataSize / Wav_Handle.Header.BytePerSecond;
     int min = sec / 60;
-    lv_obj_t * labelWavTotalTime = lv_label_create(appWindow, NULL);
+    labelWavTotalTime = lv_label_create(appWindow, NULL);
     lv_label_set_text_fmt(labelWavTotalTime, "%02d:%02d", min, sec % 60);
     lv_obj_align(labelWavTotalTime, barWav, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
     
@@ -250,13 +254,14 @@ void Creat_BtnWavCtrl()
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     WavError = !WavPlayer_LoadFile(WavFilePath);
     if(!WavError)
     {
         WavPlayer_SetEnable(true);
         WavPlayer_SetPlaying(true);
     }
-
+    
     Creat_WavFileInfo();
     Creat_ChartFFT();
     Creat_WavBar();
@@ -275,20 +280,7 @@ static void Exit()
     WavPlayer_SetEnable(false);
     lv_task_del(taskWavBar);
     lv_task_del(taskSerFFT);
-    vTaskDelay(10);
-
-    lv_obj_del_safe(&labelWavInfo);
-
-    lv_obj_del_safe(&chartFFT);
-
-    lv_obj_del_safe(&barWav);
-    lv_obj_del_safe(&labelWavTime);
-
-    lv_obj_del_safe(&sliderWavVolume);
-    lv_obj_del_safe(&labelWavVolume);
-
-    __LoopExecute(lv_obj_del_safe(&btnWav_Grp[i].btn), BTN_MAX);
-    lv_obj_del_safe(&labelLrc);
+    lv_obj_clean(appWindow);
 }
 
 /**
@@ -316,5 +308,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_WavPlayer(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

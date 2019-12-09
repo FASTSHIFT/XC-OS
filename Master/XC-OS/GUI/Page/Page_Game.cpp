@@ -2,8 +2,10 @@
 #include "DisplayPrivate.h"
 #include "doom-nano\doom_nano.h"
 
+static lv_obj_t * appWindow;
+
 static lv_task_t * task_doom;
-static lv_style_t appWinStyle,gameWinStyle;
+static lv_style_t gameWinStyle;
 extern uint8_t doomKey[K_MAX];
 static lv_obj_t * btnm;
 static const char * btnm_map[] = {
@@ -55,9 +57,7 @@ static void Creat_DoomButton()
   */
 static void Setup()
 {
-    /*±¸·Ýstyle*/
-    appWinStyle = *lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
-    
+    lv_obj_move_foreground(appWindow);
     gameWinStyle = lv_style_plain;
     gameWinStyle.body.grad_color = gameWinStyle.body.main_color = LV_COLOR_BLACK;
     gameWinStyle.body.opa = LV_OPA_COVER;
@@ -87,8 +87,7 @@ static void Loop()
 static void Exit()
 {
     lv_task_del(task_doom);
-    lv_obj_del_safe(&btnm);
-    lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &appWinStyle);
+    lv_obj_clean(appWindow);
 }
 
 /**
@@ -116,5 +115,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Game(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }

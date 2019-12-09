@@ -32,7 +32,14 @@ void Preloader_Activate(bool isact, lv_obj_t * parent)
 static void Creat_Keyboard(lv_obj_t** kb, lv_obj_t * parent, lv_obj_t * ta, lv_event_cb_t keyboard_event_cb)
 {
     *kb = lv_kb_create(parent, NULL);
-    lv_obj_set_size(*kb, APP_WIN_WIDTH, APP_WIN_HEIGHT / 2);
+    lv_obj_set_size(
+        *kb, 
+        lv_obj_get_width(lv_scr_act()), 
+        (lv_obj_get_height(lv_scr_act()) 
+        - lv_obj_get_height(barStatus) 
+        - lv_obj_get_height(barNavigation))  
+        / 2
+    );
     lv_obj_align(*kb, barNavigation, LV_ALIGN_OUT_TOP_MID, 0, 0);
     
     if(ta)

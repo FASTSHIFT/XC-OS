@@ -6,7 +6,7 @@
 #include "SdFat.h"
 
 /*WAV缓冲队列*/
-#define FIFO_Size 6000
+#define FIFO_Size 10240
 char waveBuff[FIFO_Size];
 FifoQueue<char> WaveFifo(sizeof(waveBuff), waveBuff);
 
@@ -22,9 +22,11 @@ static bool Wav_Playing = true;
 /*WAV播放任务句柄*/
 TaskHandle_t TaskHandle_WavPlayer;
 
+int WavAvailable;
+
 static void WavSendDataToDAC()
 {
-    int WavAvailable = WaveFifo.available();
+    WavAvailable = WaveFifo.available();
     if(WavAvailable < 16)
     {
         return;
@@ -106,11 +108,17 @@ void WavPlayer_SetEnable(bool en)
     TIM_Cmd(XC_TIM_WAVPLAYER, (FunctionalState)en);
     if(en)
     {
-        xTaskNotifyGive(TaskHandle_WavPlayer);
+        /*获取到文件系统使用权*/
+        if(xSemaphoreTake(SemHandle_FileSystem, 100) == pdTRUE)
+        {
+            xTaskNotifyGive(TaskHandle_WavPlayer);
+        }
     }
     else
     {
+        /*队列缓存清空*/
         WaveFifo.flush();
+        /*结束标志位置位*/
         Wav_Handle.IsEnd = true;
     }
 }
@@ -140,6 +148,7 @@ bool WavPlayer_GetPlaying()
 
 void Task_WavPlayer(void *pvParameters)
 {
+    
     /*检测SD卡是否插入*/
     pinMode(SD_CD_Pin, INPUT_PULLUP);
     if(digitalRead(SD_CD_Pin))
@@ -176,5 +185,8 @@ void Task_WavPlayer(void *pvParameters)
         WavFile.close();
         /*歌词解析器退出*/
         Lyric_Exit();
+        
+        /*归还文件系统使用权*/
+        xSemaphoreGive(SemHandle_FileSystem);
     }
 }

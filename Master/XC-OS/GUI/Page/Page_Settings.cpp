@@ -3,6 +3,8 @@
 #include "Module.h"
 #include "APP_Type.h"
 
+static lv_obj_t * appWindow;
+
 static lv_obj_t * mboxPower;
 
 static void mbox_event_handler(lv_obj_t * obj, lv_event_t event)
@@ -127,6 +129,7 @@ static void Creat_List(lv_obj_t** list)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     Creat_List(&listItems);
     Creat_ListBtn(listItems, &listItems_btn);
 }
@@ -138,8 +141,7 @@ static void Setup()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&listItems);
-    lv_obj_del_safe(&mboxPower);
+    lv_obj_clean(appWindow);
 }
 
 /**
@@ -174,5 +176,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Settings(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

@@ -3,6 +3,8 @@
 #include "Module.h"
 #include "FileManage.h"
 
+static lv_obj_t * appWindow;
+
 static lv_obj_t * topBar;
 static lv_obj_t * ta_input;
 static lv_obj_t * btnColse;
@@ -181,6 +183,7 @@ static void Creat_TextArea(const char* text)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     if(TextFile.isOpen())
     {
         TextFile.getName(TextFileNameBuff, sizeof(TextFileNameBuff));
@@ -273,5 +276,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_TextEditor(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

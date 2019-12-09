@@ -1,6 +1,8 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
 
+static lv_obj_t * appWindow;
+
 /**
   * @brief  页面初始化事件
   * @param  无
@@ -8,6 +10,8 @@
   */
 static void Setup()
 {
+    /*将此页面移到前台*/
+    lv_obj_move_foreground(appWindow);
 }
 
 /**
@@ -44,5 +48,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_X(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

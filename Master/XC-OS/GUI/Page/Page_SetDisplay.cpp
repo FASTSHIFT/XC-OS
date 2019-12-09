@@ -2,6 +2,8 @@
 #include "DisplayPrivate.h"
 #include "Module.h"
 
+static lv_obj_t * appWindow;
+
 /****************** Bright Ctrl ****************/
 static lv_obj_t * sliderBright;
 static lv_obj_t * labelBright;
@@ -127,6 +129,7 @@ static void Creat_Label(lv_obj_t** label)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     Creat_Slider(&sliderBright);
     Creat_Label(&labelBright);
 }
@@ -147,8 +150,7 @@ static void Loop()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&sliderBright);
-    lv_obj_del_safe(&labelBright);
+    lv_obj_clean(appWindow);
 }
 
 /**
@@ -176,5 +178,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_SetDisplay(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }

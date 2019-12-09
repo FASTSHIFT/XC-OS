@@ -3,6 +3,8 @@
 #include "LuaScript.h"
 #include "Module.h"
 
+static lv_obj_t * appWindow;
+
 static void Task_BattUpdate(lv_task_t * task);
 static void Task_GaugeUpdate(lv_task_t * task);
 
@@ -109,6 +111,7 @@ static void Task_BattUpdate(lv_task_t * task)
   */
 static void Setup()
 {
+    lv_obj_move_foreground(appWindow);
     Creat_Chart(&chart);
     Creat_Label(chart, &labelStatus);
     lv_obj_set_parent(labelStatus, appWindow);
@@ -129,12 +132,9 @@ static void Setup()
   */
 static void Exit()
 {
-    lv_obj_del_safe(&chart);
-    lv_obj_del_safe(&labelStatus);
-    lv_obj_del_safe(&gaugeCurrent);
-    lv_obj_del_safe(&gaugeVoltage);
     lv_task_del(task_1);
     lv_task_del(task_2);
+    lv_obj_clean(appWindow);
 }
 
 /**
@@ -162,5 +162,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_BattInfo(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

@@ -437,14 +437,19 @@
               <FilePath>..\XC-OS\GUI\DisplayPrivate.h</FilePath>
             </File>
             <File>
+              <FileName>DisplayBasic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\DisplayBasic.cpp</FilePath>
+            </File>
+            <File>
               <FileName>DisplayBar.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\DisplayBar.cpp</FilePath>
             </File>
             <File>
-              <FileName>DisplayBasic.cpp</FileName>
+              <FileName>DisplayAppWin.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\DisplayBasic.cpp</FilePath>
+              <FilePath>..\XC-OS\GUI\DisplayAppWin.cpp</FilePath>
             </File>
             <File>
               <FileName>DisplayError.cpp</FileName>

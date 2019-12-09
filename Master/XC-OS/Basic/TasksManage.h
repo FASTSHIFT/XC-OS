@@ -44,4 +44,7 @@ extern TaskHandle_t TaskHandle_TransferData;
 extern TimerHandle_t TimerHandle_Motor;
 extern TimerHandle_t TimerHandle_IMU_Claculate;
 
+/*QueueHandle*/
+extern QueueHandle_t SemHandle_FileSystem;
+
 #endif

@@ -4,6 +4,8 @@
 #include "APP_Type.h"
 #include "Module.h"
 
+static lv_obj_t * appWindow;
+
 /*主菜单视图*/
 static lv_obj_t * tabviewHome;
 
@@ -293,12 +295,13 @@ static void FirstInit()
   */
 static void Setup()
 {
+    /*显示appWindow*/
+    lv_obj_move_foreground(appWindow);
+    lv_obj_set_hidden(appWindow, false);
+    
     /*创建Tab组，只初始化一次*/
     __ExecuteOnce(FirstInit());
-    
-    /*显示tabview*/
-    lv_obj_set_hidden(tabviewHome, false);
-    
+
     /*为上一个APP退出播放动画*/
     static bool first = true;
     if(!first)
@@ -320,20 +323,7 @@ static void Exit()
     /*为APP开启动画延时*/
     vTaskDelay(AnimCloseTime_Default + 100);
     
-//    /*隐藏按钮*/
-//    lv_tabview_set_btns_hidden(tabviewHome, true);
-//    
-//    /*禁止滑动*/
-//    lv_tabview_set_sliding(tabviewHome, false);
-//    
-//    /*删除APP组，释放内存*/
-//    __LoopExecute(lv_obj_del_safe(&APP_Grp[i].cont), __Sizeof(APP_Grp));
-    
-    /*隐藏tabview*/
-    lv_obj_set_hidden(tabviewHome, true);
-    
-    /*动画容器隐藏*/
-    lv_obj_set_hidden(contAppSw, true);
+    lv_obj_set_hidden(appWindow, true);
 }
 
 /**
@@ -364,5 +354,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Home(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

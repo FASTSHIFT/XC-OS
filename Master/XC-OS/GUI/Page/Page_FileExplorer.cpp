@@ -3,7 +3,10 @@
 #include "FileManage.h"
 #include "LuaScript.h"
 #include "Module.h"
+#include "TasksManage.h"
 #include "APP_Type.h"
+
+static lv_obj_t * appWindow;
 
 #define FILENAME_LEN_MAX 64
 #define FILE_CNT_MAX     64
@@ -447,6 +450,10 @@ static void PathChange(lv_obj_t * tab, lv_obj_t** list, const char *newPath)
   */
 static void Setup()
 {
+    /*获取文件系统使用权*/
+    xSemaphoreTake(SemHandle_FileSystem, 1000);
+    
+    lv_obj_move_foreground(appWindow);
     __ExecuteOnce(Creat_Tabview(&tabviewFm));
     
     lv_obj_set_hidden(tabviewFm, false);
@@ -483,6 +490,9 @@ static void Exit()
 {
     lv_obj_del_safe(&listFiles);
     lv_obj_set_hidden(tabviewFm, true);
+    
+    /*归还文件系统使用权*/
+    xSemaphoreGive(SemHandle_FileSystem);
 }
 
 /**
@@ -530,5 +540,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_FileExplorer(uint8_t pageID)
 {
+    appWindow = AppWindow_PageGet(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }
