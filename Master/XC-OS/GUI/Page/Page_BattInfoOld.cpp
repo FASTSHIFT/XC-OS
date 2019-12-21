@@ -41,7 +41,7 @@ static void Creat_Gauge()
     lv_gauge_set_range(gaugeCurrent, 0, 30);
     lv_gauge_set_critical_value(gaugeCurrent, 24);
     lv_obj_set_size(gaugeCurrent, 150, 150);
-    lv_obj_align(gaugeCurrent, barNavigation, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+    lv_obj_align(gaugeCurrent, appWindow, LV_ALIGN_IN_BOTTOM_LEFT, 0, 0);
 
     /*Create a gauge*/
     gaugeVoltage = lv_gauge_create(appWindow, NULL);
@@ -49,7 +49,7 @@ static void Creat_Gauge()
     lv_gauge_set_critical_value(gaugeVoltage, 39);
     lv_gauge_set_range(gaugeVoltage, 26, 42);
     lv_obj_set_size(gaugeVoltage, 150, 150);
-    lv_obj_align(gaugeVoltage, barNavigation, LV_ALIGN_OUT_TOP_RIGHT, 0, 0);
+    lv_obj_align(gaugeVoltage, appWindow, LV_ALIGN_IN_BOTTOM_RIGHT, 0, 0);
 }
 
 void Creat_Chart(lv_obj_t** chart)
@@ -57,7 +57,7 @@ void Creat_Chart(lv_obj_t** chart)
     /*Create a chart*/
     *chart = lv_chart_create(appWindow, NULL);
     lv_obj_set_size(*chart, 200, 150);
-    lv_obj_align(*chart, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
+    lv_obj_align(*chart, appWindow, LV_ALIGN_IN_TOP_MID, 0, 20);
     lv_chart_set_type(*chart, LV_CHART_TYPE_POINT | LV_CHART_TYPE_LINE);   /*Show lines and points too*/
     lv_chart_set_series_opa(*chart, LV_OPA_70);                            /*Opacity of the data series*/
     lv_chart_set_series_width(*chart, 2);                                  /*Line width and point radious*/

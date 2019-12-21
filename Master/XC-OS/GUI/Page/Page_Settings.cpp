@@ -118,7 +118,7 @@ static void Creat_List(lv_obj_t** list)
     /*Create a list*/
     *list = lv_list_create(appWindow, NULL);
     lv_obj_set_size(*list, APP_WIN_WIDTH, APP_WIN_HEIGHT);
-    lv_obj_align(*list, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    lv_obj_align(*list, appWindow, LV_ALIGN_IN_TOP_MID, 0, 0);
     lv_list_set_edge_flash(*list, true);
 }
 

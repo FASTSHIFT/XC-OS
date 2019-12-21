@@ -29,7 +29,7 @@ static void Creat_Tabview(lv_obj_t** tabview)
 {
     *tabview = lv_tabview_create(appWindow, NULL);
     lv_obj_set_size(*tabview, APP_WIN_WIDTH, APP_WIN_HEIGHT);
-    lv_obj_align(*tabview, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    lv_obj_align(*tabview, appWindow, LV_ALIGN_IN_TOP_MID, 0, 0);
     tabFileList = lv_tabview_add_tab(*tabview, LV_SYMBOL_LIST);
     tabDrive = lv_tabview_add_tab(*tabview, LV_SYMBOL_DRIVE);
 }

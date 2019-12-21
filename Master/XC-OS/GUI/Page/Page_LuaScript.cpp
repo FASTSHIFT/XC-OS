@@ -20,8 +20,8 @@ static lv_obj_t * keyboard;
 
 void PageCreat_LuaScript()
 {   
-    tv = lv_tabview_create(lv_disp_get_scr_act(NULL), NULL);
-    lv_obj_align(tv, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    tv = lv_tabview_create(appWindow, NULL);
+    lv_obj_align(tv, appWindow, LV_ALIGN_IN_TOP_MID, 0, 0);
     lv_obj_set_size(tv, APP_WIN_WIDTH, APP_WIN_HEIGHT);
 
     lv_obj_t * tab1 = lv_tabview_add_tab(tv, LV_SYMBOL_EDIT);
@@ -91,6 +91,7 @@ static void TextAreaEvent_Handler(lv_obj_t * text_area, lv_event_t event)
     }
 }
 
+#if( XC_USE_LUA == 1 )
 static void LuaPrintCallback(const char* s)
 {
     if(!ta_output)
@@ -103,6 +104,7 @@ static void LuaPrintCallback(const char* s)
         lv_ta_set_text(ta_output, "");
     }
 }
+#endif
 
 /**
  * Called when the close or ok button is pressed on the keyboard

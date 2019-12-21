@@ -37,3 +37,16 @@ void lv_obj_set_color(lv_obj_t * obj, lv_color_t color)
     style->body.grad_color = style->body.main_color = color;
     lv_obj_set_style(obj, style);
 }
+
+void lv_table_set_align(lv_obj_t * table, lv_label_align_t align)
+{
+    uint16_t col = lv_table_get_col_cnt(table);
+    uint16_t row = lv_table_get_row_cnt(table);
+    for(uint16_t i = 0; i < col; i++)
+    {
+        for(uint16_t j = 0; j < row; j++)
+        {
+            lv_table_set_cell_align(table, j, i, align);
+        }
+    }
+}

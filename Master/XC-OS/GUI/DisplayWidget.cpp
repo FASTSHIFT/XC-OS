@@ -1,6 +1,8 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
 
+extern lv_obj_t * barNavigation;
+
 /***************************Preloader****************************/
 static lv_obj_t * preloader = NULL;
 
@@ -36,8 +38,8 @@ static void Creat_Keyboard(lv_obj_t** kb, lv_obj_t * parent, lv_obj_t * ta, lv_e
         *kb, 
         lv_obj_get_width(lv_scr_act()), 
         (lv_obj_get_height(lv_scr_act()) 
-        - lv_obj_get_height(barStatus) 
-        - lv_obj_get_height(barNavigation))  
+        - BarStatus_GetHeight()
+        - BarNavigation_GetHeight())  
         / 2
     );
     lv_obj_align(*kb, barNavigation, LV_ALIGN_OUT_TOP_MID, 0, 0);
@@ -90,7 +92,7 @@ void Keyboard_Activate(
             static lv_anim_t a;
             a.var = *kb;
             a.start = lv_obj_get_y(*kb);
-            a.end = LV_VER_RES;
+            a.end = lv_obj_get_height(lv_scr_act());
             a.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y;
             a.path_cb = lv_anim_path_linear;
             a.ready_cb = kb_hide_anim_end;

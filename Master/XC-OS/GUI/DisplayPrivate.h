@@ -8,6 +8,7 @@
 #define SCREEN_CLASS TFT_ILI9488
 extern SCREEN_CLASS screen;
 
+/*SCREEN basic*/
 #define TEXT_HEIGHT_1   8
 #define TEXT_WIDTH_1    6
 #define TextSetDefault() screen.setTextColor(screen.White,screen.Black),screen.setTextSize(1)
@@ -27,6 +28,7 @@ void lv_label_set_text_add(lv_obj_t * label, const char * text);
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
 lv_coord_t lv_obj_get_y_center(lv_obj_t * obj);
 void lv_obj_set_color(lv_obj_t * obj, lv_color_t color);
+void lv_table_set_align(lv_obj_t * table, lv_label_align_t align);
 
 /*Page*/
 #include "PageManager.h"
@@ -42,7 +44,6 @@ typedef enum
     PAGE_FileExplorer,
     PAGE_SubAPPs,
     PAGE_TextEditor,
-    PAGE_AppBgManager,
     PAGE_WavPlayer,
     PAGE_BvPlayer,
     PAGE_Game,
@@ -58,18 +59,29 @@ do{\
 
 /*Bar*/
 void Init_Bar();
-extern lv_obj_t * barStatus;
-extern lv_obj_t * barNavigation;
+lv_coord_t BarStatus_GetHeight();
+lv_coord_t BarNavigation_GetHeight();
+
 extern lv_obj_t * btnMenu;
 extern lv_obj_t * btnHome;
 extern lv_obj_t * btnBack;
+
+/*DropDownList*/
+bool DropDownList_GetShow();
+void DropDownList_AnimDown(bool down);
+void Creat_DropDownList();
+
+/*OSState*/
+void Creat_WinOSState();
+bool WinOSState_GetShow();
+void WinOSState_SetClose();
 
 /*AppWindow*/
 void Creat_AppWindow();
 lv_obj_t * AppWindow_PageGet(uint8_t pageID);
 
-#define APP_WIN_HEIGHT (lv_obj_get_height(appWindow))
-#define APP_WIN_WIDTH  (lv_obj_get_width(appWindow))
+#define APP_WIN_HEIGHT (lv_obj_get_height(lv_scr_act()) - BarStatus_GetHeight() - BarNavigation_GetHeight())
+#define APP_WIN_WIDTH  (lv_obj_get_width(lv_scr_act()))
 
 /*Widget*/
 void Preloader_Activate(

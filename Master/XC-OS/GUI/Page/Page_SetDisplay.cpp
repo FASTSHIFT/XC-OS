@@ -1,42 +1,7 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
-#include "Module.h"
 
 static lv_obj_t * appWindow;
-
-/****************** Bright Ctrl ****************/
-static lv_obj_t * sliderBright;
-static lv_obj_t * labelBright;
-
-static void event_handler(lv_obj_t * obj, lv_event_t event)
-{
-    if(event == LV_EVENT_VALUE_CHANGED)
-    {
-        int value = lv_slider_get_value(obj);
-        lv_label_set_text_fmt(labelBright, "%d%%", value / 10);
-        BrightnessSet(value);
-        __IntervalExecute(Serial3.printf("B%dE", value), 20);
-    }
-}
-
-static void Creat_Slider(lv_obj_t** slider)
-{
-    /*Create a slider*/
-    *slider = lv_slider_create(appWindow, NULL);
-    lv_slider_set_range(*slider, 5, 1000);
-    lv_slider_set_value(*slider, BrightnessGet(), LV_ANIM_ON);
-    
-    lv_obj_set_size(*slider, APP_WIN_WIDTH - 30, 20);
-    lv_obj_align(*slider, NULL, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_event_cb(*slider, event_handler);
-}
-
-static void Creat_Label(lv_obj_t** label)
-{
-    *label = lv_label_create(appWindow, NULL);
-    lv_label_set_text_fmt(*label, "%d%%", BrightnessGet() / 10);
-    lv_obj_align(*label, sliderBright, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
-}
 
 /********************* Theme Ctrl ***********************/
 //static lv_theme_t * th_act;
@@ -120,6 +85,58 @@ static void Creat_Label(lv_obj_t** label)
 //        lv_theme_set_current(th_act);
 //    }
 //}
+static lv_obj_t * colorPicker;
+static uint16_t theme_hue_now = 200;
+
+static void ColorPicker_EventHandler(lv_obj_t * obj, lv_event_t event)
+{
+    if(event == LV_EVENT_VALUE_CHANGED)
+    {
+        
+    }
+    else if(event == LV_EVENT_RELEASED)
+    {
+        if(obj == colorPicker)
+        {
+            theme_hue_now = lv_cpicker_get_hue(obj);
+            lv_theme_set_current(lv_theme_material_init(theme_hue_now, LV_FONT_DEFAULT));
+        }
+    }
+}
+
+static void Creat_ColorPicker()
+{
+    const lv_coord_t pickerSize = 200;
+
+    /* Set the style of the color ring */
+    static lv_style_t styleMain;
+    lv_style_copy(&styleMain, &lv_style_plain);
+    styleMain.line.width = 30;
+    /* Make the background white */
+    styleMain.body.main_color = styleMain.body.grad_color = LV_COLOR_WHITE;
+
+    /* Set the style of the knob */
+    static lv_style_t styleIndicator;
+    lv_style_copy(&styleIndicator, &lv_style_pretty);
+    styleIndicator.body.border.color = LV_COLOR_WHITE;
+    /* Ensure that the knob is fully opaque */
+    styleIndicator.body.opa = LV_OPA_COVER;
+    styleIndicator.body.border.opa = LV_OPA_COVER;
+
+    colorPicker = lv_cpicker_create(appWindow, NULL);
+    lv_obj_set_size(colorPicker, pickerSize, pickerSize);
+    /* Choose the 'DISC' type */
+    lv_cpicker_set_type(colorPicker, LV_CPICKER_TYPE_DISC);
+    lv_obj_align(colorPicker, NULL, LV_ALIGN_CENTER, 0, 0);
+    /* Set the styles */
+    lv_cpicker_set_style(colorPicker, LV_CPICKER_STYLE_MAIN, &styleMain);
+    lv_cpicker_set_style(colorPicker, LV_CPICKER_STYLE_INDICATOR, &styleIndicator);
+    /* Change the knob's color to that of the selected color */
+    lv_cpicker_set_indic_colored(colorPicker, true);
+    
+    lv_cpicker_set_hue(colorPicker, theme_hue_now);
+    lv_obj_set_event_cb(colorPicker, ColorPicker_EventHandler);
+}
 
 
 /**
@@ -130,8 +147,9 @@ static void Creat_Label(lv_obj_t** label)
 static void Setup()
 {
     lv_obj_move_foreground(appWindow);
-    Creat_Slider(&sliderBright);
-    Creat_Label(&labelBright);
+    Creat_ColorPicker();
+//    Creat_Slider(&sliderBright);
+//    Creat_Label(&labelBright);
 }
 
 /**

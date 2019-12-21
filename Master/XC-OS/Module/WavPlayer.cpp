@@ -7,11 +7,11 @@
 
 /*WAV缓冲队列*/
 #define FIFO_Size 10240
-char waveBuff[FIFO_Size];
-FifoQueue<char> WaveFifo(sizeof(waveBuff), waveBuff);
+static char waveBuff[FIFO_Size];
+static FifoQueue<char> WaveFifo(sizeof(waveBuff), waveBuff);
 
 /*WAV文件信息*/
-File WavFile;
+static File WavFile;
 WAV_TypeDef Wav_Handle;
 
 /*WAV播放控制*/
@@ -148,7 +148,6 @@ bool WavPlayer_GetPlaying()
 
 void Task_WavPlayer(void *pvParameters)
 {
-    
     /*检测SD卡是否插入*/
     pinMode(SD_CD_Pin, INPUT_PULLUP);
     if(digitalRead(SD_CD_Pin))

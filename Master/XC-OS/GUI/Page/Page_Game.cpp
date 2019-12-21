@@ -5,7 +5,6 @@
 static lv_obj_t * appWindow;
 
 static lv_task_t * task_doom;
-static lv_style_t gameWinStyle;
 extern uint8_t doomKey[K_MAX];
 static lv_obj_t * btnm;
 static const char * btnm_map[] = {
@@ -45,7 +44,7 @@ static void Creat_DoomButton()
 {
     btnm = lv_btnm_create(appWindow, NULL);
     lv_btnm_set_map(btnm, btnm_map);
-    lv_obj_align(btnm, barNavigation, LV_ALIGN_OUT_TOP_MID, 0, - 40);
+    lv_obj_align(btnm, appWindow, LV_ALIGN_IN_BOTTOM_MID, 0, - 40);
     lv_obj_set_event_cb(btnm, DoomButton_EventHandler);
     lv_obj_set_protect(btnm, LV_PROTECT_PRESS_LOST);
 }
@@ -58,10 +57,8 @@ static void Creat_DoomButton()
 static void Setup()
 {
     lv_obj_move_foreground(appWindow);
-    gameWinStyle = lv_style_plain;
-    gameWinStyle.body.grad_color = gameWinStyle.body.main_color = LV_COLOR_BLACK;
-    gameWinStyle.body.opa = LV_OPA_COVER;
-    lv_cont_set_style(appWindow, LV_CONT_STYLE_MAIN, &gameWinStyle);
+    
+    lv_obj_set_color(appWindow, LV_COLOR_BLACK);
     
     Creat_DoomButton();
     task_doom = lv_task_create(Task_DoomUpdate, 10, LV_TASK_PRIO_HIGH, 0);

@@ -24,7 +24,6 @@ static void Init_Pages()
     PAGE_REG(FileExplorer);
     PAGE_REG(SubAPPs);
     PAGE_REG(TextEditor);
-    PAGE_REG(AppBgManager);
     PAGE_REG(WavPlayer);
     PAGE_REG(BvPlayer);
     PAGE_REG(Game);

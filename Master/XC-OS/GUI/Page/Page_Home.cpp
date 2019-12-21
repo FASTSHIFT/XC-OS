@@ -80,7 +80,7 @@ static void ImgbtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
                     false,
                     lv_obj_get_x_center(APP_Grp[i].cont),
                     lv_obj_get_y_center(APP_Grp[i].cont),
-                    200
+                    AnimCloseTime_Default
                 );
             }
         }
@@ -181,8 +181,8 @@ static void Creat_Page(lv_obj_t** tabview)
     /*设置大小为应用程序区大小*/
     lv_obj_set_size(*tabview, APP_WIN_WIDTH, APP_WIN_HEIGHT);
     
-    /*与状态栏对齐对齐*/
-    lv_obj_align(*tabview, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+    /*与顶部对齐*/
+    lv_obj_align(*tabview, appWindow, LV_ALIGN_IN_TOP_MID, 0, 0);
     
     /*设定按钮方向为在下方*/
     lv_tabview_set_btns_pos(*tabview, LV_TABVIEW_BTNS_POS_BOTTOM);
@@ -212,7 +212,8 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
     lv_obj_set_hidden(contAppSw, false);
     
     /*动画组*/
-    static lv_anim_t a_w, a_h, a_opa, a_x, a_y;
+    enum{A_X, A_Y, A_W, A_H, A_OPA, A_MAX};
+    static lv_anim_t anim_grp[A_MAX];
     
     /*动画组初始化，只执行一次*/
     __ExecuteOnce((  
@@ -220,57 +221,51 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
         lv_obj_set_opa_scale_enable(contAppSw, true),
         
         /*对象*/
-        a_x.var = contAppSw,
+        anim_grp[0].var = contAppSw,
         /*路径*/
-        a_x.path_cb  = lv_anim_path_linear,
+        anim_grp[0].path_cb  = lv_anim_path_ease_in_out,
         /*时间*/
-        a_x.time = time,
+        anim_grp[0].time = time,
         /*拷贝相同参数*/
-        a_w = a_h = a_opa = a_x = a_y = a_x,
+        anim_grp[1] = anim_grp[0],
+        anim_grp[2] = anim_grp[0],
+        anim_grp[3] = anim_grp[0],
+        anim_grp[4] = anim_grp[0],
         
         /*动画回调设定*/
-        a_w.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_width,
-        a_h.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_height,
-        a_opa.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_opa_scale,
-        a_x.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_x,
-        a_y.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y
+        anim_grp[A_X].exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_x,
+        anim_grp[A_Y].exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y,
+        anim_grp[A_W].exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_width,
+        anim_grp[A_H].exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_height,
+        anim_grp[A_OPA].exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_opa_scale
     ));
 
     /*是否为关闭动画*/
     if(!close)
     {
         /*起点终点设定*/
-        a_opa.start = LV_OPA_TRANSP;
-        a_opa.end = LV_OPA_COVER;
+        anim_grp[A_OPA].start = LV_OPA_TRANSP;
+        anim_grp[A_OPA].end = LV_OPA_COVER;
         
-        a_w.start = a_h.start = 0;
-        a_w.end = lv_obj_get_width(appWindow);
-        a_h.end = lv_obj_get_height(appWindow);
+        anim_grp[A_W].start = anim_grp[A_H].start = 0;
+        anim_grp[A_W].end = lv_obj_get_width(appWindow);
+        anim_grp[A_H].end = lv_obj_get_height(appWindow);
         
-        a_x.start = x;
-        a_y.start = y;
+        anim_grp[A_X].start = x;
+        anim_grp[A_Y].start = y;
         
-        a_x.end = 0;
-        a_y.end = 0;
+        anim_grp[A_X].end = 0;
+        anim_grp[A_Y].end = 0;
     }
     else
     {
-        /*反转起点终点设定*/
-#define SWAP_ANIM(anim) {int temp;temp=anim.start,anim.start=anim.end,anim.end=temp;}
-        
-        SWAP_ANIM(a_opa);
-        SWAP_ANIM(a_w);
-        SWAP_ANIM(a_h);
-        SWAP_ANIM(a_x);
-        SWAP_ANIM(a_y);
+        /*反转起点终点设定，倒放*/
+#define ANIM_SWAP(anim) {int temp;temp=anim.start,anim.start=anim.end,anim.end=temp;}
+        __LoopExecute(ANIM_SWAP(anim_grp[i]), __Sizeof(anim_grp));
     }
     
     /*应用动画组*/
-    lv_anim_create(&a_w);
-    lv_anim_create(&a_h);
-    lv_anim_create(&a_opa);
-    lv_anim_create(&a_x);
-    lv_anim_create(&a_y);
+    __LoopExecute(lv_anim_create(&(anim_grp[i])), __Sizeof(anim_grp));
 }
 
 static void FirstInit()
@@ -302,7 +297,7 @@ static void Setup()
     /*创建Tab组，只初始化一次*/
     __ExecuteOnce(FirstInit());
 
-    /*为上一个APP退出播放动画*/
+    /*为上一个APP退出播放动画，但是第一次不运行*/
     static bool first = true;
     if(!first)
     {
@@ -310,7 +305,7 @@ static void Setup()
         vTaskDelay(AnimCloseTime_Default);
         lv_obj_set_hidden(contAppSw, true);
     }
-    first = false;
+    first = false;//这行别改
 }
 
 /**
@@ -321,7 +316,7 @@ static void Setup()
 static void Exit()
 {
     /*为APP开启动画延时*/
-    vTaskDelay(AnimCloseTime_Default + 100);
+    vTaskDelay(AnimCloseTime_Default);
     
     lv_obj_set_hidden(appWindow, true);
 }

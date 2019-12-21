@@ -11,11 +11,18 @@
 #include "Source/cpu_utils.h"
 
 /*Ext Function*/
-#define KByteToWord(kb) (kb * 1024 / 4)
 
+//bool xTaskAddStackCheckGroup(TaskHandle_t* handle);
+//TaskHandle_t xTaskGetIDHandle(uint8_t id);
+
+#define KByteToWord(kb) (kb * 1024 / 4)
 #define uxTaskGetFreeStackByte(TaskHandle_x) (uxTaskGetStackHighWaterMark(TaskHandle_x)*4)
 
-#define xTaskReg(func,stack,priority,handle) xTaskCreate(func,#func,stack,NULL,priority,handle)
+
+#define xTaskReg(func,stack,priority,handle) \
+do{\
+    xTaskCreate(func,#func,stack,NULL,priority,handle);\
+}while(0)
 
 #define xTimerReg(func,time) xTimerCreate(#func,time,pdTRUE,0,func)
 #define xTimerStartSafe(xTimer) if(xTimer)xTimerStart(xTimer,0)
@@ -31,7 +38,7 @@ void Task_PageRun(void *pvParameters);
 void Task_MotorRunning(TimerHandle_t xTimer);
 void Task_ReadBattInfo(TimerHandle_t xTimer);
 void Task_IMU_Claculate(TimerHandle_t xTimer);
-void Task_FreeStackMonitor(TimerHandle_t xTimer);
+//void Task_FreeStackMonitor(TimerHandle_t xTimer);
 
 /*TaskHandle*/
 extern TaskHandle_t TaskHandle_LuaScript;

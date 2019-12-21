@@ -49,7 +49,7 @@ static void Setup()
         return;
     }
     BvPlayer.BaseX = (APP_WIN_WIDTH - BvPlayer.Head.Width) * 0.5f;
-    BvPlayer.BaseY = (APP_WIN_HEIGHT - BvPlayer.Head.Height) * 0.5f + lv_obj_get_height(barStatus);
+    BvPlayer.BaseY = (APP_WIN_HEIGHT - BvPlayer.Head.Height) * 0.5f + BarStatus_GetHeight();
     BvPlayer.SetPlayerState(BvPlayer.Run);
     BvPlayer.DrawPic_16bit = Screen_FastDrawRGBBitmap;
     BvPlayer.DrawPic_8bit = Screen_FastDrawBitmap;

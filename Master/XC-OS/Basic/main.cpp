@@ -24,7 +24,7 @@ void setup()
     
     /*Timer Create*/
     xTimerStartSafe(xTimerReg(Task_ReadBattInfo, 500));
-    xTimerStartSafe(xTimerReg(Task_FreeStackMonitor, 1000));
+//    xTimerStartSafe(xTimerReg(Task_FreeStackMonitor, 1000));
     
     TimerHandle_Motor = xTimerReg(Task_MotorRunning, 10);
     xTimerStartSafe(TimerHandle_Motor);

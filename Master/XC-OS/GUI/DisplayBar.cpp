@@ -3,26 +3,35 @@
 #include "Module.h"
 #include "TasksManage.h"
 
+/*状态栏*/
 lv_obj_t * barStatus;
+
+static lv_obj_t * labelSignal;
+static lv_obj_t * labelTime;
+static lv_obj_t * labelCPUusage;
+static lv_obj_t * labelBattUsage;
+
+/*导航栏*/
 lv_obj_t * barNavigation;
 
 lv_obj_t * btnMenu;
 lv_obj_t * btnHome;
 lv_obj_t * btnBack;
 
-static lv_obj_t * symBatt;
-static lv_obj_t * labelBattUsage;
-static lv_obj_t * labelCPUusage;
-static lv_obj_t * contDropDown;
-#define IS_DropDownShow (lv_obj_get_y(contDropDown)+lv_obj_get_height(contDropDown)>= 0)
-static void DropDownList_AnimDown(bool down);
+lv_coord_t BarStatus_GetHeight()
+{
+    return lv_obj_get_height(barStatus);
+}
 
-static bool Is_BattCharging = false;
+lv_coord_t BarNavigation_GetHeight()
+{
+    return lv_obj_get_height(barNavigation);
+}
 
 static void Task_UpdateStatusBar(lv_task_t * task)
 {
     /*电池电量显示*/
-    Is_BattCharging = BattCurret > 0 ? true : false;
+    bool Is_BattCharging = BattCurret > 0 ? true : false;
 
     const char * battSymbol[] =
     {
@@ -45,22 +54,27 @@ static void Task_UpdateStatusBar(lv_task_t * task)
         symIndex = map(BattVoltageOc, 2600, 4200, 0, __Sizeof(battSymbol));
     }
     __LimitValue(symIndex, 0, __Sizeof(battSymbol));
-    lv_label_set_text(symBatt, battSymbol[symIndex]);
     uint8_t batUsage = map(BattVoltageOc, 2600, 4200, 0, 100);
     if(batUsage > 100)batUsage = 100;
-    lv_label_set_text_fmt(labelBattUsage, "%d%", batUsage);
-    
+    lv_label_set_text_fmt(labelBattUsage, "%d%s", batUsage, battSymbol[symIndex]);
+
     /*CPU占用显示*/
-    lv_label_set_text_fmt(labelCPUusage, "%d%%", FreeRTOS_GetCPUUsage());
+    lv_label_set_text_fmt(labelCPUusage, LV_SYMBOL_LOOP"%d%%", FreeRTOS_GetCPUUsage());
+
+    /*时间显示*/
+    uint16_t hh = (millis() / (3600 * 1000)) % 100;
+    uint16_t mm = (millis() / (60 * 1000)) % 60;
+    uint16_t ss = (millis() / 1000) % 60;
+    lv_label_set_text_fmt(labelTime, "%02d:%02d:%02d", hh, mm, ss);
 }
 
 
 static void Creat_StatusBar()
 {
     barStatus = lv_cont_create(lv_disp_get_scr_act(NULL), NULL);
-    lv_obj_set_width(barStatus, lv_disp_get_hor_res(NULL));
-    lv_obj_align(barStatus, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
-    
+    lv_obj_set_size(barStatus, lv_disp_get_hor_res(NULL), 25);
+    lv_obj_align(barStatus, NULL, LV_ALIGN_IN_TOP_MID, 0, 0);
+
     static lv_style_t styleStatusBar;
     lv_style_copy(&styleStatusBar, &lv_style_plain_color);
     styleStatusBar.body.main_color = LV_COLOR_BLACK;
@@ -68,25 +82,27 @@ static void Creat_StatusBar()
     styleStatusBar.body.opa = LV_OPA_COVER;
     lv_obj_set_style(barStatus, &styleStatusBar);
 
-    symBatt = lv_label_create(barStatus, NULL);
-    lv_label_set_text(symBatt, LV_SYMBOL_BATTERY_EMPTY);
-    lv_obj_align(symBatt, NULL, LV_ALIGN_IN_RIGHT_MID, -LV_DPI / 10, 0);
-    
+    /*电池状态*/
     labelBattUsage = lv_label_create(barStatus, NULL);
-    lv_label_set_text(labelBattUsage,"--");
-    lv_obj_align(labelBattUsage, symBatt, LV_ALIGN_OUT_LEFT_MID, -2, 0);
+    lv_label_set_text(labelBattUsage, "--"LV_SYMBOL_BATTERY_EMPTY);
+    lv_obj_align(labelBattUsage, NULL, LV_ALIGN_IN_RIGHT_MID, -2, 0);
     lv_obj_set_auto_realign(labelBattUsage, true);
-    
-    lv_obj_t * symLoop = lv_label_create(barStatus, NULL);
-    lv_label_set_text(symLoop, LV_SYMBOL_LOOP);
-    lv_obj_align(symLoop, symBatt, LV_ALIGN_OUT_LEFT_MID, -65, 0);
-    
+
+    /*CPU使用量*/
     labelCPUusage = lv_label_create(barStatus, NULL);
-    lv_label_set_text(labelCPUusage,"--%");
-    lv_obj_align(labelCPUusage, symLoop, LV_ALIGN_OUT_RIGHT_MID, 2, 0);
+    lv_label_set_text(labelCPUusage, LV_SYMBOL_LOOP"--%");
+    lv_obj_align(labelCPUusage, labelBattUsage, LV_ALIGN_OUT_RIGHT_MID, -100, 0);
+    lv_obj_set_auto_realign(labelCPUusage, true);
+
+    /*时间*/
+    labelTime = lv_label_create(barStatus, NULL);
+    lv_label_set_text(labelTime, "00:00:00");
+    lv_obj_align(labelTime, barStatus, LV_ALIGN_CENTER, 0, 0);
     
-    lv_cont_set_fit2(barStatus, LV_FIT_NONE, LV_FIT_TIGHT);   /*Let the height set automatically*/
-    lv_obj_set_pos(barStatus, 0, 0);
+    /*SD卡*/
+    labelSignal = lv_label_create(barStatus, NULL);
+    lv_label_set_text(labelSignal, lv_fs_is_ready('S') ? LV_SYMBOL_SD_CARD : LV_SYMBOL_WARNING);
+    lv_obj_align(labelSignal, barStatus, LV_ALIGN_IN_LEFT_MID, 3, 0);
 
     lv_task_create(Task_UpdateStatusBar, 500, LV_TASK_PRIO_MID, 0);
 }
@@ -99,15 +115,26 @@ static void NaviButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
     }
     if(event == LV_EVENT_CLICKED)
     {
+        if(DropDownList_GetShow())
+        {
+            DropDownList_AnimDown(false);
+            return;
+        }
+        
+        if(WinOSState_GetShow())
+        {
+            WinOSState_SetClose();
+            return;
+        }
+
         if(obj == btnHome)
         {
             page.PageStackClear();
             page.PagePush(PAGE_Home);
         }
-        if(IS_DropDownShow)
+        if(obj == btnMenu)
         {
-            DropDownList_AnimDown(false);
-            return;
+            Creat_WinOSState();
         }
     }
     page.PageEventTransmit(event, obj);
@@ -120,17 +147,17 @@ static void Creat_Buttons(lv_obj_t** btn, const char *text, lv_align_t align)
     btnStyle_Release.body.main_color = LV_COLOR_BLACK;
     btnStyle_Release.body.grad_color = LV_COLOR_BLACK;
     btnStyle_Release.body.opa = LV_OPA_TRANSP;
-    
+
     lv_style_copy(&btnStyle_Press, &lv_style_plain_color);
     btnStyle_Press.body.main_color = LV_COLOR_WHITE;
     btnStyle_Press.body.grad_color = LV_COLOR_WHITE;
     btnStyle_Press.body.opa = LV_OPA_50;
-    
+
     *btn = lv_btn_create(lv_scr_act(), NULL);
     lv_obj_set_event_cb(*btn, NaviButtonEvent_Handler);
     lv_obj_set_width(*btn, lv_disp_get_hor_res(NULL) / 3);
     lv_obj_align(*btn, barNavigation, align, 0, 0);
- 
+
     lv_btn_set_style(*btn, LV_BTN_STYLE_REL, &btnStyle_Release);
     lv_btn_set_style(*btn, LV_BTN_STYLE_PR, &btnStyle_Press);
 
@@ -139,7 +166,7 @@ static void Creat_Buttons(lv_obj_t** btn, const char *text, lv_align_t align)
 
     lv_btn_set_ink_in_time(*btn, 200);
     lv_btn_set_ink_out_time(*btn, 200);
-    
+
     lv_obj_set_protect(*btn, LV_PROTECT_PRESS_LOST);
 }
 
@@ -159,84 +186,6 @@ static void Creat_NavigationBar()
     Creat_Buttons(&btnMenu, LV_SYMBOL_STOP, LV_ALIGN_IN_LEFT_MID);
     Creat_Buttons(&btnHome, LV_SYMBOL_HOME, LV_ALIGN_CENTER);
     Creat_Buttons(&btnBack, LV_SYMBOL_LEFT, LV_ALIGN_IN_RIGHT_MID);
-}
-
-#define DropDownList_ExtArea (lv_obj_get_height(barStatus)*2)
-
-static void DropDownList_AnimEndEvent(lv_anim_t * a)
-{
-    lv_obj_set_ext_click_area(contDropDown, 0, 0, 0, IS_DropDownShow ? 0 : DropDownList_ExtArea);
-}
-
-static void DropDownList_AnimDown(bool down)
-{
-    static lv_anim_t a;
-    a.var = contDropDown;
-    a.start = lv_obj_get_y(contDropDown);
-    
-    a.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y;
-    a.path_cb = lv_anim_path_linear;
-    a.ready_cb = DropDownList_AnimEndEvent;
-    a.time = 300;
-    if(down)
-    {
-        a.end = 0;
-    }
-    else
-    {
-        a.end = -lv_obj_get_height(contDropDown) - 5;
-    }
-    
-    lv_anim_create(&a);
-}
-
-static void DropDownListEvent_Handler(lv_obj_t * obj, lv_event_t event)
-{
-    if(event == LV_EVENT_PRESSED)
-    {
-        lv_obj_set_top(contDropDown, true);
-    }
-    else if(event == LV_EVENT_RELEASED || event == LV_EVENT_DRAG_END)
-    {
-        lv_coord_t ver = lv_disp_get_ver_res(NULL);
-        lv_coord_t y = lv_obj_get_y(contDropDown) + lv_obj_get_height(contDropDown);
-        if(y > ver / 2)
-        {
-            DropDownList_AnimDown(true);
-        }
-        else
-        {
-            DropDownList_AnimDown(false);
-        }
-    }
-}
-
-static void Creat_DropDownList()
-{
-    contDropDown = lv_cont_create(lv_scr_act(), NULL);
-    
-    static lv_style_t style = *lv_obj_get_style(contDropDown);
-    style.body.main_color = LV_COLOR_BLACK;
-    style.body.grad_color = LV_COLOR_BLACK;
-    style.body.opa = LV_OPA_80;
-    lv_cont_set_style(contDropDown, LV_CONT_STYLE_MAIN, &style);
-    
-    lv_obj_set_size(contDropDown, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL) - lv_obj_get_height(barNavigation));
-    lv_obj_set_drag(contDropDown, true);
-    lv_obj_set_drag_dir(contDropDown, LV_DRAG_DIR_VER);
-//    lv_obj_set_drag_throw(contDropDown, true);
-    lv_obj_set_ext_click_area(contDropDown, 0, 0, 0, DropDownList_ExtArea);
-    lv_obj_set_event_cb(contDropDown, DropDownListEvent_Handler);
-    lv_obj_align(contDropDown, barStatus, LV_ALIGN_OUT_TOP_MID, 0, -5);
-    
-    /*label*/
-    lv_obj_t * label = lv_label_create(contDropDown, NULL);
-    lv_label_set_text(label, LV_SYMBOL_DOWN);
-    lv_obj_align(label, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
-    
-//    lv_obj_t * label2 = lv_label_create(contDropDown, NULL);
-//    lv_label_set_text(label2, "X-CTRL PRO");
-//    lv_obj_align(label2, label, LV_ALIGN_OUT_TOP_MID, 0, 0);
 }
 
 void Init_Bar()
