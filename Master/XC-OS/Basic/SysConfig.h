@@ -1,6 +1,17 @@
 #ifndef __SYSCONFIG_H
 #define __SYSCONFIG_H
 
+#define XC_VERSION_SW               "v1.0"
+#define XC_VERSION_HW               "v1.0"
+#define XC_OS_NAME                  "XC-OS"
+#define XC_CPU_NAME                 "STM32F405RGT6"
+#define XC_CPU_RATE_MHZ             (F_CPU/1000000)
+#define XC_KB(b)                    ((b)*1024)
+#define XC_ROM_SIZE                 (XC_KB(1024))
+#define XC_RAM_SIZE                 (XC_KB(192))
+#define XC_BATTERY_VOLTAGE          (3.7)
+#define XC_BATTERY_CAPACITY_MAH     (2000)
+
 #define NULL_PIN PD0
 
 #define Motor_Pin           PA0
@@ -33,6 +44,6 @@
 //VCC   GND
 
 #define XC_TIM_WAVPLAYER    TIM8
-#define XC_USE_LUA          0
+#define XC_USE_LUA          1
 
 #endif

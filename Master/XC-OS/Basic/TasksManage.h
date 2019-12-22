@@ -11,9 +11,7 @@
 #include "Source/cpu_utils.h"
 
 /*Ext Function*/
-
-//bool xTaskAddStackCheckGroup(TaskHandle_t* handle);
-//TaskHandle_t xTaskGetIDHandle(uint8_t id);
+#define DEBUG_PRINTF(format, ...) Serial.printf(format, ##__VA_ARGS__)
 
 #define KByteToWord(kb) (kb * 1024 / 4)
 #define uxTaskGetFreeStackByte(TaskHandle_x) (uxTaskGetStackHighWaterMark(TaskHandle_x)*4)
@@ -22,10 +20,15 @@
 #define xTaskReg(func,stack,priority,handle) \
 do{\
     xTaskCreate(func,#func,stack,NULL,priority,handle);\
+    DEBUG_PRINTF("Creat: task:%s, stack:%d, priority:%d\r\n",#func,stack,priority);\
 }while(0)
 
-#define xTimerReg(func,time) xTimerCreate(#func,time,pdTRUE,0,func)
-#define xTimerStartSafe(xTimer) if(xTimer)xTimerStart(xTimer,0)
+#define xTimerReg(func,time)\
+do{\
+    TimerHandle_t xTimer = xTimerCreate(#func,time,pdTRUE,0,func);\
+    if(xTimer)xTimerStart(xTimer,0);\
+    DEBUG_PRINTF("Creat: timer:%s, time:%d\r\n",#func,time);\
+}while(0)
 
 /*Task Functions*/
 void Task_Dispaly(void *pvParameters);
@@ -38,7 +41,6 @@ void Task_PageRun(void *pvParameters);
 void Task_MotorRunning(TimerHandle_t xTimer);
 void Task_ReadBattInfo(TimerHandle_t xTimer);
 void Task_IMU_Claculate(TimerHandle_t xTimer);
-//void Task_FreeStackMonitor(TimerHandle_t xTimer);
 
 /*TaskHandle*/
 extern TaskHandle_t TaskHandle_LuaScript;
@@ -48,8 +50,6 @@ extern TaskHandle_t TaskHandle_PageRun;
 extern TaskHandle_t TaskHandle_TransferData;
 
 /*TimerHandle*/
-extern TimerHandle_t TimerHandle_Motor;
-extern TimerHandle_t TimerHandle_IMU_Claculate;
 
 /*QueueHandle*/
 extern QueueHandle_t SemHandle_FileSystem;

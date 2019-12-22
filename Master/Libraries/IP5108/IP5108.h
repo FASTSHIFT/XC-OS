@@ -7,8 +7,8 @@
 
 class IP5108{
 public :
-    IP5108();
-    void begin(uint8_t addr = IP5018_DEFATLT_ADDRESS);
+    IP5108(uint8_t addr = IP5018_DEFATLT_ADDRESS);
+    void begin();
 
     typedef enum{
         SYS_CTL0 = 0x01,

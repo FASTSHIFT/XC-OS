@@ -2,8 +2,6 @@
 #include "TasksManage.h"
 #include "Module.h"
 
-TimerHandle_t TimerHandle_Motor;
-
 bool State_MotorVibrate = true;
 static uint32_t MotorStop_TimePoint = 0;
 static bool IsMotorRunning = false;

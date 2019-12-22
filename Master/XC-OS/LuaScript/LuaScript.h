@@ -3,6 +3,7 @@
 
 #include "lua.hpp"
 #include "stdint.h"
+#include "WString.h"
 
 #define registerFUNC(func) registerFunc(#func,func)
 
@@ -20,6 +21,7 @@ public:
 
     bool begin();
     bool end();
+    bool doFile(const char *file);
     bool doString(const char *s);
     void registerStrOutput(StrOutput_Callback_t func);
     void registerFunc(const char *name, lua_CFunction func);
@@ -41,5 +43,6 @@ void LuaReg_ModuleCtrl();
 void LuaReg_Com();
 
 void LuaScriptStart(const char *script);
+void LuaScriptExecuteFile(String file);
 
 #endif

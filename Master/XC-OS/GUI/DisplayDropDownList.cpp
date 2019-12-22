@@ -6,6 +6,8 @@
 extern lv_obj_t * barStatus;
 static lv_obj_t * contDropDown;
 
+static lv_obj_t * sliderBright;
+
 static void Creat_Slider();
 
 void DropDownList_AnimDown(bool down);
@@ -48,7 +50,7 @@ static void DropDownListEvent_Handler(lv_obj_t * obj, lv_event_t event)
     if(event == LV_EVENT_PRESSED)
     {
         lv_obj_move_foreground(contDropDown);
-//        lv_obj_set_top(contDropDown, true);
+        lv_slider_set_value(sliderBright, Brightness_GetValue(), LV_ANIM_ON);
     }
     else if(event == LV_EVENT_RELEASED || event == LV_EVENT_DRAG_END)
     {
@@ -92,7 +94,7 @@ void Creat_DropDownList()
 }
 
 /****************** Bright Ctrl ****************/
-static lv_obj_t * sliderBright;
+
 //static lv_obj_t * labelBright;
 
 static void SliderBright_EventHandler(lv_obj_t * obj, lv_event_t event)
@@ -101,7 +103,7 @@ static void SliderBright_EventHandler(lv_obj_t * obj, lv_event_t event)
     {
         int value = lv_slider_get_value(obj);
 //        lv_label_set_text_fmt(labelBright, "%d%%", value / 10);
-        BrightnessSet(value);
+        Brightness_SetValue(value);
 //        __IntervalExecute(Serial3.printf("B%dE", value), 20);
     }
 }
@@ -111,8 +113,7 @@ static void Creat_Slider()
     /*Create a slider*/
     sliderBright = lv_slider_create(contDropDown, NULL);
     lv_slider_set_range(sliderBright, 5, 1000);
-    lv_slider_set_value(sliderBright, BrightnessGet(), LV_ANIM_ON);
-    
+
     lv_obj_set_size(sliderBright, APP_WIN_WIDTH - 30, 20);
     lv_obj_align(sliderBright, NULL, LV_ALIGN_IN_TOP_MID, 0, 60);
     lv_obj_set_event_cb(sliderBright, SliderBright_EventHandler);

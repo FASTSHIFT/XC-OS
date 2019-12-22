@@ -31,7 +31,9 @@ lv_coord_t BarNavigation_GetHeight()
 static void Task_UpdateStatusBar(lv_task_t * task)
 {
     /*电池电量显示*/
-    bool Is_BattCharging = BattCurret > 0 ? true : false;
+    uint8_t batUsage = map(BattVoltageOc, 2600, 4200, 0, 100);
+    if(batUsage > 100)batUsage = 100;
+    bool Is_BattCharging = (BattCurret > 0 && batUsage < 100) ? true : false;
 
     const char * battSymbol[] =
     {
@@ -53,9 +55,7 @@ static void Task_UpdateStatusBar(lv_task_t * task)
     {
         symIndex = map(BattVoltageOc, 2600, 4200, 0, __Sizeof(battSymbol));
     }
-    __LimitValue(symIndex, 0, __Sizeof(battSymbol));
-    uint8_t batUsage = map(BattVoltageOc, 2600, 4200, 0, 100);
-    if(batUsage > 100)batUsage = 100;
+    __LimitValue(symIndex, 0, __Sizeof(battSymbol) - 1);
     lv_label_set_text_fmt(labelBattUsage, "%d%s", batUsage, battSymbol[symIndex]);
 
     /*CPU占用显示*/

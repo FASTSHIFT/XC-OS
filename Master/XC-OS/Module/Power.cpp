@@ -11,7 +11,16 @@ float BattCurret, BattVoltage, BattVoltageOc;
 
 void Task_ReadBattInfo(TimerHandle_t xTimer)
 {
-    __ExecuteOnce(charger.begin());
+    __ExecuteOnce((
+        charger.begin(),
+        pinMode(CHG_KEY_Pin, INPUT)
+    ));
+    
+    static uint8_t press_cnt = 0;
+    digitalRead(CHG_KEY_Pin) == LOW ? press_cnt++ : press_cnt = 0;
+    if(press_cnt > 1)
+        Power_Shutdown();
+    
     BattCurret = charger.getBattCurrent();
     BattVoltage = charger.getBattVoltage();
     BattVoltageOc = charger.getBattOcVoltage();
@@ -21,18 +30,7 @@ void Task_ReadBattInfo(TimerHandle_t xTimer)
 
 void Power_Shutdown()
 {
+    Brightness_SetGradual(0, 200);
     pinMode(CHG_KEY_Pin, OUTPUT_OPEN_DRAIN);
-    
-    digitalWrite(CHG_KEY_Pin, HIGH);   
-    vTaskDelay(50);
-    digitalWrite(CHG_KEY_Pin, LOW);
-    vTaskDelay(50);
-    digitalWrite(CHG_KEY_Pin, HIGH);
-    
-    vTaskDelay(50);
-    digitalWrite(CHG_KEY_Pin, LOW);
-    vTaskDelay(50);
-    digitalWrite(CHG_KEY_Pin, HIGH);
-    
-    pinMode(CHG_KEY_Pin, INPUT);
+    digitalWrite(CHG_KEY_Pin, LOW);   
 }

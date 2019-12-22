@@ -15,6 +15,7 @@ static void mbox_event_handler(lv_obj_t * obj, lv_event_t event)
         if(index == 0)
         {
             Power_Shutdown();
+            lv_mbox_start_auto_close(obj, 20);
         }
         else if(index == 1)
         {

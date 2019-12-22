@@ -1,7 +1,6 @@
 #ifndef __MOUDLE_H
 #define __MOUDLE_H
 
-#include "stdint.h"
 #include "Arduino.h"
 
 /*Motor*/
@@ -28,8 +27,9 @@ uint32_t TextBuf_GetSize();
 void     TextBuf_Clear(uint8_t n = 0);
 
 /*Brightness*/
-uint16_t BrightnessGet();
-void BrightnessSet(uint16_t val);
+uint16_t Brightness_GetValue();
+void Brightness_SetValue(uint16_t val);
+void Brightness_SetGradual(uint16_t target, uint16_t time = 500);
 
 /*Lyric*/
 bool Lyric_Setup(String path);

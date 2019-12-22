@@ -117,6 +117,11 @@ static void Setup()
     lv_obj_set_parent(labelStatus, appWindow);
     lv_obj_align(labelStatus, chart, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
     
+    lv_obj_t * lableBattInfo = lv_label_create(appWindow, NULL);
+    lv_obj_align(lableBattInfo, labelStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+    lv_obj_set_auto_realign(lableBattInfo, true);
+    lv_label_set_text_fmt(lableBattInfo, "@%0.1fV %dmAh",XC_BATTERY_VOLTAGE, XC_BATTERY_CAPACITY_MAH);
+    
     Creat_Gauge();
     Creat_Label(gaugeCurrent, &labelCurrent);
     Creat_Label(gaugeVoltage, &labelVoltage);

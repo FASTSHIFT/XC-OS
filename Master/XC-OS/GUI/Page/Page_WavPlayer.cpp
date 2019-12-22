@@ -143,7 +143,7 @@ static void Creat_ChartFFT()
     lv_chart_set_point_count(chartFFT, ChartPointCount);
     lv_chart_set_div_line_count(chartFFT, 0, 0);
 
-    serFFT = lv_chart_add_series(chartFFT, lv_color_hex(0x487fb7));
+    serFFT = lv_chart_add_series(chartFFT, lv_style_plain_color.body.main_color);
 
     taskSerFFT = lv_task_create(Task_UpdateSerFFT, 50, LV_TASK_PRIO_MID, 0);
 }

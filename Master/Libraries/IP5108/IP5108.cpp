@@ -1,12 +1,15 @@
 #include "IP5108.h"
 
-IP5108::IP5108()
-{
-}
-
-void IP5108::begin(uint8_t addr)
+IP5108::IP5108(uint8_t addr)
 {
     Address = addr;
+}
+
+void IP5108::begin()
+{
+    writeRegBit(SYS_CTL0, SYS_CTL0_BIT_FlashLight, false);
+    writeRegBit(SYS_CTL1, SYS_CTL1_BIT_LowLoadOff, false);
+    writeRegBit(SYS_CTL5, SYS_CTL5_BIT_KeyShutdownSet, true);
 }
 
 uint8_t IP5108::readReg(REG_t reg)

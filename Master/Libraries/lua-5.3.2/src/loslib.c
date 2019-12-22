@@ -21,22 +21,6 @@
 #include "lauxlib.h"
 #include "lualib.h"
 
-#include "delay.h"
-
-time_t time(time_t * time)  
-{  
-    return millis();  
-}  
-  
-void exit(int status)  
-{
-    while(1);
-}
-
-int system(const char * string)  
-{  
-    return 0;  
-}  
 
 
 /*

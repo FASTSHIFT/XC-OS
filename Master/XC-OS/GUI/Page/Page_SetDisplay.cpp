@@ -86,21 +86,23 @@ static lv_obj_t * appWindow;
 //    }
 //}
 static lv_obj_t * colorPicker;
+static lv_obj_t * labelHue;
 static uint16_t theme_hue_now = 200;
 
 static void ColorPicker_EventHandler(lv_obj_t * obj, lv_event_t event)
 {
+    if(obj != colorPicker)
+        return;
+    
     if(event == LV_EVENT_VALUE_CHANGED)
     {
-        
+        lv_color_t color = lv_cpicker_get_color(colorPicker);
+        lv_label_set_text_fmt(labelHue, "R%d G%d B%d", color.ch.red << 3, color.ch.green << 2, color.ch.blue << 3);
     }
     else if(event == LV_EVENT_RELEASED)
     {
-        if(obj == colorPicker)
-        {
-            theme_hue_now = lv_cpicker_get_hue(obj);
-            lv_theme_set_current(lv_theme_material_init(theme_hue_now, LV_FONT_DEFAULT));
-        }
+        theme_hue_now = lv_cpicker_get_hue(obj);
+        lv_theme_set_current(lv_theme_material_init(theme_hue_now, LV_FONT_DEFAULT));
     }
 }
 
@@ -133,7 +135,7 @@ static void Creat_ColorPicker()
     lv_cpicker_set_style(colorPicker, LV_CPICKER_STYLE_INDICATOR, &styleIndicator);
     /* Change the knob's color to that of the selected color */
     lv_cpicker_set_indic_colored(colorPicker, true);
-    
+
     lv_cpicker_set_hue(colorPicker, theme_hue_now);
     lv_obj_set_event_cb(colorPicker, ColorPicker_EventHandler);
 }
@@ -148,8 +150,12 @@ static void Setup()
 {
     lv_obj_move_foreground(appWindow);
     Creat_ColorPicker();
-//    Creat_Slider(&sliderBright);
-//    Creat_Label(&labelBright);
+
+    labelHue = lv_label_create(colorPicker, NULL);
+    lv_obj_set_auto_realign(labelHue, true);
+    lv_obj_align(labelHue, NULL, LV_ALIGN_CENTER, 0, 0);
+    lv_color_t color = lv_cpicker_get_color(colorPicker);
+    lv_label_set_text_fmt(labelHue, "R%d G%d B%d", color.ch.red << 3, color.ch.green << 2, color.ch.blue << 3);
 }
 
 /**

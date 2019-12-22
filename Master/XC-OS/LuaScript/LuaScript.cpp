@@ -50,6 +50,17 @@ bool LuaScript::end()
     return true;
 }
 
+bool LuaScript::doFile(const char *file)
+{
+    isRunning = true;
+    bool error = luaL_dofile(L, file);
+    isRunning = false;
+    if(error)
+        lua_string_print(lua_tostring(L, -1));
+
+    return error;
+}
+
 bool LuaScript::doString(const char *s)
 {
     isRunning = true;

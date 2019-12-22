@@ -23,7 +23,10 @@ typedef struct{
 AppPathText_TypeDef AppPathText_Grp[APP_MAX];
 APP_TypeDef APP_Grp[APP_MAX];
 
-static void APP_Call(const char *path);
+static void APP_Call(const char *path)
+{
+    LuaScriptExecuteFile(path);
+}
 
 static int LoadFolderInfo(const char *path)
 {
@@ -57,30 +60,6 @@ static int LoadFolderInfo(const char *path)
         file.close();
     }
     return count;
-}  
-
-static bool ExecuteLuaFile(const char* path)
-{
-    bool ret = false;
-    SdFile file;
-    if(file.open(path, O_RDONLY))
-    {
-        file.read(TextBuf_GetBuff(), TextBuf_GetSize());
-        file.close();
-        ret = true;
-    }
-    return ret;
-}
-
-static void APP_Call(const char *path)
-{
-    if(ExecuteLuaFile(path))
-    {
-#if( XC_USE_LUA == 1 )
-        luaScript.registerStrOutput(NULL);
-        LuaScriptStart(TextBuf_GetBuff());
-#endif
-    }
 }
 
 static void ImgbtnEvent_Handler(lv_obj_t * obj, lv_event_t event)

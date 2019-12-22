@@ -155,11 +155,11 @@ void Task_WavPlayer(void *pvParameters)
         vTaskSuspend(TaskHandle_WavPlayer);
     }
     
-    /*检测SD卡是否初始化成功*/
-    if(!SD.begin(SD_CS_Pin, SD_SCK_MHZ(50))) 
-    {
-        vTaskSuspend(TaskHandle_WavPlayer);
-    }
+//    /*检测SD卡是否初始化成功*/
+//    if(!SD.begin(SD_CS_Pin, SD_SCK_MHZ(50))) 
+//    {
+//        vTaskSuspend(TaskHandle_WavPlayer);
+//    }
     
     for(;;)
     {
