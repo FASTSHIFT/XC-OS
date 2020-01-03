@@ -614,6 +614,11 @@
               </FileOption>
             </File>
             <File>
+              <FileName>Page_About.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page\Page_About.cpp</FilePath>
+            </File>
+            <File>
               <FileName>Page_BattInfoOld.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_BattInfoOld.cpp</FilePath>
@@ -732,6 +737,31 @@
               <FileName>ImgVideo.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\XC-OS\GUI\IMG\ImgVideo.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgBattery.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgBattery.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgCPU.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgCPU.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgOS.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgOS.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgRAM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgRAM.c</FilePath>
+            </File>
+            <File>
+              <FileName>ImgROM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgROM.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -955,7 +985,7 @@
                 <PlainCh>2</PlainCh>
                 <Ropi>2</Ropi>
                 <Rwpi>2</Rwpi>
-                <wLevel>1</wLevel>
+                <wLevel>2</wLevel>
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>

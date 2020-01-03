@@ -24,7 +24,7 @@ TaskHandle_t TaskHandle_WavPlayer;
 
 int WavAvailable;
 
-static void WavSendDataToDAC()
+static void WavTimer_Handler()
 {
     WavAvailable = WaveFifo.available();
     if(WavAvailable < 16)
@@ -95,7 +95,7 @@ bool WavPlayer_LoadFile(String path)
     Wav_StructInit(&Wav_Handle, WavFileLoader);
     Wav_Open(&Wav_Handle);
 
-    Timer_SetInterrupt(XC_TIM_WAVPLAYER, 1000000 / Wav_Handle.Header.SampleFreq, WavSendDataToDAC);
+    Timer_SetInterrupt(XC_TIM_WAVPLAYER, 1000000 / Wav_Handle.Header.SampleFreq, WavTimer_Handler);
     Timer_SetInterruptFreqUpdate(XC_TIM_WAVPLAYER, Wav_Handle.Header.SampleFreq);
 //    clock_out = Timer_GetClockOut(TIM_WAVPLAYER);
   

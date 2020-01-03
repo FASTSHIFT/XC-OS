@@ -1,3 +1,25 @@
+/*
+ * MIT License
+ * Copyright (c) 2019 _VIFEXTech
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 #include "pwm.h"
 #include "timer.h"
 #include "Arduino.h"
@@ -14,10 +36,10 @@ void TIMx_OCxInit(TIM_TypeDef* TIMx, uint16_t arr, uint16_t psc, uint8_t TimerCh
 {
     TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_OCInitTypeDef TIM_OCInitStructure;
-
+    
     if(!IS_TIM_ALL_PERIPH(TIMx))
         return;
-
+    
     Timer_ClockCmd(TIMx, ENABLE);
 
     TIM_TimeBaseStructure.TIM_Period = arr;
@@ -50,7 +72,7 @@ void TIMx_OCxInit(TIM_TypeDef* TIMx, uint16_t arr, uint16_t psc, uint8_t TimerCh
     }
 
     TIM_Cmd(TIMx, ENABLE);
-
+    
     if(IS_APB2_TIM(TIMx))
     {
         TIM_CtrlPWMOutputs(TIMx, ENABLE);
@@ -67,19 +89,19 @@ void TIMx_OCxInit(TIM_TypeDef* TIMx, uint16_t arr, uint16_t psc, uint8_t TimerCh
 uint8_t PWM_Init(uint8_t Pin, uint16_t PWM_DutyCycle, uint32_t PWM_Frequency)
 {
     uint32_t arr, psc;
-
+    
     if(!IS_PWM_PIN(Pin))
         return 0;
-
+    
     if(PWM_DutyCycle == 0 || PWM_Frequency == 0 || (PWM_DutyCycle * PWM_Frequency) > F_CPU)
         return 0;
 
     pinMode(Pin, OUTPUT_AF);
-    GPIO_PinAFConfig(PIN_MAP[Pin].GPIOx, Get_TIM_PinSourcex(Pin), Get_TIMx_GPIO_AF_x(Pin));
+    GPIO_PinAFConfig(PIN_MAP[Pin].GPIOx, TIM_GetPinSourcex(Pin), TIM_GetGPIO_AF(Pin));
 
     arr = PWM_DutyCycle;
     psc = F_CPU / PWM_DutyCycle / PWM_Frequency;
-
+    
     if(!IS_APB2_TIM(PIN_MAP[Pin].TIMx))
         psc /= 2;
 
@@ -93,10 +115,13 @@ uint8_t PWM_Init(uint8_t Pin, uint16_t PWM_DutyCycle, uint32_t PWM_Frequency)
   * @param  Pin: 引脚编号
   * @retval 定时器复用编号
   */
-uint8_t Get_TIMx_GPIO_AF_x(uint8_t Pin)
+uint8_t TIM_GetGPIO_AF(uint8_t Pin)
 {
     uint8_t GPIO_AF_x = 0;
     TIM_TypeDef* TIMx = PIN_MAP[Pin].TIMx;
+    
+    if(!IS_TIM_ALL_PERIPH(TIMx))
+        return 0;
 
 #define TIMx_GPIO_AF_DEF(n)\
 do{\

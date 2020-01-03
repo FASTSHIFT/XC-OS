@@ -2,7 +2,7 @@
 #include "TasksManage.h"
 #include "ComPrivate.h"
 
-TaskHandle_t TaskHandle_TransferData;
+TaskHandle_t TaskHandle_Commmunicate;
 
 /*失联超时500ms*/
 #define ConnectLost_TimeOut 500
@@ -38,7 +38,7 @@ int16_t NRF_SignalStrength = 0;
 NRF_Config_TypeDef NRF_Cfg = {0, 0, 40};
 
 /*发送数据使能*/
-bool State_RF = ON;
+static bool State_RF = ON;
 
 /*回传使能*/
 bool State_PassBack = ON;
@@ -61,7 +61,7 @@ static bool Init_NRF()
 {
     /*总初始化*/
     nrf.init(nrf.TXRX_MODE, NRF_TxBuff, sizeof(NRF_TxBuff), sizeof(NRF_RxBuff));
-    
+
     /*设置地址*/
     nrf.SetAddress((uint8_t*)NRF_AddressConfig + NRF_Cfg.Address * 5);
 
@@ -203,7 +203,7 @@ static void LoadDataPack()
         __LimitValue(CarSS.MotorSpeed, -CtrlOutput_MaxValue, CtrlOutput_MaxValue);
         __LimitValue(CarSS.SteerAngle, -CtrlOutput_MaxValue, CtrlOutput_MaxValue);
     }
-    
+
     /*数据包载入NRF发送缓冲区*/
     switch(CTRL.Info.CtrlObject)
     {
@@ -225,69 +225,81 @@ static void LoadDataPack()
     }
 }
 
+static void CommmunicateProcess()
+{
+    LoadDataPack();//打包数据包
+
+    if(ConnectState.Pattern == Pattern_NRF)
+    {
+        /*是否开启回传*/
+        if(State_PassBack)
+        {
+            /*NRF收发数据*/
+            nrf.TranRecvSafe(NRF_TxBuff, NRF_RxBuff);
+
+            /*数组第二位为0说明是用户自定义回传类型*/
+            if(NRF_RxBuff[1] == 0)
+            {
+                Enable_CommonPassBack = false;
+
+                /*调用用户自定义回传数据解析数据*/
+                for(uint8_t i = 0; i < __Sizeof(LoadUserCustomPassBack_Group); i++)
+                {
+                    if(LoadUserCustomPassBack_Group[i])
+                        LoadUserCustomPassBack_Group[i](NRF_RxBuff);
+                    else
+                        break;
+                }
+            }
+            else
+            {
+                Enable_CommonPassBack = true;
+
+                /*是否锁定回传数据*/
+                if(!Lock_CommonPassback)
+                {
+                    Common_Passback = __TypeExplain(Protocol_Passback_CommonDisplay_t, NRF_RxBuff);
+                }
+            }
+        }
+        else
+        {
+            nrf.Tran(NRF_TxBuff);//NRF发送数据
+        }
+    }
+}
+
+void NRF_Delay_Callback(uint32_t ms)
+{
+    vTaskDelay(ms);
+}
+
+void CommmunicateRF_Enable(bool en)
+{
+    State_RF = en;
+    if(en)
+    {
+        xTaskNotifyGive(TaskHandle_Commmunicate);
+    }
+}
+
 /**
   * @brief  数据发送任务
   * @param  无
   * @retval 无
   */
-void Task_TransferData(void *pvParameters)
+void Task_Commmunicate(void *pvParameters)
 {
-    if(State_RF == OFF)
-    {
-        while(1);
-    }
-    
-    if(!Init_NRF())
-    {
-        while(1);
-    }
+    State_RF = Init_NRF();
     
     for(;;)
     {
-        vTaskDelay(10);
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         
-        if(State_RF)
+        while(State_RF)
         {
-            LoadDataPack();//打包数据包
-
-            if(ConnectState.Pattern == Pattern_NRF)
-            {
-                /*是否开启回传*/
-                if(State_PassBack)
-                {
-                    /*NRF收发数据*/
-                    nrf.TranRecvSafe(NRF_TxBuff, NRF_RxBuff);
-
-                    /*数组第二位为0说明是用户自定义回传类型*/
-                    if(NRF_RxBuff[1] == 0)
-                    {
-                        Enable_CommonPassBack = false;
-
-                        /*调用用户自定义回传数据解析数据*/
-                        for(uint8_t i = 0; i < __Sizeof(LoadUserCustomPassBack_Group); i++)
-                        {
-                            if(LoadUserCustomPassBack_Group[i])
-                                LoadUserCustomPassBack_Group[i](NRF_RxBuff);
-                            else
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        Enable_CommonPassBack = true;
-
-                        /*是否锁定回传数据*/
-                        if(!Lock_CommonPassback)
-                        {
-                            Common_Passback = __TypeExplain(Protocol_Passback_CommonDisplay_t, NRF_RxBuff);
-                        }
-                    }
-                }
-                else
-                {
-                    nrf.Tran(NRF_TxBuff);//NRF发送数据
-                }
-            }
+            CommmunicateProcess();
+            vTaskDelay(10);
         }
     }
 }

@@ -8,7 +8,7 @@
 
 static lv_obj_t * appWindow;
 
-#define FILENAME_LEN_MAX 64
+#define FILE_NAME_LEN_MAX LV_FS_MAX_FN_LENGTH
 #define FILE_CNT_MAX     64
 
 /*文件根路径*/
@@ -303,7 +303,7 @@ static bool FileInfoLoadNext(SdFile &file, int index)
         return false;
     
     /*文件名获取*/
-    char fileName[FILENAME_LEN_MAX];
+    char fileName[FILE_NAME_LEN_MAX];
     file.getName(fileName, sizeof(fileName));
     FileInfo_Grp[index].name = String(fileName);
     
@@ -540,6 +540,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_FileExplorer(uint8_t pageID)
 {
-    appWindow = AppWindow_PageGet(pageID);
+    appWindow = AppWindow_GetObj(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }

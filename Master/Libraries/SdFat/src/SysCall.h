@@ -76,7 +76,7 @@ inline void SysCall::yield() {
 #elif defined(ARDUINO)
 inline void SysCall::yield() {
   // Use the external Arduino yield() function.
-  delay(0);//::yield();
+  yield();
 }
 #elif defined(PLATFORM_ID)  // Only defined if a Particle device
 inline void SysCall::yield() {

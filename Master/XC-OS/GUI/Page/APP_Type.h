@@ -9,6 +9,7 @@ typedef enum{
     TYPE_None,
     TYPE_PageJump,
     TYPE_FuncCall,
+    TYPE_Number,
 }Func_Type;
 
 /*存放APP图标和标签的容器*/
@@ -27,5 +28,12 @@ typedef struct
 } APP_TypeDef;
 
 void Creat_APP(APP_TypeDef &app, lv_obj_t * parent, uint8_t index, lv_event_cb_t imgbtn_event_handler);
+
+typedef struct{
+    const void* img_src;
+    const char* text;
+    Func_Type type;
+    int param;
+}ListBtn_TypeDef;
 
 #endif

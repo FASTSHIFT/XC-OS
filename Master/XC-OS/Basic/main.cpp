@@ -18,8 +18,8 @@ void setup()
     xTaskReg(Task_Dispaly,      KByteToWord(5),    2, &TaskHandle_Display);
     xTaskReg(Task_WavPlayer,    KByteToWord(1),    0, &TaskHandle_WavPlayer);
     xTaskReg(Task_PageRun,      KByteToWord(3),    1, &TaskHandle_PageRun);
-//    xTaskReg(Task_TransferData, KByteToWord(0.5f), 0, &TaskHandle_TransferData);
-#if( XC_USE_LUA == 1)
+    xTaskReg(Task_Commmunicate, KByteToWord(0.5f), 0, &TaskHandle_Commmunicate);
+#if( XC_USE_LUA == 1 )
     xTaskReg(Task_LuaScript,    KByteToWord(3),    0, &TaskHandle_LuaScript);
 #endif
     

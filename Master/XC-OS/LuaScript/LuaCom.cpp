@@ -2,23 +2,25 @@
 #include "LuaScript.h"
 #include "ComPrivate.h"
 
-#define Lua_SERIAL Serial
+//#define Lua_SERIAL Serial
+
+//static int lua_pushstring_fmt(lua_State *L, const char *__restrict __format, ...)
+//{
+//    char printf_buff[100];
+
+//    va_list args;
+//    va_start(args, __format);
+//    int ret_status = vsnprintf(printf_buff, sizeof(printf_buff), __format, args);
+//    va_end(args);
+//    lua_pushstring(L, printf_buff);
+
+//    return ret_status;
+//}
 
 static int Lua_SetRFState(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 1)
-    {
-        lua_pushstring(L, "Error! Example: setRF(1) -> Turn on RF");
-        lua_error(L);
-    }
-    if (!lua_isinteger(L, 1))
-    {
-        lua_pushstring(L, "Error! Use integer set RF state");
-        lua_error(L);
-    }
-    State_RF = lua_tointeger(L, 1);
-    State_RF ? Lua_SERIAL.println("RF Enalbe") : Lua_SERIAL.println("RF Disable");
+    bool rf_enable = luaL_checkinteger(L, 1);;
+    CommmunicateRF_Enable(rf_enable);
     return 0;
 }
 
@@ -26,51 +28,19 @@ static int Lua_SetRFState(lua_State *L)
 static uint8_t ItemSelect_MAX = 0;
 static int Lua_Handshake(lua_State *L)
 {
-    State_RF = OFF;//遥控关闭
+    CommmunicateRF_Enable(false);
     ItemSelect_MAX = 0;
 
-    int nValue = lua_gettop(L);
-    if(nValue != 1 || !lua_isnumber(L, 1))
-    {
-        lua_pushstring(L, "Error! Example: handshake(2000) -> run handshake process 2000ms");
-        lua_error(L);
-    }
-
-    Lua_SERIAL.println("Handshake preparing...");
     /*主机准备握手*/
     HandshakeRun(HandshakeState_Prepare);
 
-    uint32_t StopTime = millis() + lua_tonumber(L, 1);
-    uint8_t ItemSelect_MAX_Last = 0;
+    uint32_t StopTime = millis() + luaL_checkinteger(L, 1);
     while(millis() < StopTime)
     {
         /*获取从机列表数量*/
         ItemSelect_MAX = HandshakeRun(HandshakeState_Search);
-
-        if(ItemSelect_MAX != ItemSelect_MAX_Last)
-        {
-            Lua_SERIAL.printf(
-                "Find-> ID:0x%x %s\r\n",
-                HandshakePack_Slave[ItemSelect_MAX_Last].ID,
-                HandshakePack_Slave[ItemSelect_MAX_Last].Description
-            );
-
-            ItemSelect_MAX_Last = ItemSelect_MAX;
-        }
     }
-
-    /*显示搜索结果*/
-    if(ItemSelect_MAX > 0)
-    {
-        Lua_SERIAL.println("Search Done!");
-    }
-    else
-    {
-        Lua_SERIAL.println("Not Found!");
-    }
-
     lua_pushnumber(L, ItemSelect_MAX);
-
     return 1;
 }
 
@@ -82,28 +52,12 @@ static int Lua_ConnectSlave(lua_State *L)
         lua_error(L);
     }
 
-    int nValue = lua_gettop(L);
-    if(nValue != 1)
-    {
-        lua_pushstring(L, "Error! Example: connect(1) -> connect to slave(1)");
-        lua_error(L);
-    }
-    if (!lua_isinteger(L, 1))
-    {
-        lua_pushstring(L, "Error! Use integer set slave");
-        lua_error(L);
-    }
-
-    uint8_t ItemSelect = lua_tonumber(L, 1);
+    uint8_t ItemSelect = luaL_checkinteger(L, 1);
     if(ItemSelect >= ItemSelect_MAX)
     {
-        lua_pushfstring(L, "slave num max is %d!", ItemSelect_MAX - 1);
+        lua_pushfstring(L, "slave num max is %d!\r\n", ItemSelect_MAX - 1);
         lua_error(L);
     }
-
-
-    /*尝试连接从机*/
-    Lua_SERIAL.printf("connecting to %s...\r\n", HandshakePack_Slave[ItemSelect].Description);
 
     /*超时设置*/
     uint32_t timeout = millis();
@@ -114,7 +68,6 @@ static int Lua_ConnectSlave(lua_State *L)
         /*2500ms超时*/
         if(millis() - timeout > 2500)
         {
-            Lua_SERIAL.println("timeout");
             IsTimeout = true;
             break;
         }
@@ -125,12 +78,6 @@ static int Lua_ConnectSlave(lua_State *L)
 
     /*对应从机类型*/
     CTRL.Info.CtrlObject = HandshakePack_Slave[ItemSelect].CtrlType;
-
-    /*如果未超时表示握手成功*/
-    if(!IsTimeout)
-    {
-        Lua_SERIAL.println("connecting successful");
-    }
     
     lua_pushboolean(L, !IsTimeout);
     return 1;
@@ -152,22 +99,9 @@ static int Lua_GetSlaveInfo(lua_State *L)
 
 static int Lua_SetChannle(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 2)
-    {
-        lua_pushstring(L, "Error! Example: setCh(0,1000) -> set channle0 to 1000");
-        lua_error(L);
-    }
-
-    if (!(lua_isnumber(L, 1) && lua_isnumber(L, 2)))
-    {
-        lua_pushstring(L, "Error! Use number set channle num and value");
-        lua_error(L);
-    }
-
 //    SetJoystickConnectEnable(false);
-    uint8_t channle = lua_tointeger(L, 1);
-    float value = (float)lua_tonumber(L, 2);
+    uint8_t channle = luaL_checkinteger(L, 1);
+    int16_t value = luaL_checkinteger(L, 2);
 
     switch(channle)
     {
@@ -194,21 +128,8 @@ static int Lua_SetChannle(lua_State *L)
 
 static int Lua_GetChannle(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 1)
-    {
-        lua_pushstring(L, "Error! Example: getCh(0) -> get channle0 value");
-        lua_error(L);
-    }
-
-    if (!lua_isnumber(L, 1))
-    {
-        lua_pushstring(L, "Error! Use number set channle num");
-        lua_error(L);
-    }
-
-    uint8_t channle = lua_tointeger(L, 1);
-    float value = 0.0;
+    uint8_t channle = luaL_checkinteger(L, 1);
+    int16_t value = 0;
 
     switch(channle)
     {
@@ -230,34 +151,15 @@ static int Lua_GetChannle(lua_State *L)
         break;
     }
 
-    lua_pushnumber(L, value);
+    lua_pushinteger(L, value);
 
     return 1;
 }
 
 static int Lua_SetButton(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 2)
-    {
-        lua_pushstring(L, "Error! Example: setBt(0,1) -> press button 0");
-        lua_error(L);
-    }
-
-    if (!lua_isnumber(L, 1))
-    {
-        lua_pushstring(L, "Error! Use number set button num");
-        lua_error(L);
-    }
-
-    if (!lua_isnumber(L, 2))
-    {
-        lua_pushstring(L, "Error! Use number set button value");
-        lua_error(L);
-    }
-
-    uint8_t bt = constrain(lua_tointeger(L, 1), 0, 7);
-    bool val = lua_tointeger(L, 2);
+    uint8_t bt = constrain(luaL_checkinteger(L, 1), 0, 7);
+    bool val = luaL_checkinteger(L, 2);
 
     if(val)
     {

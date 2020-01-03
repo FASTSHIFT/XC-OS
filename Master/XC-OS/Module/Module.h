@@ -7,8 +7,8 @@
 void Motor_Vibrate(float strength, uint32_t time);
 
 /*Power*/
-extern float BattCurret, BattVoltage, BattVoltageOc;
 void Power_Shutdown();
+void Power_GetInfo(float* battCurrent,float* battVoltage,float* battVoltageOc);
 
 /*Audio*/
 void Audio_SetEnable(bool en);
@@ -28,7 +28,7 @@ void     TextBuf_Clear(uint8_t n = 0);
 
 /*Brightness*/
 uint16_t Brightness_GetValue();
-void Brightness_SetValue(uint16_t val);
+void Brightness_SetValue(int16_t val);
 void Brightness_SetGradual(uint16_t target, uint16_t time = 500);
 
 /*Lyric*/

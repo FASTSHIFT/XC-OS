@@ -112,6 +112,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Game(uint8_t pageID)
 {
-    appWindow = AppWindow_PageGet(pageID);
+    appWindow = AppWindow_GetObj(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }

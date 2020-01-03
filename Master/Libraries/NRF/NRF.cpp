@@ -129,7 +129,8 @@ bool NRF::init(NRF_Mode_TypeDef mode, uint8_t *buff, uint8_t TX_length, uint8_t 
     pinMode(CSN_Pin, OUTPUT);
     
     NRF_CE_HIGH();
-    delay(100);
+    extern void NRF_Delay_Callback(uint32_t ms);
+    NRF_Delay_Callback(100);
     NRF_CE_LOW();
     NRF_CSN_HIGH();
 

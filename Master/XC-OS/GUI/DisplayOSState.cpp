@@ -23,8 +23,8 @@ static void TimerForRuntime_Callback()
 
 static void AppConfigureTimerForRuntimeStats()
 {
-    Timer_SetInterrupt(TIM7, 10, TimerForRuntime_Callback);
-    TIM_Cmd(TIM7, ENABLE);
+    Timer_SetInterrupt(XC_TIM_RUNTIME, 10, TimerForRuntime_Callback);
+    TIM_Cmd(XC_TIM_RUNTIME, ENABLE);
 }
 
 static void Task_UpdateTaskStatus(lv_task_t * task)
@@ -51,11 +51,10 @@ static void Task_UpdateTaskStatus(lv_task_t * task)
         lv_table_set_cell_crop(tableOSState, i + 1, 0, true);
         lv_table_set_cell_value(tableOSState, i + 1, 0, TaskStatus_Grp[i].pcTaskName);
 
-        float cpu_usage = 0.0f;
-
         uint32_t taskRunTime = TaskStatus_Grp[i].ulRunTimeCounter - TaskLastRunTime[i];
         TaskLastRunTime[i] = TaskStatus_Grp[i].ulRunTimeCounter;
 
+        float cpu_usage = 0.0f;
         if(currentTime)
         {
             cpu_usage = (taskRunTime * 100.0f) / (currentTime);
@@ -63,16 +62,7 @@ static void Task_UpdateTaskStatus(lv_task_t * task)
                 cpu_usage = 0.0f;
         }
         lv_table_set_cell_value(tableOSState, i + 1, 1, (String(cpu_usage, 1) + "%").c_str());
-//        lv_table_set_cell_value(tableOSState, i + 1, 1, String(TaskStatus_Grp[i].xTaskNumber).c_str());
 
-//        const char* eCurrentStateStr[] = {
-//            LV_SYMBOL_PLAY,
-//            LV_SYMBOL_NEXT,
-//            LV_SYMBOL_PAUSE,
-//            LV_SYMBOL_STOP,
-//            LV_SYMBOL_TRASH,
-//            LV_SYMBOL_WARNING
-//        };
         const char* eCurrentStateStr[] = {"RUN", "RDY", "BLK", "SPD", "DEL", "INV"};
         lv_table_set_cell_value(tableOSState, i + 1, 2, eCurrentStateStr[TaskStatus_Grp[i].eCurrentState]);
 
@@ -84,20 +74,6 @@ static void Task_UpdateTaskStatus(lv_task_t * task)
 static void Creat_TableOSState()
 {
     TaskStatusNum = uxTaskGetNumberOfTasks();
-
-//    /*Create a normal cell style*/
-//    static lv_style_t style_cell1;
-//    lv_style_copy(&style_cell1, &lv_style_plain);
-//    style_cell1.body.border.width = 1;
-//    style_cell1.body.border.color = LV_COLOR_BLACK;
-
-//    /*Crealte a header cell style*/
-//    static lv_style_t style_cell2;
-//    lv_style_copy(&style_cell2, &lv_style_plain);
-//    style_cell2.body.border.width = 1;
-//    style_cell2.body.border.color = LV_COLOR_BLACK;
-//    style_cell2.body.main_color = LV_COLOR_SILVER;
-//    style_cell2.body.grad_color = LV_COLOR_SILVER;
 
     tableOSState = lv_table_create(winOSState, NULL);
     lv_table_set_style(tableOSState, LV_TABLE_STYLE_CELL1, &lv_style_plain);

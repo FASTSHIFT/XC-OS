@@ -63,25 +63,19 @@ static void Creat_ShutdownMessageBox()
 //    lv_obj_align(*mbox, NULL, LV_ALIGN_CENTER, 0, 0); /*Align to the corner*/
 }
 
-typedef struct{
-    const void* symbol;
-    const char* text;
-    Func_Type type;
-    int param;
-}ListBtn_TypeDef;
-
-static ListBtn_TypeDef ListBtn_Grp[] = {
+static const ListBtn_TypeDef ListBtn_Grp[] = {
     {LV_SYMBOL_IMAGE,     " Display", TYPE_PageJump, PAGE_SetDisplay},
     {LV_SYMBOL_BATTERY_3, " Battery", TYPE_PageJump, PAGE_BattInfo},
     {LV_SYMBOL_WIFI,      " Radio"},
     {LV_SYMBOL_AUDIO,     " Audio"},
-    {LV_SYMBOL_POWER,     " Power",   TYPE_FuncCall, (int)Creat_ShutdownMessageBox}
+    {LV_SYMBOL_POWER,     " Power",   TYPE_FuncCall, (int)Creat_ShutdownMessageBox},
+    {LV_SYMBOL_GPS,       " About",   TYPE_PageJump, PAGE_About},
 };
 
 static lv_obj_t * listItems;
 static lv_obj_t * listItems_btn;
 
-static void event_handler(lv_obj_t * obj, lv_event_t event)
+static void List_EventHandler(lv_obj_t * obj, lv_event_t event)
 {
     int index = lv_list_get_btn_index(listItems, obj);
     if(event == LV_EVENT_CLICKED)
@@ -103,14 +97,14 @@ static void Creat_ListBtn(lv_obj_t* parent,lv_obj_t** list_btn)
     /*Add buttons to the list*/
     for(int i = 0; i < __Sizeof(ListBtn_Grp); i++)
     {
-        *list_btn = lv_list_add_btn(parent, ListBtn_Grp[i].symbol, ListBtn_Grp[i].text);
+        *list_btn = lv_list_add_btn(parent, ListBtn_Grp[i].img_src, ListBtn_Grp[i].text);
 //        static lv_style_t style = *lv_obj_get_style(*list_btn);
 //        style.text.font = &lv_font_roboto_28;
 //        lv_obj_set_style(*list_btn, &style);
         
         lv_btn_set_ink_in_time(*list_btn, 200);
         lv_btn_set_ink_out_time(*list_btn, 200);
-        lv_obj_set_event_cb(*list_btn, event_handler);
+        lv_obj_set_event_cb(*list_btn, List_EventHandler);
     }
 }
 
@@ -177,6 +171,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Settings(uint8_t pageID)
 {
-    appWindow = AppWindow_PageGet(pageID);
+    appWindow = AppWindow_GetObj(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

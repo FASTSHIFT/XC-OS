@@ -79,6 +79,7 @@ void vApplicationIdleHook(void)
 */
 void vApplicationTickHook (void)
 {
+    extern void SystemMsInc(void);
     SystemMsInc();
     static int tick = 0;
 

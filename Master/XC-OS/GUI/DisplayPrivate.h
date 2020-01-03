@@ -29,6 +29,7 @@ lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
 lv_coord_t lv_obj_get_y_center(lv_obj_t * obj);
 void lv_obj_set_color(lv_obj_t * obj, lv_color_t color);
 void lv_table_set_align(lv_obj_t * table, lv_label_align_t align);
+lv_obj_t * lv_win_get_label(lv_obj_t * win);
 
 /*Page*/
 #include "PageManager.h"
@@ -47,6 +48,7 @@ typedef enum
     PAGE_WavPlayer,
     PAGE_BvPlayer,
     PAGE_Game,
+    PAGE_About,
     PAGE_MAX
 } Page_Type;
 
@@ -78,7 +80,7 @@ void WinOSState_SetClose();
 
 /*AppWindow*/
 void Creat_AppWindow();
-lv_obj_t * AppWindow_PageGet(uint8_t pageID);
+lv_obj_t * AppWindow_GetObj(uint8_t pageID);
 
 #define APP_WIN_HEIGHT (lv_obj_get_height(lv_scr_act()) - BarStatus_GetHeight() - BarNavigation_GetHeight())
 #define APP_WIN_WIDTH  (lv_obj_get_width(lv_scr_act()))
@@ -94,8 +96,7 @@ void Keyboard_Activate(
     bool isact, 
     lv_obj_t * parent, 
     lv_obj_t * ta, 
-    lv_event_cb_t 
-    keyboard_event_cb
+    lv_event_cb_t keyboard_event_cb
 );
     
 void MessageBox_Activate(

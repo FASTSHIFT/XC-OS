@@ -12,20 +12,24 @@
 static lv_obj_t * appWindow;
 
 #define APP_MAX 9
-#define APP_NAME_MAX 20
-#define APP_PATH_MAX (APP_NAME_MAX+30)
+#define APP_FOLDER "/APP"
+#define APP_ICON   "icon.bin"
+#define APP_MAIN   "main.lua"
+
+APP_TypeDef APP_Grp[APP_MAX];
 
 typedef struct{
-    char path[APP_PATH_MAX];
-    char text[APP_NAME_MAX];
+    String path;
+    String text;
 }AppPathText_TypeDef;
 
 AppPathText_TypeDef AppPathText_Grp[APP_MAX];
-APP_TypeDef APP_Grp[APP_MAX];
 
 static void APP_Call(const char *path)
 {
+#if ( XC_USE_LUA == 1 )
     LuaScriptExecuteFile(path);
+#endif
 }
 
 static int LoadFolderInfo(const char *path)
@@ -41,17 +45,17 @@ static int LoadFolderInfo(const char *path)
     {
         if (!file.isHidden() && file.isDir())
         {
-            char fileName[APP_NAME_MAX];
+            char fileName[LV_FS_MAX_FN_LENGTH];
             file.getName(fileName, sizeof(fileName));
             
-            char imgPath[APP_PATH_MAX];
-            sprintf(imgPath, "S:%s/%s/%s.bin", path, fileName, fileName);
+            String imgPath;
+            imgPath.sprintf("S:%s/%s/"APP_ICON, path, fileName);
             
-            strcpy(AppPathText_Grp[count].path, imgPath);
-            strcpy(AppPathText_Grp[count].text, fileName);
+            AppPathText_Grp[count].path = imgPath;
+            AppPathText_Grp[count].text = String(fileName);
             
-            APP_Grp[count].img_dsc = AppPathText_Grp[count].path;
-            APP_Grp[count].lable_text = AppPathText_Grp[count].text;
+            APP_Grp[count].img_dsc = AppPathText_Grp[count].path.c_str();
+            APP_Grp[count].lable_text = AppPathText_Grp[count].text.c_str();
             APP_Grp[count].type = TYPE_FuncCall;
             APP_Grp[count].param = (int)APP_Call;
             
@@ -72,9 +76,9 @@ static void ImgbtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
             if(obj == APP_Grp[i].imgbtn && APP_Grp[i].type == TYPE_FuncCall)
             {
                 String luaPath = String((const char*)APP_Grp[i].img_dsc);
-                luaPath.replace("bin", "lua");
-                typedef void(*void_func_t)(const char*);
-                ((void_func_t)APP_Grp[i].param)(luaPath.c_str() + 2);
+                luaPath.replace(APP_ICON, APP_MAIN);
+                typedef void(*appcall_func_t)(const char*);
+                ((appcall_func_t)APP_Grp[i].param)(luaPath.c_str() + 2);
             }
         }
     }
@@ -96,7 +100,7 @@ static void Setup()
     contApp = lv_cont_create(appWindow, NULL);
     lv_cont_set_fit(contApp, LV_FIT_FLOOD);
 
-    int count = LoadFolderInfo("/APP");
+    int count = LoadFolderInfo(APP_FOLDER);
     
     /*由于是在Page线程里创建APP，而图片显示在lvgl线程里，
      *所以要进临界区，保证加载完毕*/
@@ -145,6 +149,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_SubAPPs(uint8_t pageID)
 {
-    appWindow = AppWindow_PageGet(pageID);
+    appWindow = AppWindow_GetObj(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

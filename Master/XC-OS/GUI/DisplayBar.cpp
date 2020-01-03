@@ -31,9 +31,11 @@ lv_coord_t BarNavigation_GetHeight()
 static void Task_UpdateStatusBar(lv_task_t * task)
 {
     /*电池电量显示*/
-    uint8_t batUsage = map(BattVoltageOc, 2600, 4200, 0, 100);
+    float battCurrent, battVoltageOc;
+    Power_GetInfo(&battCurrent, NULL, &battVoltageOc);
+    uint8_t batUsage = map(battVoltageOc, 2600, 4200, 0, 100);
     if(batUsage > 100)batUsage = 100;
-    bool Is_BattCharging = (BattCurret > 0 && batUsage < 100) ? true : false;
+    bool Is_BattCharging = (battCurrent > 0 && batUsage < 100) ? true : false;
 
     const char * battSymbol[] =
     {
@@ -43,18 +45,18 @@ static void Task_UpdateStatusBar(lv_task_t * task)
         LV_SYMBOL_BATTERY_3,
         LV_SYMBOL_BATTERY_FULL
     };
-    int symIndex;
+    int symIndex = map(
+            battVoltageOc, 
+            XC_BATTERY_VOLTAGE_MIN, XC_BATTERY_VOLTAGE_MAX, 
+            0, __Sizeof(battSymbol));
     if(Is_BattCharging)
     {
         static uint8_t usage = 0;
         usage++;
-        usage %= map(BattVoltageOc, 2600, 4200, 0, __Sizeof(battSymbol)) + 1;
+        usage %= (symIndex + 1);
         symIndex = usage;
     }
-    else
-    {
-        symIndex = map(BattVoltageOc, 2600, 4200, 0, __Sizeof(battSymbol));
-    }
+
     __LimitValue(symIndex, 0, __Sizeof(battSymbol) - 1);
     lv_label_set_text_fmt(labelBattUsage, "%d%s", batUsage, battSymbol[symIndex]);
 

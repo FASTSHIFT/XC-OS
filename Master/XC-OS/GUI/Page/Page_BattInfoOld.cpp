@@ -84,8 +84,10 @@ static void Task_GaugeUpdate(lv_task_t * task)
 
 static void Task_BattUpdate(lv_task_t * task)
 {
-    cur = __Map(ABS(BattCurret), 0, 3000, 0, 100);
-    vol = __Map(BattVoltage, 2600, 4200, 0, 100);
+    float BattCurret, BattVoltage;
+    Power_GetInfo(&BattCurret, &BattVoltage, NULL);
+    cur = __Map(ABS(BattCurret), 0, XC_BATTERY_CURRENT_MAX, 0, 100);
+    vol = __Map(BattVoltage, XC_BATTERY_VOLTAGE_MIN, XC_BATTERY_VOLTAGE_MAX, 0, 100);
     
     lv_chart_set_next(chart, serCurrent, cur);
     lv_chart_set_next(chart, serVoltage, vol);
@@ -93,10 +95,7 @@ static void Task_BattUpdate(lv_task_t * task)
     lv_chart_refresh(chart); /*Required after direct set*/
     
     lv_label_set_text_fmt(labelCurrent, "%0.2fmA", BattCurret);
-//    lv_obj_align(labelCurrent, gaugeCurrent, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
-    
     lv_label_set_text_fmt(labelVoltage, "%0.2fmV", BattVoltage);
-//    lv_obj_align(labelVoltage, gaugeVoltage, LV_ALIGN_IN_BOTTOM_MID, 0, -15);
     
     float power = BattCurret * BattVoltage / 1000000.0f;
     const char *state = BattCurret < 0.0f ? "Discharge" : "Charge";
@@ -120,7 +119,7 @@ static void Setup()
     lv_obj_t * lableBattInfo = lv_label_create(appWindow, NULL);
     lv_obj_align(lableBattInfo, labelStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
     lv_obj_set_auto_realign(lableBattInfo, true);
-    lv_label_set_text_fmt(lableBattInfo, "@%0.1fV %dmAh",XC_BATTERY_VOLTAGE, XC_BATTERY_CAPACITY_MAH);
+    lv_label_set_text_fmt(lableBattInfo, "@%0.1fV %dmAh",XC_BATTERY_VOLTAGE/1000.0f, XC_BATTERY_CAPACITY_MAH);
     
     Creat_Gauge();
     Creat_Label(gaugeCurrent, &labelCurrent);
@@ -167,6 +166,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_BattInfo(uint8_t pageID)
 {
-    appWindow = AppWindow_PageGet(pageID);
+    appWindow = AppWindow_GetObj(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

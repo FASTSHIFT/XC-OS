@@ -7,7 +7,6 @@
 #include "semphr.h"
 #include "queue.h"
 #include "event_groups.h"
-
 #include "Source/cpu_utils.h"
 
 /*Ext Function*/
@@ -32,7 +31,7 @@ do{\
 
 /*Task Functions*/
 void Task_Dispaly(void *pvParameters);
-void Task_TransferData(void *pvParameters);
+void Task_Commmunicate(void *pvParameters);
 void Task_LuaScript(void *pvParameters);
 void Task_WavPlayer(void *pvParameters);
 void Task_PageRun(void *pvParameters);
@@ -47,7 +46,7 @@ extern TaskHandle_t TaskHandle_LuaScript;
 extern TaskHandle_t TaskHandle_WavPlayer;
 extern TaskHandle_t TaskHandle_Display;
 extern TaskHandle_t TaskHandle_PageRun;
-extern TaskHandle_t TaskHandle_TransferData;
+extern TaskHandle_t TaskHandle_Commmunicate;
 
 /*TimerHandle*/
 

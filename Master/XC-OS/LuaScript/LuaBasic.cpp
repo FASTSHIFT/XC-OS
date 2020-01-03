@@ -16,8 +16,8 @@ void LuaScriptStart(const char *script)
 
 void LuaScriptExecuteFile(String file)
 {
-    ScriptFilePath = file;
     ScriptText = NULL;
+    ScriptFilePath = file;
     
     xTaskNotifyGive(TaskHandle_LuaScript);
 }

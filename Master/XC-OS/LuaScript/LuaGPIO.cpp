@@ -1,26 +1,34 @@
 #include "Arduino.h"
 #include "LuaScript.h"
 
-static int Lua_pinMode(lua_State *L)
+#define LUA_GET_PIN() int pin = Lua_CheckGPIO(L);if(pin < 0)return 0
+
+static int Lua_CheckGPIO(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 3)
+    int GPIOx = luaL_checkinteger(L, 1);
+    int Pinx = luaL_checkinteger(L, 2);
+
+    if(GPIOx < 1 || GPIOx > 11)
     {
-        lua_pushstring(L, "Error! Example: pinMode(1,1,\"OUTPUT\") -> PA1 OUTPUT Mode");
+        lua_pushstring(L, "Error GPIOx is'A'->1 ~'K'->11!");
         lua_error(L);
+        return -1;
+    }
+    if(Pinx < 0 || Pinx > 15)
+    {
+        lua_pushstring(L, "Error Pinx is 0~15!");
+        lua_error(L);
+        return -1;
     }
 
-    if(!lua_isinteger(L, 1))lua_pushstring(L, "Error GPIOx !"), lua_error(L);
-    if(!lua_isinteger(L, 2))lua_pushstring(L, "Error Pinx !"), lua_error(L);
-    if(!lua_isstring(L, 3))lua_pushstring(L, "Error Mode !"), lua_error(L);
+    return ((GPIOx - 1) * 16 + Pinx);
+}
 
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-    if(GPIOx < 1 || GPIOx > 7) lua_pushstring(L, "Error GPIOx is'A'->1 ~'G'->7!"), lua_error(L);
-    if(Pinx < 0 || Pinx > 15) lua_pushstring(L, "Error Pinx is 0~15!"), lua_error(L);
-    int pin = (GPIOx - 1) * 16 + Pinx;
+static int Lua_pinMode(lua_State *L)
+{
+    LUA_GET_PIN();
 
-    String Mode = String(lua_tostring(L, 3));
+    String Mode = String(luaL_checkstring(L, 3));
     Mode.toUpperCase();
     if(Mode == "OUTPUT")pinMode(pin, OUTPUT);
     else if(Mode == "INPUT")pinMode(pin, INPUT);
@@ -38,192 +46,35 @@ static int Lua_pinMode(lua_State *L)
 
 static int Lua_togglePin(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 2)
-    {
-        lua_pushstring(L, "Error! Example: togglePin(1,1) ->toggle PA1 State");
-        lua_error(L);
-    }
-
-    for(int i = 1; i <= 2; i++)
-    {
-        if (!lua_isinteger(L, i))
-        {
-            lua_pushstring(L, "Error number of Value!");
-            lua_error(L);
-        }
-    }
-
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-
-    if(GPIOx < 1 || GPIOx > 11)
-    {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'K'->11!");
-        lua_error(L);
-    }
-    if(Pinx < 0 || Pinx > 15)
-    {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-    }
-
-    int pin = (GPIOx - 1) * 16 + Pinx;
-
+    LUA_GET_PIN();
     togglePin(pin);
     return 0;
 }
 
 static int Lua_digitalWrite(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 3)
-    {
-        lua_pushstring(L, "Error! Example: digitalWrite(1,1,1) ->PA1 is 1");
-        lua_error(L);
-    }
-
-    for(int i = 1; i <= 3; i++)
-    {
-        if (!lua_isinteger(L, i))
-        {
-            lua_pushstring(L, "Error number of Value!");
-            lua_error(L);
-        }
-    }
-
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-    int State = lua_tonumber(L, 3);
-
-    if(GPIOx < 1 || GPIOx > 11)
-    {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'K'->11!");
-        lua_error(L);
-    }
-    if(Pinx < 0 || Pinx > 15)
-    {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-    }
-
-    int pin = (GPIOx - 1) * 16 + Pinx;
-
-    digitalWrite(pin, State);
+    LUA_GET_PIN();
+    digitalWrite(pin, luaL_checkinteger(L, 3));
     return 0;
 }
 
 static int Lua_digitalRead(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 2)
-    {
-        lua_pushstring(L, "Error! Example: digitalRead(1,1) ->Read PA1 State");
-        lua_error(L);
-    }
-
-    for(int i = 1; i <= 2; i++)
-    {
-        if (!lua_isinteger(L, i))
-        {
-            lua_pushstring(L, "Error number of Value!");
-            lua_error(L);
-        }
-    }
-
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-
-    if(GPIOx < 1 || GPIOx > 11)
-    {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'K'->11!");
-        lua_error(L);
-    }
-    if(Pinx < 0 || Pinx > 15)
-    {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-    }
-
-    int pin = (GPIOx - 1) * 16 + Pinx;
-
+    LUA_GET_PIN();
     lua_pushnumber(L, digitalRead(pin));
     return 1;
 }
 
 static int Lua_analogWrite(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 3)
-    {
-        lua_pushstring(L, "Error! Example: analogWrite(1,1,500) ->PA1 PWM 50%");
-        lua_error(L);
-    }
-
-    for(int i = 1; i <= 3; i++)
-    {
-        if (!lua_isinteger(L, i))
-        {
-            lua_pushstring(L, "Error number of Value!");
-            lua_error(L);
-        }
-    }
-
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-    int Duty = lua_tonumber(L, 3);
-
-    if(GPIOx < 1 || GPIOx > 7)
-    {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'G'->7!");
-        lua_error(L);
-    }
-    if(Pinx < 0 || Pinx > 15)
-    {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-    }
-
-    int pin = (GPIOx - 1) * 16 + Pinx;
-
-    analogWrite(pin, Duty);
+    LUA_GET_PIN();
+    analogWrite(pin, luaL_checkinteger(L, 3));
     return 0;
 }
 
 static int Lua_analogRead(lua_State *L)
 {
-    int nValue = lua_gettop(L);
-    if(nValue != 2)
-    {
-        lua_pushstring(L, "Error! Example: analogRead(1,1) ->Read PA1 ADC");
-        lua_error(L);
-    }
-
-    for(int i = 1; i <= 2; i++)
-    {
-        if (!lua_isinteger(L, i))
-        {
-            lua_pushstring(L, "Error number of Value!");
-            lua_error(L);
-        }
-    }
-
-    int GPIOx = lua_tonumber(L, 1);
-    int Pinx = lua_tonumber(L, 2);
-
-    if(GPIOx < 1 || GPIOx > 7)
-    {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'G'->7!");
-        lua_error(L);
-    }
-    if(Pinx < 0 || Pinx > 15)
-    {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-    }
-
-    int pin = (GPIOx - 1) * 16 + Pinx;
-
+    LUA_GET_PIN();
     lua_pushnumber(L, analogRead(pin));
     return 1;
 }

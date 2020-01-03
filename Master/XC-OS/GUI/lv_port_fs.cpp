@@ -4,7 +4,7 @@
 #if LV_USE_FILESYSTEM
 #include "SdFat.h"
 
-SdFat SD;
+SdFat SD(&SPI);
 
 /*********************
  *      DEFINES

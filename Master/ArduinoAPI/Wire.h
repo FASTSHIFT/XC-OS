@@ -41,13 +41,11 @@
 #define _WIRE_H_
 
 #include "WireBase.h"
-//#include "wirish.h"
 
 /*
  * On the Maple, let the default pins be in the same location as the Arduino
  * pins
  */
- 
 #ifndef SDA_Pin
 #define SDA_Pin PA11
 #endif
@@ -64,13 +62,10 @@
 #ifdef FULL_SPEED_I2C
 #define I2C_DELAY(x) {}
 #else
-#define I2C_DELAY(x) {delayMicroseconds(x);}
+#define I2C_DELAY(x) delayMicroseconds(x)
 #endif
 
 #define BUFFER_LENGTH 32
-
-#pragma diag_suppress 122
-#pragma diag_suppress 136
 
 class TwoWire : public WireBase {
 public:

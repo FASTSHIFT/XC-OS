@@ -1,3 +1,25 @@
+/*
+ * MIT License
+ * Copyright (c) 2019 _VIFEXTech
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 #include "timer.h"
 
 /*定时器编号枚举*/
@@ -323,12 +345,16 @@ do{\
 }\
 while(0)
 
+    /*如果提示 
+     *identifier "xxx_IRQn" is undefined
+     *把未定义的注释掉即可
+     */
     TIMx_IRQn_DEF(1, TIM1_UP_TIM10_IRQn);
     TIMx_IRQn_DEF(2, TIM2_IRQn);
     TIMx_IRQn_DEF(3, TIM3_IRQn);
     TIMx_IRQn_DEF(4, TIM4_IRQn);
     TIMx_IRQn_DEF(5, TIM5_IRQn);
-    TIMx_IRQn_DEF(6, TIM6_DAC_IRQn);
+//    TIMx_IRQn_DEF(6, TIM6_DAC_IRQn);
     TIMx_IRQn_DEF(7, TIM7_IRQn);
     TIMx_IRQn_DEF(8, TIM8_UP_TIM13_IRQn);
     TIMx_IRQn_DEF(9, TIM1_BRK_TIM9_IRQn);

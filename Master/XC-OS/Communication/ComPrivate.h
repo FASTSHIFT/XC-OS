@@ -26,7 +26,6 @@ typedef struct {
 
 typedef void(*CustomDataPack_Callback_t)(uint8_t*);
 
-extern bool State_RF;
 extern bool State_PassBack;
 extern bool State_Handshake;
 extern bool Enable_CommonPassBack;
@@ -53,5 +52,7 @@ uint8_t HandshakeRun(uint8_t State, uint8_t SlaveNum = 0, uint8_t Cmd = 0);
 
 void SetUserCustomDataPack_Callback(CustomDataPack_Callback_t callback);
 bool AddUserCustomPassBack_Callback(CustomDataPack_Callback_t callback);
+
+void CommmunicateRF_Enable(bool en);
 
 #endif

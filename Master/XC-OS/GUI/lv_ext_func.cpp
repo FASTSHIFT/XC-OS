@@ -50,3 +50,9 @@ void lv_table_set_align(lv_obj_t * table, lv_label_align_t align)
         }
     }
 }
+
+lv_obj_t * lv_win_get_label(lv_obj_t * win)
+{
+    lv_win_ext_t * ext = (lv_win_ext_t*)lv_obj_get_ext_attr(win);
+    return ext->title;
+}

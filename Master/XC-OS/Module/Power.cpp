@@ -7,7 +7,19 @@ TimerHandle_t TimerHandle_Charger;
 
 static IP5108 charger;
 
-float BattCurret, BattVoltage, BattVoltageOc;
+static float BattCurrent, BattVoltage, BattVoltageOc;
+
+void Power_GetInfo(float* battCurrent,float* battVoltage,float* battVoltageOc)
+{
+    if(battCurrent)
+        *battCurrent = BattCurrent;
+    
+    if(battVoltage)
+        *battVoltage = BattVoltage;
+    
+    if(battVoltageOc)
+        *battVoltageOc = BattVoltageOc;
+}
 
 void Task_ReadBattInfo(TimerHandle_t xTimer)
 {
@@ -21,7 +33,7 @@ void Task_ReadBattInfo(TimerHandle_t xTimer)
     if(press_cnt > 1)
         Power_Shutdown();
     
-    BattCurret = charger.getBattCurrent();
+    BattCurrent = charger.getBattCurrent();
     BattVoltage = charger.getBattVoltage();
     BattVoltageOc = charger.getBattOcVoltage();
     //Serial.printf("Batt U = %0.2fmV, I = %0.2fmA, ", charger.getBattVoltage(), charger.getBattCurrent());
