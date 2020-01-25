@@ -21,8 +21,8 @@ extern SCREEN_CLASS screen;
 #include "lvgl.h"
 #include "lv_conf.h"
 
-void lv_user_init();
-void lv_user_fs_init();
+void lv_disp_init();
+void lv_fsys_init();
 bool lv_obj_del_safe(lv_obj_t** obj);
 void lv_label_set_text_add(lv_obj_t * label, const char * text);
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
@@ -30,25 +30,37 @@ lv_coord_t lv_obj_get_y_center(lv_obj_t * obj);
 void lv_obj_set_color(lv_obj_t * obj, lv_color_t color);
 void lv_table_set_align(lv_obj_t * table, lv_label_align_t align);
 lv_obj_t * lv_win_get_label(lv_obj_t * win);
+void lv_obj_add_anim(
+    lv_obj_t * obj, lv_anim_t * a,
+    lv_anim_exec_xcb_t exec_cb, 
+    int32_t start, int32_t end,
+    uint16_t time = 200,
+    lv_anim_ready_cb_t ready_cb = NULL,
+    lv_anim_path_cb_t path_cb = lv_anim_path_ease_in_out
+);
 
 /*Page*/
 #include "PageManager.h"
 
 typedef enum
 {
+    /*保留*/
     PAGE_None,
+    /*用户页面*/
+    PAGE_About,
+    PAGE_BattInfo,
+    PAGE_BvPlayer,
+    PAGE_FileExplorer,
+    PAGE_Game,
     PAGE_Home,
+    PAGE_LuaScript,
+    PAGE_RadioCfg,
     PAGE_Settings,
     PAGE_SetDisplay,
-    PAGE_BattInfo,
-    PAGE_LuaScript,
-    PAGE_FileExplorer,
     PAGE_SubAPPs,
     PAGE_TextEditor,
     PAGE_WavPlayer,
-    PAGE_BvPlayer,
-    PAGE_Game,
-    PAGE_About,
+    /*保留*/
     PAGE_MAX
 } Page_Type;
 

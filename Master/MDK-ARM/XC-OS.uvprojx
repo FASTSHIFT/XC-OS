@@ -496,6 +496,21 @@
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\lv_ext_func.cpp</FilePath>
             </File>
+            <File>
+              <FileName>lv_settings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\lv_settings\lv_settings.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_ex_settings_1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\lv_settings\lv_ex_settings_1.c</FilePath>
+            </File>
+            <File>
+              <FileName>lv_ex_settings_2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\lv_settings\lv_ex_settings_2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -647,6 +662,11 @@
               <FileName>Page_LuaScript.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_LuaScript.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_RadioCfg.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\Page\Page_RadioCfg.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_SetDisplay.cpp</FileName>
@@ -1861,6 +1881,11 @@
               <FilePath>..\Libraries\BV_Player\BV_Player.cpp</FilePath>
             </File>
             <File>
+              <FileName>FastFFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\FastFFT\FastFFT.cpp</FilePath>
+            </File>
+            <File>
               <FileName>GT911.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\GT911\GT911.cpp</FilePath>
@@ -1881,14 +1906,34 @@
               <FilePath>..\Libraries\I2Cdev\I2Cdev.cpp</FilePath>
             </File>
             <File>
+              <FileName>Lyric_Analyzer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\Lyric_Analyzer\Lyric_Analyzer.cpp</FilePath>
+            </File>
+            <File>
               <FileName>MPU6050.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\MPU6050\MPU6050.cpp</FilePath>
             </File>
             <File>
-              <FileName>NRF.cpp</FileName>
+              <FileName>NRF_Basic.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\Libraries\NRF\NRF.cpp</FilePath>
+              <FilePath>..\Libraries\NRF\NRF_Basic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NRF_TRM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\NRF\NRF_TRM.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>NRF_FHSS.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\NRF\NRF_FHSS.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PageManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\Libraries\LightGUI\PageManager\PageManager.cpp</FilePath>
             </File>
             <File>
               <FileName>StrPrinter.cpp</FileName>
@@ -1906,24 +1951,9 @@
               <FilePath>..\Libraries\GT911\touch.cpp</FilePath>
             </File>
             <File>
-              <FileName>PageManager.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\LightGUI\PageManager\PageManager.cpp</FilePath>
-            </File>
-            <File>
               <FileName>wav_decoder.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Lyric_Analyzer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\Lyric_Analyzer\Lyric_Analyzer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FastFFT.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\FastFFT\FastFFT.cpp</FilePath>
             </File>
           </Files>
         </Group>

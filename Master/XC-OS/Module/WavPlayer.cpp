@@ -16,7 +16,7 @@ WAV_TypeDef Wav_Handle;
 
 /*WAV播放控制*/
 #define WAV_VOLUME_MAX 0.7f
-static float Wav_Volume = WAV_VOLUME_MAX;
+static float Wav_Volume = WAV_VOLUME_MAX / 2;
 static bool Wav_Playing = true;
 
 /*WAV播放任务句柄*/

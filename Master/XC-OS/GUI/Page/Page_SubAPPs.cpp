@@ -84,8 +84,6 @@ static void ImgbtnEvent_Handler(lv_obj_t * obj, lv_event_t event)
     }
 }
 
-static lv_obj_t * contApp;
-
 /**
   * @brief  页面初始化事件
   * @param  无
@@ -97,15 +95,13 @@ static void Setup()
     xSemaphoreTake(SemHandle_FileSystem, 1000);
 
     lv_obj_move_foreground(appWindow);
-    contApp = lv_cont_create(appWindow, NULL);
-    lv_cont_set_fit(contApp, LV_FIT_FLOOD);
 
     int count = LoadFolderInfo(APP_FOLDER);
     
     /*由于是在Page线程里创建APP，而图片显示在lvgl线程里，
      *所以要进临界区，保证加载完毕*/
     taskENTER_CRITICAL();
-    __LoopExecute(Creat_APP(APP_Grp[i], contApp, i, ImgbtnEvent_Handler), count);
+    __LoopExecute(Creat_APP(APP_Grp[i], appWindow, i, ImgbtnEvent_Handler), count);
     taskEXIT_CRITICAL();
 }
 
@@ -150,5 +146,7 @@ static void Event(int event, void* param)
 void PageRegister_SubAPPs(uint8_t pageID)
 {
     appWindow = AppWindow_GetObj(pageID);
+    lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
+    *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

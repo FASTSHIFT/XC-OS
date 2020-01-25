@@ -74,18 +74,30 @@ void Wav_LabelLrcUpdate(const char* str)
     LrcDisplay += s;
 
     lv_label_set_static_text(labelLrc, LrcDisplay.c_str());
+    
+    
+    int lrc_width = lv_obj_get_width(labelLrc);
+    int lrc_x = 
+        (lrc_width <= APP_WIN_WIDTH) 
+        ? ((APP_WIN_WIDTH - lrc_width) / 2)
+        : (APP_WIN_WIDTH - lrc_width - 10);
+
+    static lv_anim_t a;
+    lv_obj_add_anim(
+        labelLrc, &a,
+        (lv_anim_exec_xcb_t)lv_obj_set_x,
+        lv_obj_get_x(labelLrc), lrc_x,
+        100
+    );
 }
 
 static void Creat_LabelLrc()
 {
     labelLrc = lv_label_create(appWindow, NULL);
-//    lv_label_set_long_mode(labelLrc, LV_LABEL_LONG_SROLL);
-//    lv_obj_set_width(labelLrc, APP_WIN_WIDTH);
     lv_obj_align(labelLrc, barWav, LV_ALIGN_OUT_BOTTOM_MID, 0, 60);
-    lv_obj_set_auto_realign(labelLrc, true);
 
     LrcDisplay = "";
-    lv_label_set_text_fmt(labelLrc, LrcDisplay.c_str());
+    lv_label_set_static_text(labelLrc, LrcDisplay.c_str());
 }
 
 static void Creat_WavFileInfo()
@@ -124,7 +136,7 @@ static void Task_UpdateSerFFT(lv_task_t * task)
     const float * fft_strength = FFT_GetStrength();
     for(int i = 0; i < ChartPointCount ; i++)
     {
-        serFFT->points[i] = fft_strength[i * (128/ChartPointCount) + 1];
+        serFFT->points[i] = fft_strength[i * (128 / ChartPointCount) + 1];
     }
     lv_chart_refresh(chartFFT);
 }
@@ -134,6 +146,8 @@ static void Creat_ChartFFT()
     chartFFT = lv_chart_create(appWindow, NULL);
     lv_obj_set_size(chartFFT, APP_WIN_WIDTH - 60, 120);
     lv_obj_align(chartFFT, labelWavInfo, LV_ALIGN_OUT_BOTTOM_MID, 0, 30);
+    lv_obj_set_opa_scale_enable(chartFFT, true);
+    lv_obj_set_opa_scale(chartFFT, LV_OPA_80);
     lv_chart_set_type(chartFFT, LV_CHART_TYPE_COLUMN);
     lv_chart_set_series_opa(chartFFT, LV_OPA_COVER);
     lv_chart_set_series_width(chartFFT, 10);
@@ -146,6 +160,13 @@ static void Creat_ChartFFT()
     serFFT = lv_chart_add_series(chartFFT, lv_style_plain_color.body.main_color);
 
     taskSerFFT = lv_task_create(Task_UpdateSerFFT, 50, LV_TASK_PRIO_MID, 0);
+
+    static lv_anim_t a;
+    lv_obj_add_anim(
+        chartFFT, &a,
+        (lv_anim_exec_xcb_t)lv_obj_set_height,
+        lv_obj_get_height(chartFFT) / 10, lv_obj_get_height(chartFFT)
+    );
 }
 
 static void Task_WavBarUpdate(lv_task_t * task)
@@ -171,14 +192,14 @@ static void Creat_WavBar()
     lv_obj_align(labelWavTime, barWav, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
     lv_obj_set_auto_realign(labelWavTime, true);
     lv_label_set_text_fmt(labelWavTime, "00:00");
-    
+
     int sec = Wav_Handle.DataSize / Wav_Handle.Header.BytePerSecond;
     int min = sec / 60;
     labelWavTotalTime = lv_label_create(appWindow, NULL);
     lv_label_set_text_fmt(labelWavTotalTime, "%02d:%02d", min, sec % 60);
     lv_obj_align(labelWavTotalTime, barWav, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
-    
-    
+
+
     taskWavBar = lv_task_create(Task_WavBarUpdate, 500, LV_TASK_PRIO_MID, 0);
 }
 
@@ -255,13 +276,14 @@ void Creat_BtnWavCtrl()
 static void Setup()
 {
     lv_obj_move_foreground(appWindow);
+    
     WavError = !WavPlayer_LoadFile(WavFilePath);
     if(!WavError)
     {
         WavPlayer_SetEnable(true);
         WavPlayer_SetPlaying(true);
     }
-    
+
     Creat_WavFileInfo();
     Creat_ChartFFT();
     Creat_WavBar();
@@ -309,5 +331,7 @@ static void Event(int event, void* param)
 void PageRegister_WavPlayer(uint8_t pageID)
 {
     appWindow = AppWindow_GetObj(pageID);
+    lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
+    *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

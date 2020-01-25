@@ -167,5 +167,7 @@ static void Event(int event, void* param)
 void PageRegister_BattInfo(uint8_t pageID)
 {
     appWindow = AppWindow_GetObj(pageID);
+    lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
+    *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

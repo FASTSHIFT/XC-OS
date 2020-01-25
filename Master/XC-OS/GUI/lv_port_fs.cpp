@@ -54,7 +54,7 @@ static lv_fs_drv_t fs_drv;                         /*A driver descriptor*/
  *   GLOBAL FUNCTIONS
  **********************/
 
-void lv_user_fs_init(void)
+void lv_fsys_init(void)
 {
     /*----------------------------------------------------
      * Initialize your storage device and File System
@@ -98,7 +98,7 @@ void lv_user_fs_init(void)
 
 static bool is_fs_ready = false;
 
-bool fs_ready(lv_fs_drv_t * drv)
+static bool fs_ready(lv_fs_drv_t * drv)
 {
     return is_fs_ready;
 }

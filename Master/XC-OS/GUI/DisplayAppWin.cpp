@@ -3,7 +3,7 @@
 extern lv_obj_t * barStatus;
 
 typedef struct{
-    lv_obj_t *cont;
+    lv_obj_t * cont;
     lv_style_t style;
 }AppWindow_TypeDef;
 

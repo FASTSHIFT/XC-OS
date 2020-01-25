@@ -5,7 +5,7 @@
 #include "RC_Protocol.h"
 
 #define Master_ID 0x08
-#define Master_Description "X-CTRL PRO"
+#define Master_Description "XC-OS"
 #define SlaveNum_MAX 5 //从机列表长度
 #define NRF_AddressNum 6
 
@@ -26,11 +26,15 @@ typedef struct {
 
 typedef void(*CustomDataPack_Callback_t)(uint8_t*);
 
+extern bool State_RF;
 extern bool State_PassBack;
 extern bool State_Handshake;
+extern bool State_FHSS;
 extern bool Enable_CommonPassBack;
 
-extern NRF nrf;
+extern NRF_Basic nrf;
+extern NRF_TRM   nrfTRM;
+extern NRF_FHSS  nrfFHSS;
 extern uint8_t NRF_TxBuff[32];
 extern uint8_t NRF_RxBuff[32];
 extern Protocol_Handshake_t HandshakePack_Master;//主机握手数据包

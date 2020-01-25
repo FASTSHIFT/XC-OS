@@ -8,11 +8,17 @@ TaskHandle_t TaskHandle_Commmunicate;
 #define ConnectLost_TimeOut 500
 
 /*实例化NRF对象*/
-NRF nrf(NRF_MOSI_Pin, NRF_MISO_Pin, NRF_SCK_Pin, NRF_CE_Pin, NRF_CSN_Pin);
+NRF_Basic nrf(
+    NRF_MOSI_Pin, NRF_MISO_Pin, NRF_SCK_Pin, 
+    NRF_CE_Pin, NRF_CSN_Pin
+);
 //IRQ   MISO
 //MOSI  SCK
 //CSN   CE
 //VCC   GND
+
+NRF_TRM  nrfTRM(&nrf);
+NRF_FHSS nrfFHSS(&nrf);
 
 /*NRF发送数据缓冲区*/
 uint8_t NRF_TxBuff[32];
@@ -38,7 +44,7 @@ int16_t NRF_SignalStrength = 0;
 NRF_Config_TypeDef NRF_Cfg = {0, 0, 40};
 
 /*发送数据使能*/
-static bool State_RF = ON;
+bool State_RF = OFF;
 
 /*回传使能*/
 bool State_PassBack = ON;
@@ -46,22 +52,28 @@ bool State_PassBack = ON;
 /*通用回传模式使能*/
 bool Enable_CommonPassBack = true;
 
-/*回传数据锁定*/
+/*锁定回传数据包*/
 bool Lock_CommonPassback = false;
 
 /*握手使能*/
 bool State_Handshake = ON;
+
+/*跳频使能*/
+bool State_FHSS = OFF;
 
 /**
   * @brief  NRF初始化
   * @param  无
   * @retval true成功 false失败
   */
-static bool Init_NRF()
+bool Init_NRF()
 {
-    /*总初始化*/
-    nrf.init(nrf.TXRX_MODE, NRF_TxBuff, sizeof(NRF_TxBuff), sizeof(NRF_RxBuff));
+    /*默认初始化*/
+    nrf.Init();
 
+    /*发送模式*/
+    nrf.TX_Mode();
+    
     /*设置地址*/
     nrf.SetAddress((uint8_t*)NRF_AddressConfig + NRF_Cfg.Address * 5);
 
@@ -69,12 +81,16 @@ static bool Init_NRF()
     nrf.SetFreqency(NRF_Cfg.Freq);
 
     /*设置速率*/
-    if(NRF_Cfg.Speed == 0)
-        nrf.SetSpeed(nrf.SPEED_250Kbps);
-    else if(NRF_Cfg.Speed == 1)
-        nrf.SetSpeed(nrf.SPEED_1Mbps);
-    else if(NRF_Cfg.Speed == 2)
-        nrf.SetSpeed(nrf.SPEED_2Mbps);
+    nrf.SetSpeed(NRF_Cfg.Speed);
+
+    /*数据包长度*/
+    nrf.SetPayloadWidth(sizeof(NRF_TxBuff), sizeof(NRF_RxBuff));
+    
+    /*开射频*/
+    nrf.SetRF_Enable(true);
+    
+    /*更新寄存器状态*/
+    nrf.UpdateRegs();
 
     /*返回连接情况*/
     return nrf.IsDetect();
@@ -102,55 +118,12 @@ Protocol_Passback_CommonDisplay_t Common_Passback;
 /*通信状态指示*/
 ConnectState_t ConnectState;
 
-/*自定义发送数据包回调*/
-static CustomDataPack_Callback_t LoadUserCustomDataPack = 0;
-
-/*自定义回传数据包回调*/
-static CustomDataPack_Callback_t LoadUserCustomPassBack_Group[10] = {0};
-
-/**
-  * @brief  设置自定义发送数据包回调
-  * @param  无
-  * @retval 无
-  */
-void SetUserCustomDataPack_Callback(CustomDataPack_Callback_t callback)
-{
-    LoadUserCustomDataPack = callback;
-}
-
-/**
-  * @brief  设置自定义回传数据包回调
-  * @param  无
-  * @retval 无
-  */
-bool AddUserCustomPassBack_Callback(CustomDataPack_Callback_t callback)
-{
-    static uint8_t regCnt = 0;
-
-    /*寻找是否有重复函数*/
-    for(uint8_t i = 0; i < __Sizeof(LoadUserCustomPassBack_Group); i++)
-    {
-        if(callback == LoadUserCustomPassBack_Group[i])
-            return true;
-    }
-
-    /*在新的空位填入函数地址*/
-    if(regCnt < __Sizeof(LoadUserCustomPassBack_Group))
-    {
-        LoadUserCustomPassBack_Group[regCnt] = callback;
-        regCnt++;
-        return true;
-    }
-    else
-        return false;
-}
-
 /**
   * @brief  数据包加载
   * @param  无
   * @retval 无
   */
-static void LoadDataPack()
+void LoadDataPack()
 {
     float Limit_L = CTRL.KnobLimit.L / (float)CtrlOutput_MaxValue;//左限幅映射0.0~1.0
     float Limit_R = CTRL.KnobLimit.R / (float)CtrlOutput_MaxValue;//右限幅映射0.0~1.0
@@ -203,6 +176,59 @@ static void LoadDataPack()
         __LimitValue(CarSS.MotorSpeed, -CtrlOutput_MaxValue, CtrlOutput_MaxValue);
         __LimitValue(CarSS.SteerAngle, -CtrlOutput_MaxValue, CtrlOutput_MaxValue);
     }
+}
+
+/*自定义发送数据包回调*/
+static CustomDataPack_Callback_t LoadUserCustomDataPack = 0;
+
+/*自定义回传数据包回调*/
+static CustomDataPack_Callback_t LoadUserCustomPassBack_Group[10] = {0};
+
+/**
+  * @brief  设置自定义发送数据包回调
+  * @param  无
+  * @retval 无
+  */
+void SetUserCustomDataPack_Callback(CustomDataPack_Callback_t callback)
+{
+    LoadUserCustomDataPack = callback;
+}
+
+/**
+  * @brief  设置自定义回传数据包回调
+  * @param  无
+  * @retval 无
+  */
+bool AddUserCustomPassBack_Callback(CustomDataPack_Callback_t callback)
+{
+    static uint8_t regCnt = 0;
+
+    /*寻找是否有重复函数*/
+    for(uint8_t i = 0; i < __Sizeof(LoadUserCustomPassBack_Group); i++)
+    {
+        if(callback == LoadUserCustomPassBack_Group[i])
+            return true;
+    }
+
+    /*在新的空位填入函数地址*/
+    if(regCnt < __Sizeof(LoadUserCustomPassBack_Group))
+    {
+        LoadUserCustomPassBack_Group[regCnt] = callback;
+        regCnt++;
+        return true;
+    }
+    else
+        return false;
+}
+
+/**
+  * @brief  数据发送任务
+  * @param  无
+  * @retval 无
+  */
+static void CommmunicateProcess()
+{
+    LoadDataPack();//打包数据包
 
     /*数据包载入NRF发送缓冲区*/
     switch(CTRL.Info.CtrlObject)
@@ -223,19 +249,18 @@ static void LoadDataPack()
             LoadUserCustomDataPack(NRF_TxBuff);
         break;
     }
-}
-
-static void CommmunicateProcess()
-{
-    LoadDataPack();//打包数据包
 
     if(ConnectState.Pattern == Pattern_NRF)
     {
+        if(State_FHSS)
+        {
+            nrfFHSS.TxProcess(NRF_TxBuff, NRF_RxBuff);
+        }
         /*是否开启回传*/
-        if(State_PassBack)
+        else if(State_PassBack)
         {
             /*NRF收发数据*/
-            nrf.TranRecvSafe(NRF_TxBuff, NRF_RxBuff);
+            nrfTRM.TranRecv(NRF_TxBuff, NRF_RxBuff);
 
             /*数组第二位为0说明是用户自定义回传类型*/
             if(NRF_RxBuff[1] == 0)
@@ -257,13 +282,16 @@ static void CommmunicateProcess()
 
                 /*是否锁定回传数据*/
                 if(!Lock_CommonPassback)
-                {
                     Common_Passback = __TypeExplain(Protocol_Passback_CommonDisplay_t, NRF_RxBuff);
-                }
             }
         }
         else
         {
+            if(nrf.GetRF_State() != nrf.State_TX)
+            {
+                nrf.TX_Mode();
+            }
+            nrf.TranCheck();
             nrf.Tran(NRF_TxBuff);//NRF发送数据
         }
     }

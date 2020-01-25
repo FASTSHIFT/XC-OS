@@ -38,6 +38,7 @@ extern "C" {
 #include "exti.h"
 #include "gpio.h"
 #include "pwm.h"
+#include "rng.h"
 #include "timer.h"
 
 #define __STM32__

@@ -28,6 +28,7 @@ static void Init_Pages()
     PAGE_REG(BvPlayer);
     PAGE_REG(Game);
     PAGE_REG(About);
+    PAGE_REG(RadioCfg);
     
     page.PagePush(PAGE_Home);
 }
@@ -41,7 +42,10 @@ void Task_PageRun(void *pvParameters)
     }
 }
 
-
+extern "C" {
+    void lv_ex_settings_2(void);
+    void lv_ex_settings_1(void);
+}
 
 void Task_Dispaly(void *pvParameters)
 {
@@ -51,13 +55,14 @@ void Task_Dispaly(void *pvParameters)
     
     Brightness_SetValue(0);
 
-    lv_user_init();
-    
-    lv_user_fs_init();
+    lv_init();
+    lv_disp_init();
+    lv_theme_set_current(lv_theme_material_init(200, LV_FONT_DEFAULT));
+    lv_fsys_init();
     SemHandle_FileSystem = xSemaphoreCreateBinary();
     xSemaphoreGive(SemHandle_FileSystem);
 
-    lv_theme_set_current(lv_theme_material_init(200, LV_FONT_DEFAULT));
+//    lv_ex_settings_2();
     
     Init_Bar();
     Init_Pages();

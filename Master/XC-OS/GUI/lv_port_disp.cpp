@@ -1,7 +1,7 @@
 #include "DisplayPrivate.h"
 
 static lv_disp_buf_t disp_buf;
-lv_color_t lv_disp_buf[LV_HOR_RES_MAX * 20];
+static lv_color_t lv_disp_buf[LV_HOR_RES_MAX * 20];
 
 #if LV_USE_LOG != 0
 /* Serial debugging */
@@ -12,7 +12,7 @@ void my_print(lv_log_level_t level, const char * file, uint32_t line, const char
 #endif
 
 /* Display flushing */
-static void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+static void disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
     screen.drawFastRGBBitmap(area->x1, area->y1, (uint16_t*)color_p, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1));
     lv_disp_flush_ready(disp); /* tell lvgl that flushing is done */
@@ -20,7 +20,7 @@ static void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t
 //    screen.drawRect(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1), color += 50);
 }
 
-bool my_touchpad_read(lv_indev_drv_t * indev, lv_indev_data_t * data)
+static bool touchpad_read(lv_indev_drv_t * indev, lv_indev_data_t * data)
 {
     static lv_coord_t last_x = 0;
     static lv_coord_t last_y = 0;
@@ -44,9 +44,20 @@ bool my_touchpad_read(lv_indev_drv_t * indev, lv_indev_data_t * data)
     return false; /*Return `false` because we are not buffering and no more data to read*/
 }
 
-void lv_user_init()
+static void lv_indev_init()
 {
-    lv_init();
+    /*Initialize the touch pad*/
+    lv_indev_drv_t indev_drv;
+
+    lv_indev_drv_init(&indev_drv);             /*Descriptor of a input device driver*/
+    indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
+    indev_drv.read_cb = touchpad_read;      /*Set your driver function*/
+    lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
+
+}
+
+void lv_disp_init()
+{
 
 #if LV_USE_LOG != 0
     lv_log_register_print_cb(my_print); /* register print function for debugging */
@@ -59,16 +70,9 @@ void lv_user_init()
     lv_disp_drv_init(&disp_drv);
     disp_drv.hor_res = LV_HOR_RES_MAX;
     disp_drv.ver_res = LV_VER_RES_MAX;
-    disp_drv.flush_cb = my_disp_flush;
+    disp_drv.flush_cb = disp_flush;
     disp_drv.buffer = &disp_buf;
     lv_disp_drv_register(&disp_drv);
-
-
-    /*Initialize the touch pad*/
-    lv_indev_drv_t indev_drv;
-
-    lv_indev_drv_init(&indev_drv);             /*Descriptor of a input device driver*/
-    indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
-    indev_drv.read_cb = my_touchpad_read;      /*Set your driver function*/
-    lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
+    
+    lv_indev_init();
 }

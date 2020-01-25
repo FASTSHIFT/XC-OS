@@ -51,7 +51,7 @@ static void GenerateRandomConfig(Protocol_Handshake_t *hs, uint32_t randSeed)
   */
 static void NRF_ComProcess_Handler()
 {
-    nrf.TranRecv(NRF_TxBuff, NRF_RxBuff);
+    nrfTRM.TranRecv(NRF_TxBuff, NRF_RxBuff);
 }
 
 /**
@@ -88,18 +88,22 @@ uint8_t HandshakeRun(uint8_t State, uint8_t SlaveNum, uint8_t Cmd)
         memset(&NRF_RxBuff, 0, sizeof(NRF_RxBuff));
         memset(&HandshakePack_Slave, 0, sizeof(HandshakePack_Slave));
 
+        nrf.SetRF_Enable(false);
         nrf.SetAddress(BroadcastAddr);//设置广播地址
         nrf.SetFreqency(BroadcastFreq);//设置广播频段
         nrf.SetSpeed(BroadcastSpeed);//设置广播通信速度
+        nrf.SetAutoRetryTimeout(10);
+        nrf.SetRF_Enable(true);
 
         HandshakePack_Master.HeadCode = BroadcastHead_MasterWait;//设置帧头识别码为主机等待连接
         HandshakePack_Master.ID = Master_ID;//设置主机ID
-        HandshakePack_Master.SupportPassback = State_PassBack;
+        HandshakePack_Master.EnableFunction.Passback = State_PassBack;
+        HandshakePack_Master.EnableFunction.FHSS = State_FHSS;
         strcpy(HandshakePack_Master.Description, Master_Description);//设置主机文字描述
         GenerateRandomConfig(&HandshakePack_Master, micros());//生成随机地址和随机跳频表
 
 #ifdef TIM_Handshake
-        TimerSet(TIM_Handshake, 10 * 1000, NRF_ComProcess_Handler); //设置10ms定时中断运行NRF_ComProcess_Handler
+        Timer_SetInterrupt(TIM_Handshake, 10 * 1000, NRF_ComProcess_Handler); //设置10ms定时中断运行NRF_ComProcess_Handler
         TIM_Cmd(TIM_Handshake, ENABLE);//开启定时器
 #endif
         ret = true;//返回 成功
@@ -143,14 +147,17 @@ uint8_t HandshakeRun(uint8_t State, uint8_t SlaveNum, uint8_t Cmd)
         NRF_Cfg.Speed = HandshakePack_Master.Speed;//保存通信速度
 //      EEPROM_Handle(EEPROM_Chs::SaveData);//保存所有数据
 
+        nrf.SetRF_Enable(false);
         nrf.SetAddress(HandshakePack_Master.Address);//应用新地址
         nrf.SetFreqency(HandshakePack_Master.FerqList[0]);//应用新频道
-        if(HandshakePack_Master.Speed == 0)//应用新通信速率
-            nrf.SetSpeed(nrf.SPEED_250Kbps);
-        else if(HandshakePack_Master.Speed == 1)
-            nrf.SetSpeed(nrf.SPEED_1Mbps);
-        else if(HandshakePack_Master.Speed == 2)
-            nrf.SetSpeed(nrf.SPEED_2Mbps);
+        nrf.SetSpeed(HandshakePack_Master.Speed);//应用新通信速率
+        nrf.SetAutoRetryTimeout(10);
+            
+        nrfFHSS.SetFreqHoppingList(HandshakePack_Master.FerqList, FreqList_Length);
+            
+        nrf.TX_Mode();
+        nrf.SetRF_Enable(true);
+
         ret = true;//返回 成功
         break;
     }

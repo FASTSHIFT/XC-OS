@@ -66,7 +66,7 @@ static void Creat_ShutdownMessageBox()
 static const ListBtn_TypeDef ListBtn_Grp[] = {
     {LV_SYMBOL_IMAGE,     " Display", TYPE_PageJump, PAGE_SetDisplay},
     {LV_SYMBOL_BATTERY_3, " Battery", TYPE_PageJump, PAGE_BattInfo},
-    {LV_SYMBOL_WIFI,      " Radio"},
+    {LV_SYMBOL_WIFI,      " Radio",   TYPE_PageJump, PAGE_RadioCfg},
     {LV_SYMBOL_AUDIO,     " Audio"},
     {LV_SYMBOL_POWER,     " Power",   TYPE_FuncCall, (int)Creat_ShutdownMessageBox},
     {LV_SYMBOL_GPS,       " About",   TYPE_PageJump, PAGE_About},
