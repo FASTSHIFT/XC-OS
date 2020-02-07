@@ -1,7 +1,7 @@
-#include "FileGroup.h"
+#include "Basic/FileGroup.h"
+#include "Basic/TasksManage.h"
 #include "DisplayPrivate.h"
-#include "Module.h"
-#include "TasksManage.h"
+#include "Module/Module.h"
 
 /*状态栏*/
 lv_obj_t * barStatus;
@@ -33,8 +33,7 @@ static void Task_UpdateStatusBar(lv_task_t * task)
     /*电池电量显示*/
     float battCurrent, battVoltageOc;
     Power_GetInfo(&battCurrent, NULL, &battVoltageOc);
-    uint8_t batUsage = map(battVoltageOc, 2600, 4200, 0, 100);
-    if(batUsage > 100)batUsage = 100;
+    int batUsage = Power_GetBattUsage();
     bool Is_BattCharging = (battCurrent > 0 && batUsage < 100) ? true : false;
 
     const char * battSymbol[] =
@@ -45,10 +44,14 @@ static void Task_UpdateStatusBar(lv_task_t * task)
         LV_SYMBOL_BATTERY_3,
         LV_SYMBOL_BATTERY_FULL
     };
+    
     int symIndex = map(
             battVoltageOc, 
             XC_BATTERY_VOLTAGE_MIN, XC_BATTERY_VOLTAGE_MAX, 
-            0, __Sizeof(battSymbol));
+            0, __Sizeof(battSymbol)
+    );
+    __LimitValue(symIndex, 0, __Sizeof(battSymbol) - 1);
+    
     if(Is_BattCharging)
     {
         static uint8_t usage = 0;
@@ -57,7 +60,6 @@ static void Task_UpdateStatusBar(lv_task_t * task)
         symIndex = usage;
     }
 
-    __LimitValue(symIndex, 0, __Sizeof(battSymbol) - 1);
     lv_label_set_text_fmt(labelBattUsage, "%d%s", batUsage, battSymbol[symIndex]);
 
     /*CPU占用显示*/
@@ -142,7 +144,7 @@ static void NaviButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
     page.PageEventTransmit(event, obj);
 }
 
-static void Creat_Buttons(lv_obj_t** btn, const char *text, lv_align_t align)
+static void Creat_NaviButtons(lv_obj_t** btn, const char *text, lv_align_t align)
 {
     static lv_style_t btnStyle_Release, btnStyle_Press;
     lv_style_copy(&btnStyle_Release, &lv_style_plain_color);
@@ -185,9 +187,9 @@ static void Creat_NavigationBar()
     lv_obj_align(barNavigation, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
     lv_obj_set_style(barNavigation, &styleNavigationBar);
 
-    Creat_Buttons(&btnMenu, LV_SYMBOL_STOP, LV_ALIGN_IN_LEFT_MID);
-    Creat_Buttons(&btnHome, LV_SYMBOL_HOME, LV_ALIGN_CENTER);
-    Creat_Buttons(&btnBack, LV_SYMBOL_LEFT, LV_ALIGN_IN_RIGHT_MID);
+    Creat_NaviButtons(&btnMenu, LV_SYMBOL_STOP, LV_ALIGN_IN_LEFT_MID);
+    Creat_NaviButtons(&btnHome, LV_SYMBOL_HOME, LV_ALIGN_CENTER);
+    Creat_NaviButtons(&btnBack, LV_SYMBOL_LEFT, LV_ALIGN_IN_RIGHT_MID);
 }
 
 void Init_Bar()

@@ -6,39 +6,49 @@
 template <class T> class FifoQueue {
 public:
     FifoQueue(uint32_t bufferSize);
-    FifoQueue(uint32_t bufferSize, char* buffer);
+    FifoQueue(T* buffer, uint32_t bufferSize);
     ~FifoQueue();
-    uint32_t available();
+    uint32_t available()
+    {
+        return ((uint32_t)(BufferSize + Head - Tail)) % BufferSize;
+    }
+    uint32_t size()
+    {
+        return BufferSize;
+    }
     bool write(T data);
     T read();
-    void flush();
+    void flush()
+    {
+        Head = Tail;
+    }
+
 private:
     T *Buffer;
+    bool IsBufferMalloc;
     uint32_t Head;
     uint32_t Tail;
     uint32_t BufferSize;
 };
 
-template <class T> FifoQueue<T>::FifoQueue(uint32_t bufferSize, char* buffer)
+template <class T> FifoQueue<T>::FifoQueue(T* buffer, uint32_t bufferSize)
 {
     BufferSize = bufferSize;
-    Buffer = (T *)buffer;
+    Buffer = buffer;
+    IsBufferMalloc = false;
 }
 
 template <class T> FifoQueue<T>::FifoQueue(uint32_t bufferSize)
 {
     BufferSize = bufferSize;
     Buffer = new T[BufferSize];
+    IsBufferMalloc = true;
 }
 
 template <class T> FifoQueue<T>::~FifoQueue()
 {
-    delete[] Buffer;
-}
-
-template <class T> uint32_t FifoQueue<T>::available()
-{
-    return ((uint32_t)(BufferSize + Head - Tail)) % BufferSize;
+    if(IsBufferMalloc)
+        delete[] Buffer;
 }
 
 template <class T> T FifoQueue<T>::read()
@@ -64,11 +74,6 @@ template <class T> bool FifoQueue<T>::write(T data)
     }
     else
         return false;
-}
-
-template <class T> void FifoQueue<T>::flush()
-{
-    Head = Tail;
 }
 
 #endif

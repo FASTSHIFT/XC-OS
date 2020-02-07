@@ -1,6 +1,6 @@
-#include "FileGroup.h"
-#include "ComPrivate.h"
-#include "TasksManage.h"
+#include "Basic/FileGroup.h"
+#include "Communication/ComPrivate.h"
+#include "Basic/TasksManage.h"
 #include "MPU6050.h"
 #include "math.h"
 
@@ -92,7 +92,7 @@ static void Init_MPU6050()
   * @param  нч
   * @retval нч
   */
-void Task_IMU_Claculate(TimerHandle_t xTimer)
+void Task_IMU_Update(TimerHandle_t xTimer)
 {
     if(!State_MPU)
         return;

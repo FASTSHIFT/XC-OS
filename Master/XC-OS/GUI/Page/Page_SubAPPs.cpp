@@ -1,12 +1,12 @@
-#include "FileGroup.h"
+#include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "APP_Type.h"
 #include "SdFat.h"
-#include "TasksManage.h"
-#include "Module.h"
+#include "Basic/TasksManage.h"
+#include "Module/Module.h"
 
 #if( XC_USE_LUA == 1 )
-#include "LuaScript.h"
+#include "LuaInterface/LuaScript.h"
 #endif
 
 static lv_obj_t * appWindow;
@@ -145,7 +145,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_SubAPPs(uint8_t pageID)
 {
-    appWindow = AppWindow_GetObj(pageID);
+    appWindow = Page_GetAppWindow(pageID);
     lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
     *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);

@@ -2,10 +2,10 @@
 #define __DISPLAYPRIVATE_H
 
 /*Basic*/
-#include "TFT_ILI9488.h"
-#include "touch.h"
+#include "TFT_ILI9488/TFT_ILI9488.h"
+#include "GT911/touch.h"
 
-#define SCREEN_CLASS TFT_ILI9488
+typedef TFT_ILI9488 SCREEN_CLASS;
 extern SCREEN_CLASS screen;
 
 /*SCREEN basic*/
@@ -23,6 +23,8 @@ extern SCREEN_CLASS screen;
 
 void lv_disp_init();
 void lv_fsys_init();
+
+/*lvÀ©Õ¹º¯Êý*/
 bool lv_obj_del_safe(lv_obj_t** obj);
 void lv_label_set_text_add(lv_obj_t * label, const char * text);
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
@@ -40,7 +42,7 @@ void lv_obj_add_anim(
 );
 
 /*Page*/
-#include "PageManager.h"
+#include "LightGUI/PageManager/PageManager.h"
 
 typedef enum
 {
@@ -92,7 +94,7 @@ void WinOSState_SetClose();
 
 /*AppWindow*/
 void Creat_AppWindow();
-lv_obj_t * AppWindow_GetObj(uint8_t pageID);
+lv_obj_t * Page_GetAppWindow(uint8_t pageID);
 
 #define APP_WIN_HEIGHT (lv_obj_get_height(lv_scr_act()) - BarStatus_GetHeight() - BarNavigation_GetHeight())
 #define APP_WIN_WIDTH  (lv_obj_get_width(lv_scr_act()))

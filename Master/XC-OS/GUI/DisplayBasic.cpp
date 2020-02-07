@@ -1,7 +1,7 @@
-#include "FileGroup.h"
 #include "DisplayPrivate.h"
-#include "TasksManage.h"
-#include "Module.h"
+#include "Basic/FileGroup.h"
+#include "Basic/TasksManage.h"
+#include "Module/Module.h"
 
 TaskHandle_t TaskHandle_Display = 0;
 TaskHandle_t TaskHandle_PageRun = 0;

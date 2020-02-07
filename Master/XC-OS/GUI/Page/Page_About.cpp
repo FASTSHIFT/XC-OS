@@ -1,4 +1,4 @@
-#include "FileGroup.h"
+#include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "APP_Type.h"
 
@@ -125,6 +125,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_About(uint8_t pageID)
 {
-    appWindow = AppWindow_GetObj(pageID);
+    appWindow = Page_GetAppWindow(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

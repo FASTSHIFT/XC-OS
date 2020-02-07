@@ -24,7 +24,7 @@ void setup()
 #endif
     
     /*Timer Create*/
-    xTimerReg(Task_ReadBattInfo, 500);
+    xTimerReg(Task_BattInfoUpdate, 500);
     xTimerReg(Task_MotorRunning, 10);
 
     Serial.println("OS start scheduler...");

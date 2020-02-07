@@ -1,7 +1,7 @@
 #include "DisplayPrivate.h"
-#include "TasksManage.h"
-#include "Module.h"
-#include "CommonMacro.h"
+#include "Basic/TasksManage.h"
+#include "Module/Module.h"
+#include "Basic/CommonMacro.h"
 
 extern lv_obj_t * barStatus;
 static lv_obj_t * contDropDown;
@@ -26,23 +26,13 @@ static void DropDownList_AnimEndEvent(lv_anim_t * a)
 void DropDownList_AnimDown(bool down)
 {
     static lv_anim_t a;
-    a.var = contDropDown;
-    a.start = lv_obj_get_y(contDropDown);
-
-    a.exec_cb = (lv_anim_exec_xcb_t)lv_obj_set_y;
-    a.path_cb = lv_anim_path_linear;
-    a.ready_cb = DropDownList_AnimEndEvent;
-    a.time = 300;
-    if(down)
-    {
-        a.end = 0;
-    }
-    else
-    {
-        a.end = -lv_obj_get_height(contDropDown) - 5;
-    }
-
-    lv_anim_create(&a);
+    lv_obj_add_anim(
+        contDropDown, &a,
+        (lv_anim_exec_xcb_t)lv_obj_set_y,
+        lv_obj_get_y(contDropDown), (down ? 0 : -lv_obj_get_height(contDropDown) - 5),
+        300,
+        DropDownList_AnimEndEvent
+    );
 }
 
 static void DropDownListEvent_Handler(lv_obj_t * obj, lv_event_t event)
@@ -103,7 +93,7 @@ static void SliderBright_EventHandler(lv_obj_t * obj, lv_event_t event)
     {
         int value = lv_slider_get_value(obj);
 //        lv_label_set_text_fmt(labelBright, "%d%%", value / 10);
-        Brightness_SetValue(value);
+        Brightness_SetGradual(value);
 //        __IntervalExecute(Serial3.printf("B%dE", value), 20);
     }
 }

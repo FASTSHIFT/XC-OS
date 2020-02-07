@@ -1,5 +1,5 @@
 #include "DisplayPrivate.h"
-#include "SysConfig.h"
+#include "Basic/SysConfig.h"
 
 #if LV_USE_FILESYSTEM
 #include "SdFat.h"

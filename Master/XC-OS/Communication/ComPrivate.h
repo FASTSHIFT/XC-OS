@@ -1,7 +1,7 @@
 #ifndef __COMPRIVATE_H
 #define __COMPRIVATE_H
 
-#include "NRF.h"
+#include "NRF/NRF.h"
 #include "RC_Protocol.h"
 
 #define Master_ID 0x08

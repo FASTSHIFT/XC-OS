@@ -2,7 +2,7 @@
 #define __SYSCONFIG_H
 
 /***************** ª˘±æ…Ë÷√ *****************/
-#define XC_VERSION_HW               "v1.0"
+#define XC_VERSION_HW               "v1.9"
 #define XC_VERSION_SW               __DATE__
 #define XC_OS_NAME                  "XC-OS"
 #define XC_CPU_NAME                 "STM32F405RGT6"

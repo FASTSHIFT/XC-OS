@@ -38,8 +38,8 @@ void Task_PageRun(void *pvParameters);
 
 /*Timer Functions*/
 void Task_MotorRunning(TimerHandle_t xTimer);
-void Task_ReadBattInfo(TimerHandle_t xTimer);
-void Task_IMU_Claculate(TimerHandle_t xTimer);
+void Task_BattInfoUpdate(TimerHandle_t xTimer);
+void Task_IMU_Update(TimerHandle_t xTimer);
 
 /*TaskHandle*/
 extern TaskHandle_t TaskHandle_LuaScript;

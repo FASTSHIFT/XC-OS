@@ -337,7 +337,7 @@
               <MiscControls>--gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,PLL_M=8,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\Adafruit_GFX_Library;..\Libraries\TFT_ILI9488;..\Libraries\GT911;..\Libraries\StrPrinter;..\Libraries\lvgl;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\Libraries\NRF;..\Libraries\IP5108;..\Libraries\LightGUI\PageManager;..\Libraries\FifoQueue;..\Libraries\WavDecoder;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries\Lyric_Analyzer;..\Libraries\BV_Player;..\Libraries\FastFFT;..\Libraries\cm_backtrace;..\XC-OS\Basic;..\XC-OS\Communication;..\XC-OS\GUI;..\XC-OS\LuaScript;..\XC-OS\Module;..\XC-OS\Game;..\XC-OS\GUI\Page</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\XC-OS;..\XC-OS\GUI;..\Libraries\Adafruit_GFX_Library;..\Libraries\cm_backtrace;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries;..\Libraries\lvgl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -410,26 +410,6 @@
               <FileName>sys_io.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\Basic\sys_io.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Communication</GroupName>
-          <Files>
-            <File>
-              <FileName>ComBasic.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Communication\ComBasic.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ComHandshake.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Communication\ComHandshake.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>ComPrivate.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\XC-OS\Communication\ComPrivate.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -514,7 +494,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>GUI\Page</GroupName>
+          <GroupName>GUI/Page</GroupName>
           <Files>
             <File>
               <FileName>Page_EXAMPLE.cpp</FileName>
@@ -639,29 +619,9 @@
               <FilePath>..\XC-OS\GUI\Page\Page_BattInfoOld.cpp</FilePath>
             </File>
             <File>
-              <FileName>Page_BvPlayer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_BvPlayer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_FileExplorer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_FileExplorer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_Game.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_Game.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Page_Home.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_Home.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_LuaScript.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_LuaScript.cpp</FilePath>
             </File>
             <File>
               <FileName>Page_RadioCfg.cpp</FileName>
@@ -683,20 +643,10 @@
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_SubAPPs.cpp</FilePath>
             </File>
-            <File>
-              <FileName>Page_TextEditor.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_TextEditor.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_WavPlayer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_WavPlayer.cpp</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>GUI\IMG</GroupName>
+          <GroupName>GUI/IMG</GroupName>
           <Files>
             <File>
               <FileName>ImgCode.c</FileName>
@@ -786,136 +736,217 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Game\doom-nano</GroupName>
-          <GroupOption>
-            <CommonProperty>
-              <UseCPPCompiler>0</UseCPPCompiler>
-              <RVCTCodeConst>0</RVCTCodeConst>
-              <RVCTZI>0</RVCTZI>
-              <RVCTOtherData>0</RVCTOtherData>
-              <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>1</IncludeInBuild>
-              <AlwaysBuild>2</AlwaysBuild>
-              <GenerateAssemblyFile>2</GenerateAssemblyFile>
-              <AssembleAssemblyFile>2</AssembleAssemblyFile>
-              <PublicsOnly>2</PublicsOnly>
-              <StopOnExitCode>11</StopOnExitCode>
-              <CustomArgument></CustomArgument>
-              <IncludeLibraryModules></IncludeLibraryModules>
-              <ComprImg>1</ComprImg>
-            </CommonProperty>
-            <GroupArmAds>
-              <Cads>
-                <interw>2</interw>
-                <Optim>0</Optim>
-                <oTime>2</oTime>
-                <SplitLS>2</SplitLS>
-                <OneElfS>2</OneElfS>
-                <Strict>2</Strict>
-                <EnumInt>2</EnumInt>
-                <PlainCh>2</PlainCh>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <wLevel>0</wLevel>
-                <uThumb>2</uThumb>
-                <uSurpInc>2</uSurpInc>
-                <uC99>2</uC99>
-                <uGnu>2</uGnu>
-                <useXO>2</useXO>
-                <v6Lang>0</v6Lang>
-                <v6LangP>0</v6LangP>
-                <vShortEn>2</vShortEn>
-                <vShortWch>2</vShortWch>
-                <v6Lto>2</v6Lto>
-                <v6WtE>2</v6WtE>
-                <v6Rtti>2</v6Rtti>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Cads>
-              <Aads>
-                <interw>2</interw>
-                <Ropi>2</Ropi>
-                <Rwpi>2</Rwpi>
-                <thumb>2</thumb>
-                <SplitLS>2</SplitLS>
-                <SwStkChk>2</SwStkChk>
-                <NoWarn>2</NoWarn>
-                <uSurpInc>2</uSurpInc>
-                <useXO>2</useXO>
-                <uClangAs>2</uClangAs>
-                <VariousControls>
-                  <MiscControls></MiscControls>
-                  <Define></Define>
-                  <Undefine></Undefine>
-                  <IncludePath></IncludePath>
-                </VariousControls>
-              </Aads>
-            </GroupArmAds>
-          </GroupOption>
+          <GroupName>APP/BvPlayer</GroupName>
           <Files>
             <File>
-              <FileName>doom-nano.cpp</FileName>
+              <FileName>Page_BvPlayer.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\doom-nano.cpp</FilePath>
+              <FilePath>..\XC-OS\APP\BvPlayer\Page_BvPlayer.cpp</FilePath>
             </File>
             <File>
-              <FileName>entities.cpp</FileName>
+              <FileName>BV_Player.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\entities.cpp</FilePath>
+              <FilePath>..\XC-OS\APP\BvPlayer\BV_Player\BV_Player.cpp</FilePath>
             </File>
             <File>
-              <FileName>input.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\input.cpp</FilePath>
+              <FileName>BV_Player.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\BvPlayer\BV_Player\BV_Player.h</FilePath>
             </File>
             <File>
-              <FileName>types.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Game\doom-nano\types.cpp</FilePath>
+              <FileName>BvType.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\BvPlayer\BV_Player\BvType.h</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>LuaScript</GroupName>
+          <GroupName>APP/FileExplorer</GroupName>
           <Files>
             <File>
-              <FileName>LuaScript.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaScript.h</FilePath>
+              <FileName>Page_FileExplorer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\FileExplorer\Page_FileExplorer.cpp</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/Game</GroupName>
+          <Files>
+            <File>
+              <FileName>doom-nano.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\doom-nano\doom-nano.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>entities.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\doom-nano\entities.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>input.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\doom-nano\input.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>types.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\doom-nano\types.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Page_Game.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\Page_Game.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/LuaIDE</GroupName>
+          <Files>
+            <File>
+              <FileName>Page_LuaScript.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\LuaIDE\Page_LuaScript.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/TextEditor</GroupName>
+          <Files>
+            <File>
+              <FileName>Page_TextEditor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\TextEditor\Page_TextEditor.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TextEditor_Private.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\TextEditor\TextEditor_Private.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/WavPlayer</GroupName>
+          <Files>
+            <File>
+              <FileName>Page_WavPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\Page_WavPlayer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WavPlayer_Private.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\WavPlayer_Private.h</FilePath>
+            </File>
+            <File>
+              <FileName>WavPlayer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\WavPlayer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MusicList.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\MusicList.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Lyric.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\Lyric.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\FFT.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>wav_decoder.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\WavDecoder\wav_decoder.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>wav_decoder.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\WavDecoder\wav_decoder.h</FilePath>
+            </File>
+            <File>
+              <FileName>FastFFT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\FastFFT\FastFFT.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>FastFFT.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\FastFFT\FastFFT.h</FilePath>
+            </File>
+            <File>
+              <FileName>Lyric_Analyzer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\Lyric_Analyzer\Lyric_Analyzer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Lyric_Analyzer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\WavPlayer\Lyric_Analyzer\Lyric_Analyzer.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Communication</GroupName>
+          <Files>
+            <File>
+              <FileName>ComBasic.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Communication\ComBasic.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ComHandshake.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Communication\ComHandshake.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ComPrivate.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\Communication\ComPrivate.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>LuaInterface</GroupName>
+          <Files>
             <File>
               <FileName>LuaBasic.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaBasic.cpp</FilePath>
+              <FilePath>..\XC-OS\LuaInterface\LuaBasic.cpp</FilePath>
             </File>
             <File>
               <FileName>LuaCom.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaCom.cpp</FilePath>
+              <FilePath>..\XC-OS\LuaInterface\LuaCom.cpp</FilePath>
             </File>
             <File>
               <FileName>LuaGPIO.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaGPIO.cpp</FilePath>
+              <FilePath>..\XC-OS\LuaInterface\LuaGPIO.cpp</FilePath>
             </File>
             <File>
               <FileName>LuaModule.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaModule.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LuaTime.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaTime.cpp</FilePath>
+              <FilePath>..\XC-OS\LuaInterface\LuaModule.cpp</FilePath>
             </File>
             <File>
               <FileName>LuaScript.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaScript\LuaScript.cpp</FilePath>
+              <FilePath>..\XC-OS\LuaInterface\LuaScript.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LuaScript.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\LuaInterface\LuaScript.h</FilePath>
+            </File>
+            <File>
+              <FileName>LuaTime.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\LuaInterface\LuaTime.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -953,24 +984,9 @@
               <FilePath>..\XC-OS\Module\Power.cpp</FilePath>
             </File>
             <File>
-              <FileName>Text.cpp</FileName>
+              <FileName>TextBuf.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Text.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Lyric.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Lyric.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>WavPlayer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\WavPlayer.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FFT.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\FFT.cpp</FilePath>
+              <FilePath>..\XC-OS\Module\TextBuf.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -1876,16 +1892,6 @@
               <FilePath>..\Libraries\Adafruit_GFX_Library\Adafruit_GFX.cpp</FilePath>
             </File>
             <File>
-              <FileName>BV_Player.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\BV_Player\BV_Player.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>FastFFT.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\FastFFT\FastFFT.cpp</FilePath>
-            </File>
-            <File>
               <FileName>GT911.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\GT911\GT911.cpp</FilePath>
@@ -1904,11 +1910,6 @@
               <FileName>I2Cdev.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\I2Cdev\I2Cdev.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Lyric_Analyzer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\Lyric_Analyzer\Lyric_Analyzer.cpp</FilePath>
             </File>
             <File>
               <FileName>MPU6050.cpp</FileName>
@@ -1936,11 +1937,6 @@
               <FilePath>..\Libraries\LightGUI\PageManager\PageManager.cpp</FilePath>
             </File>
             <File>
-              <FileName>StrPrinter.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\StrPrinter\StrPrinter.cpp</FilePath>
-            </File>
-            <File>
               <FileName>TFT_ILI9488.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\TFT_ILI9488\TFT_ILI9488.cpp</FilePath>
@@ -1949,11 +1945,6 @@
               <FileName>touch.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\Libraries\GT911\touch.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>wav_decoder.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\Libraries\WavDecoder\wav_decoder.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -2117,6 +2108,16 @@
               <FileName>timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Core\timer.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>README</GroupName>
+          <Files>
+            <File>
+              <FileName>README.md</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\README.md</FilePath>
             </File>
           </Files>
         </Group>

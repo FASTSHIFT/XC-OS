@@ -1,6 +1,6 @@
-#include "FileGroup.h"
-#include "TasksManage.h"
-#include "IP5108.h"
+#include "Basic/FileGroup.h"
+#include "Basic/TasksManage.h"
+#include "IP5108/IP5108.h"
 #include "Module.h"
 
 TimerHandle_t TimerHandle_Charger;
@@ -21,7 +21,15 @@ void Power_GetInfo(float* battCurrent,float* battVoltage,float* battVoltageOc)
         *battVoltageOc = BattVoltageOc;
 }
 
-void Task_ReadBattInfo(TimerHandle_t xTimer)
+float Power_GetBattUsage()
+{
+    float batUsage = __Map(BattVoltageOc, 2600, 4200, 0.0f, 100.0f);
+    if(batUsage > 100)
+        batUsage = 100;
+    return batUsage;
+}
+
+void Task_BattInfoUpdate(TimerHandle_t xTimer)
 {
     __ExecuteOnce((
         charger.begin(),

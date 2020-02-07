@@ -1,5 +1,5 @@
-#include "FileGroup.h"
-#include "TasksManage.h"
+#include "Basic/FileGroup.h"
+#include "Basic/TasksManage.h"
 #include "Module.h"
 
 bool State_MotorVibrate = true;

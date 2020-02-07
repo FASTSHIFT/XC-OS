@@ -3,7 +3,7 @@
 
 #include "Arduino.h"
 #include "Adafruit_GFX.h"
-#include "StrPrinter.h"
+//#include "StrPrinter.h"
 
 #define ILI9488_TFTWIDTH  320
 #define ILI9488_TFTHEIGHT 480

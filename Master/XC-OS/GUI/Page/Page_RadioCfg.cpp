@@ -1,6 +1,6 @@
-#include "FileGroup.h"
+#include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
-#include "ComPrivate.h"
+#include "Communication/ComPrivate.h"
 
 #define NRF_CHANNELS 126
 /*smooths signal strength with numerical range 0 - 0x7FFF*/
@@ -171,7 +171,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_RadioCfg(uint8_t pageID)
 {
-    appWindow = AppWindow_GetObj(pageID);
+    appWindow = Page_GetAppWindow(pageID);
     lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
     *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, Loop, Exit, Event);

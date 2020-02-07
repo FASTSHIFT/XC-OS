@@ -1,6 +1,6 @@
 #include "DisplayPrivate.h"
-#include "CommonMacro.h"
-#include "TasksManage.h"
+#include "Basic/CommonMacro.h"
+#include "Basic/TasksManage.h"
 
 static lv_obj_t * winOSState;
 static lv_obj_t * tableOSState;

@@ -1,5 +1,5 @@
 #include "DisplayPrivate.h"
-#include "TasksManage.h"
+#include "Basic/TasksManage.h"
 #include "cm_backtrace.h"
 
 void InfoPrintf(const char *__restrict __format, ...)
@@ -22,7 +22,7 @@ static void SoftDelay(uint32_t ms)
 }
 
 #include "Fonts\FreeMono24pt7b.h"
-static void ShowCrashReports(const char* report)
+static void DisplayCrashReports(const char* report)
 {
     noInterrupts();
     screen.fillScreen(screen.Blue);
@@ -59,17 +59,17 @@ extern "C"
     {
         char str[configMAX_TASK_NAME_LEN + 1];
         sprintf(str, "stack overflow\n < %s >", pcTaskName);
-        ShowCrashReports(str);
+        DisplayCrashReports(str);
     }
     
     void vApplicationMallocFailedHook()
     {
-        ShowCrashReports("malloc failed");
+        DisplayCrashReports("malloc failed");
     }
     
     void vApplicationHardFaultHook()
     {
-        ShowCrashReports("FXXK HardFault!");
+        DisplayCrashReports("FXXK HardFault!");
     }
     
     __asm void HardFault_Handler()

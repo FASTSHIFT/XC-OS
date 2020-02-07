@@ -2,7 +2,7 @@
 #define __GT_IIC_H
 
 #include "Arduino.h"
-#include "SysConfig.h"
+#include "Basic\SysConfig.h"
 
 #define GT_SDA_Pin Touch_SDA_Pin
 #define GT_SCL_Pin Touch_SCL_Pin

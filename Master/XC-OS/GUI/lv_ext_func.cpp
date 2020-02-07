@@ -66,6 +66,10 @@ void lv_obj_add_anim(
     lv_anim_path_cb_t path_cb
 )
 {
+    lv_anim_t a_tmp;
+    if(a == NULL)
+        a = &a_tmp;
+
     a->var = obj;
     a->start = start;
     a->end = end;

@@ -1,29 +1,21 @@
-#include "FileGroup.h"
+#include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "Module.h"
 
-static int16_t BrightnessTarget, BrightnessStep;
-
-static void Task_BrightnessCtrl(lv_task_t * task)
+static void Brightness_AnimCallback(void * obj, int16_t brightness)
 {
-    int16_t brightness = Brightness_GetValue();
-    __ValueCloseTo(brightness, BrightnessTarget, BrightnessStep);
     Brightness_SetValue(brightness);
-    
-    if(brightness == BrightnessTarget)
-    {
-        lv_task_del(task);
-    }
 }
 
 void Brightness_SetGradual(uint16_t target, uint16_t time)
 {
-    BrightnessTarget = target;
-    int16_t length = abs((BrightnessTarget - (int)Brightness_GetValue()));
-    int16_t bps = length * 1000 / time;
-    int16_t step = bps / 100;
-    BrightnessStep = step;
-    lv_task_create(Task_BrightnessCtrl, 10, LV_TASK_PRIO_HIGH, 0);
+    static lv_anim_t a;
+    lv_obj_add_anim(
+        NULL, &a,
+        (lv_anim_exec_xcb_t)Brightness_AnimCallback,
+        Brightness_GetValue(), target,
+        time
+    );
 }
 
 uint16_t Brightness_GetValue()

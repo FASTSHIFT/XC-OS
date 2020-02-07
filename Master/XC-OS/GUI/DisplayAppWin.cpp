@@ -9,7 +9,7 @@ typedef struct{
 
 AppWindow_TypeDef appWindow_Grp[PAGE_MAX];
 
-lv_obj_t * AppWindow_GetObj(uint8_t pageID)
+lv_obj_t * Page_GetAppWindow(uint8_t pageID)
 {
     lv_obj_t * win = NULL;
     if(pageID < PAGE_MAX)

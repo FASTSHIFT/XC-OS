@@ -1,5 +1,5 @@
-#include "FileGroup.h"
-#include "TasksManage.h"
+#include "Basic/FileGroup.h"
+#include "Basic/TasksManage.h"
 #include "ComPrivate.h"
 
 TaskHandle_t TaskHandle_Commmunicate;
