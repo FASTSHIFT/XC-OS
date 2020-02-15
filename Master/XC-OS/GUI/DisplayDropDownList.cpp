@@ -1,11 +1,9 @@
 #include "DisplayPrivate.h"
 #include "Basic/TasksManage.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 #include "Basic/CommonMacro.h"
 
-extern lv_obj_t * barStatus;
 static lv_obj_t * contDropDown;
-
 static lv_obj_t * sliderBright;
 
 static void Creat_Slider();
@@ -62,18 +60,20 @@ void Creat_DropDownList()
     contDropDown = lv_cont_create(lv_scr_act(), NULL);
 
     static lv_style_t style = *lv_obj_get_style(contDropDown);
-    style.body.main_color = LV_COLOR_BLACK;
-    style.body.grad_color = LV_COLOR_BLACK;
-    style.body.opa = LV_OPA_80;
+//    style.body.main_color = LV_COLOR_BLACK;
+//    style.body.grad_color = LV_COLOR_BLACK;
+//    style.body.opa = LV_OPA_80;
     lv_cont_set_style(contDropDown, LV_CONT_STYLE_MAIN, &style);
+    
+    lv_obj_set_color(contDropDown, LV_COLOR_GRAY);
+    lv_obj_set_opa_scale_enable(contDropDown, false);
 
     lv_obj_set_size(contDropDown, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL) - BarNavigation_GetHeight());
     lv_obj_set_drag(contDropDown, true);
     lv_obj_set_drag_dir(contDropDown, LV_DRAG_DIR_VER);
-//    lv_obj_set_drag_throw(contDropDown, true);
     lv_obj_set_ext_click_area(contDropDown, 0, 0, 0, DropDownList_ExtArea);
     lv_obj_set_event_cb(contDropDown, DropDownListEvent_Handler);
-    lv_obj_align(contDropDown, barStatus, LV_ALIGN_OUT_TOP_MID, 0, -5);
+    lv_obj_align(contDropDown, BarStatus_GetObj(), LV_ALIGN_OUT_TOP_MID, 0, -5);
 
     /*label*/
     lv_obj_t * label = lv_label_create(contDropDown, NULL);

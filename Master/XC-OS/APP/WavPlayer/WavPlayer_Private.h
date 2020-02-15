@@ -4,7 +4,7 @@
 #include "Basic/FileGroup.h"
 #include "GUI/DisplayPrivate.h"
 #include "WavDecoder/wav_decoder.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 #include "SdFat.h"
 
 /*Lyric*/

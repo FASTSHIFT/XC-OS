@@ -23,7 +23,6 @@ static lv_task_t * taskWavBar;
 
 /*“Ù¡ø*/
 static lv_obj_t * sliderWavVolume;
-static lv_obj_t * labelWavVolume;
 
 /*øÿ÷∆∞¥≈•*/
 typedef struct
@@ -55,7 +54,7 @@ enum{
 };
 static btnGrp_TypeDef btnListCtrl_Grp[] =
 {
-    {LV_SYMBOL_SHUFFLE, -120},
+    {LV_SYMBOL_LOOP, -120},
     {LV_SYMBOL_LIST, -40},
     {LV_SYMBOL_VOLUME_MID, 40},
     {LV_SYMBOL_AUDIO, 120}
@@ -206,37 +205,26 @@ static void Creat_WavBar()
     taskWavBar = lv_task_create(Task_WavBarUpdate, 500, LV_TASK_PRIO_MID, 0);
 }
 
-//static void SliderEvent_Handler(lv_obj_t * obj, lv_event_t event)
-//{
-//    if(event == LV_EVENT_VALUE_CHANGED)
-//    {
-//        uint8_t volume = lv_slider_get_value(obj);
-//        WavPlayer_SetVolume(volume);
-//        const char* symGrp[] = {LV_SYMBOL_MUTE, LV_SYMBOL_VOLUME_MID, LV_SYMBOL_VOLUME_MAX};
-//        uint8_t index;
-//        if(volume < 20) index = 0;
-//        else if(volume < 60) index = 1;
-//        else index = 2;
+static void SliderEvent_Handler(lv_obj_t * obj, lv_event_t event)
+{
+    if(event == LV_EVENT_VALUE_CHANGED)
+    {
+        uint8_t volume = lv_slider_get_value(obj);
+        WavPlayer_SetVolume(volume);
+    }
+}
 
-//        lv_label_set_text_fmt(labelWavVolume, "%s%-3d", symGrp[index], volume);
-//    }
-//}
-
-//static void Creat_VolumeSlider()
-//{
-//    sliderWavVolume = lv_slider_create(appWindow, NULL);
-//    lv_obj_set_size(sliderWavVolume, APP_WIN_WIDTH - 100, 10);
-//    lv_obj_align(sliderWavVolume, barWav, LV_ALIGN_OUT_BOTTOM_LEFT, 50, 30);
-//    lv_obj_set_event_cb(sliderWavVolume, SliderEvent_Handler);
-//    lv_slider_set_range(sliderWavVolume, 0, 100);
-//    lv_slider_set_value(sliderWavVolume, WavPlayer_GetVolume(), LV_ANIM_ON);
-
-//    labelWavVolume = lv_label_create(appWindow, NULL);
-//    lv_obj_align(labelWavVolume, sliderWavVolume, LV_ALIGN_OUT_LEFT_MID, 0, 0);
-//    lv_obj_set_auto_realign(labelWavVolume, true);
-
-//    lv_event_send(sliderWavVolume, LV_EVENT_VALUE_CHANGED, 0);
-//}
+static void Creat_VolumeSlider()
+{
+    sliderWavVolume = lv_slider_create(appWindow, NULL);
+    //lv_obj_set_opa_scale_enable(sliderWavVolume true);
+    lv_obj_set_hidden(sliderWavVolume, true);
+    lv_obj_set_size(sliderWavVolume, 20, APP_WIN_HEIGHT / 3);
+    lv_obj_align(sliderWavVolume, appWindow, LV_ALIGN_IN_RIGHT_MID, -20, 0);
+    lv_obj_set_event_cb(sliderWavVolume, SliderEvent_Handler);
+    lv_slider_set_range(sliderWavVolume, 0, 100);
+    lv_slider_set_value(sliderWavVolume, WavPlayer_GetVolume(), LV_ANIM_ON);
+}
 
 static void ButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
 {
@@ -265,11 +253,20 @@ static void ButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
         /******btnListCtrl_Grp*****/
         if(obj == btnListCtrl_Grp[BTN_MODE].btn)
         {
-            
+            const char* sym_mode[] = {LV_SYMBOL_LOOP, LV_SYMBOL_SHUFFLE, "1", LV_SYMBOL_REFRESH"1"};
+            static uint8_t mode_index = 0;
+            mode_index++;
+            mode_index %= __Sizeof(sym_mode);
+            btnListCtrl_Grp[BTN_MODE].sym = sym_mode[mode_index];
+            lv_label_set_text(btnListCtrl_Grp[BTN_MODE].label, btnListCtrl_Grp[BTN_MODE].sym);
         }
         if(obj == btnListCtrl_Grp[BTN_LIST].btn)
         {
             MusicList_SetActivate(!MusicList_GetActivate());
+        }
+        if(obj == btnListCtrl_Grp[BTN_VOLUME].btn)
+        {
+            lv_obj_set_hidden(sliderWavVolume, !lv_obj_get_hidden(sliderWavVolume));
         }
     }
 }
@@ -338,11 +335,11 @@ static void Setup()
     Creat_BtnGrp(btnListCtrl_Grp, __Sizeof(btnListCtrl_Grp), 55, 20, -10);
     Creat_WavBar();
     Creat_LabelLrc();
+    Creat_VolumeSlider();
     
     Wav_Update();
     
     Preloader_Activate(false, appWindow);
-    //Creat_VolumeSlider();
 }
 
 /**
@@ -383,7 +380,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_WavPlayer(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
     *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);

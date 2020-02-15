@@ -1,7 +1,7 @@
 #include "DisplayPrivate.h"
 #include "Basic/FileGroup.h"
 #include "Basic/TasksManage.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 
 TaskHandle_t TaskHandle_Display = 0;
 TaskHandle_t TaskHandle_PageRun = 0;
@@ -13,6 +13,12 @@ SCREEN_CLASS screen(
 );
 
 PageManager page(PAGE_MAX);
+
+#define PAGE_REG(name)\
+do{\
+    extern void PageRegister_##name(uint8_t pageID);\
+    PageRegister_##name(PAGE_##name);\
+}while(0)
 
 static void Init_Pages()
 {
@@ -29,6 +35,7 @@ static void Init_Pages()
     PAGE_REG(Game);
     PAGE_REG(About);
     PAGE_REG(RadioCfg);
+    PAGE_REG(USB);
     
     page.PagePush(PAGE_Home);
 }
@@ -62,8 +69,7 @@ void Task_Dispaly(void *pvParameters)
     SemHandle_FileSystem = xSemaphoreCreateBinary();
     xSemaphoreGive(SemHandle_FileSystem);
 
-//    lv_ex_settings_2();
-    
+//    lv_ex_settings_1();
     Init_Bar();
     Init_Pages();
     

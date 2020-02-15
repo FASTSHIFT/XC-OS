@@ -27,56 +27,57 @@
 #include "Print.h"
 #include "Stream.h"
 
-#define SERIAL_RX_BUFFER_SIZE 128
-#define SERIAL_Config_Default SERIAL_8N1
-#define USART_PreemptionPriority_Default 1
-#define USART_SubPriority_Default 3
-
-#define USART_GetWordLength(SERIAL_x)    ((uint16_t)(SERIAL_x&0xF000))
-#define USART_GetParity(SERIAL_x)        ((uint16_t)(SERIAL_x&0x0F00))
-#define USART_GetStopBits(SERIAL_x)      ((uint16_t)((SERIAL_x&0x00F0)<<8))
+#define SERIAL_RX_BUFFER_SIZE             128
+#define SERIAL_PreemptionPriority_Default 1
+#define SERIAL_SubPriority_Default        3
 
 typedef enum
 {
-    SERIAL_8N1 = USART_WordLength_8b | USART_Parity_No | (USART_StopBits_1 >> 8),
-    SERIAL_8N2 = USART_WordLength_8b | USART_Parity_No | (USART_StopBits_2 >> 8),
-    SERIAL_8E1 = USART_WordLength_8b | USART_Parity_Even | (USART_StopBits_1 >> 8),
-    SERIAL_8E2 = USART_WordLength_8b | USART_Parity_Even | (USART_StopBits_2 >> 8),
-    SERIAL_8O1 = USART_WordLength_8b | USART_Parity_Odd | (USART_StopBits_1 >> 8),
-    SERIAL_8O2 = USART_WordLength_8b | USART_Parity_Odd | (USART_StopBits_2 >> 8),
-    SERIAL_8N0_5 = USART_WordLength_8b | USART_Parity_No | (USART_StopBits_0_5 >> 8),
-    SERIAL_8N1_5 = USART_WordLength_8b | USART_Parity_No | (USART_StopBits_1_5 >> 8),
-    SERIAL_8E0_5 = USART_WordLength_8b | USART_Parity_Even | (USART_StopBits_0_5 >> 8),
-    SERIAL_8E1_5 = USART_WordLength_8b | USART_Parity_Even | (USART_StopBits_1_5 >> 8),
-    SERIAL_8O0_5 = USART_WordLength_8b | USART_Parity_Odd | (USART_StopBits_0_5 >> 8),
-    SERIAL_8O1_5 = USART_WordLength_8b | USART_Parity_Odd | (USART_StopBits_1_5 >> 8),
+    SERIAL_8N1,
+    SERIAL_8N2,
+    SERIAL_8E1,
+    SERIAL_8E2,
+    SERIAL_8O1,
+    SERIAL_8O2,
+    SERIAL_8N0_5,
+    SERIAL_8N1_5,
+    SERIAL_8E0_5,
+    SERIAL_8E1_5,
+    SERIAL_8O0_5,
+    SERIAL_8O1_5,
 
-    SERIAL_9N1 = USART_WordLength_9b | USART_Parity_No | (USART_StopBits_1 >> 8),
-    SERIAL_9N2 = USART_WordLength_9b | USART_Parity_No | (USART_StopBits_2 >> 8),
-    SERIAL_9E1 = USART_WordLength_9b | USART_Parity_Even | (USART_StopBits_1 >> 8),
-    SERIAL_9E2 = USART_WordLength_9b | USART_Parity_Even | (USART_StopBits_2 >> 8),
-    SERIAL_9O1 = USART_WordLength_9b | USART_Parity_Odd | (USART_StopBits_1 >> 8),
-    SERIAL_9O2 = USART_WordLength_9b | USART_Parity_Odd | (USART_StopBits_2 >> 8),
-    SERIAL_9N0_5 = USART_WordLength_9b | USART_Parity_No | (USART_StopBits_0_5 >> 8),
-    SERIAL_9N1_5 = USART_WordLength_9b | USART_Parity_No | (USART_StopBits_1_5 >> 8),
-    SERIAL_9E0_5 = USART_WordLength_9b | USART_Parity_Even | (USART_StopBits_0_5 >> 8),
-    SERIAL_9E1_5 = USART_WordLength_9b | USART_Parity_Even | (USART_StopBits_1_5 >> 8),
-    SERIAL_9O0_5 = USART_WordLength_9b | USART_Parity_Odd | (USART_StopBits_0_5 >> 8),
-    SERIAL_9O1_5 = USART_WordLength_9b | USART_Parity_Odd | (USART_StopBits_1_5 >> 8),
+    SERIAL_9N1,
+    SERIAL_9N2,
+    SERIAL_9E1,
+    SERIAL_9E2,
+    SERIAL_9O1,
+    SERIAL_9O2,
+    SERIAL_9N0_5,
+    SERIAL_9N1_5,
+    SERIAL_9E0_5,
+    SERIAL_9E1_5,
+    SERIAL_9O0_5,
+    SERIAL_9O1_5,
+    
+    SERIAL_CFG_MAX
 } SERIAL_Config;
 
 class HardwareSerial : public Stream
 {
     typedef uint16_t rx_buffer_index_t;
-    typedef void(*USART_CallbackFunction_t)(void);
+    typedef void(*Serial_CallbackFunction_t)(uint8_t);
 public:
     HardwareSerial(USART_TypeDef *USARTx);
+    USART_TypeDef *USARTx;
     void IRQHandler();
-    void begin(uint32_t BaudRate);
-    void begin(uint32_t BaudRate, SERIAL_Config Config);
-    void begin(uint32_t BaudRate, SERIAL_Config Config, uint8_t PreemptionPriority, uint8_t SubPriority);
+    void begin(
+        uint32_t BaudRate, 
+        SERIAL_Config Config = SERIAL_8N1, 
+        uint8_t PreemptionPriority = SERIAL_PreemptionPriority_Default, 
+        uint8_t SubPriority = SERIAL_SubPriority_Default
+    );
     void end(void);
-    void attachInterrupt(USART_CallbackFunction_t Function);
+    void attachInterrupt(Serial_CallbackFunction_t function);
     virtual int available(void);
     virtual int peek(void);
     virtual int read(void);
@@ -106,11 +107,10 @@ public:
     }
 
 private:
-    USART_TypeDef *USARTx;
-    USART_CallbackFunction_t USART_Function;
-    volatile uint16_t _rx_buffer_head;
-    volatile uint16_t _rx_buffer_tail;
-    uint8_t _rx_buffer[SERIAL_RX_BUFFER_SIZE];
+    Serial_CallbackFunction_t serialCallback;
+    volatile rx_buffer_index_t rx_buffer_head;
+    volatile rx_buffer_index_t rx_buffer_tail;
+    uint8_t rx_buffer[SERIAL_RX_BUFFER_SIZE];
 };
 
 extern HardwareSerial Serial;

@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 #include "lv_settings.h"
+#include "stdio.h"
 //#include "lv_drivers/indev/keyboard.h"
 //#include "lv_drivers/indev/mousewheel.h"
 
@@ -250,13 +251,13 @@ static void motor_menu_event_cb(lv_obj_t * btn, lv_event_t e)
     }
     else if(e == LV_EVENT_VALUE_CHANGED) {
         if(strcmp("Max RPM", act_item->name) == 0) {
-            sprintf((char*)act_item->value, "%dRPM", act_item->state);
+            sprintf(act_item->value, "%dRPM", act_item->state);
             lv_settings_refr(act_item);
         }
         if(strcmp("Max Current", act_item->name) == 0) {
             if(act_item->state > 10) act_item->state = 10;
             if(act_item->state < 1) act_item->state = 1;
-            sprintf((char*)act_item->value, "%dA", act_item->state);
+            sprintf(act_item->value, "%dA", act_item->state);
             lv_settings_refr(act_item);
         }
         else if(strcmp("Motor type", act_item->name) == 0) {
@@ -302,7 +303,7 @@ static void misc_menu_event_cb(lv_obj_t * btn, lv_event_t e)
     }
     else if(e == LV_EVENT_VALUE_CHANGED) {
         if(strcmp("Brightness", act_item->name) == 0) {
-            sprintf((char*)act_item->value, "%d%%", (act_item->state * 100) / 256);
+            sprintf(act_item->value, "%d%%", (act_item->state * 100) / 256);
             lv_settings_refr(act_item);
         }
     }
@@ -328,7 +329,7 @@ static void time_menu_event_cb(lv_obj_t * obj, lv_event_t e)
             if(act_item->state > 23) act_item->state = 0;
             if(act_item->state < 0) act_item->state = 23;
 
-            sprintf((char*)act_item->value, "%d", act_item->state);
+            sprintf(act_item->value, "%d", act_item->state);
             lv_settings_refr(act_item);
 
             sprintf(misc_menu_items[0].value, "%02d:%02d", time_menu_items[0].state, time_menu_items[1].state);
@@ -338,7 +339,7 @@ static void time_menu_event_cb(lv_obj_t * obj, lv_event_t e)
             if(act_item->state > 59) act_item->state = 0;
             if(act_item->state < 0) act_item->state = 59;
 
-            sprintf((char*)act_item->value, "%d", act_item->state);
+            sprintf(act_item->value, "%d", act_item->state);
             lv_settings_refr(act_item);
 
             sprintf(misc_menu_items[0].value, "%02d:%02d", time_menu_items[0].state, time_menu_items[1].state);

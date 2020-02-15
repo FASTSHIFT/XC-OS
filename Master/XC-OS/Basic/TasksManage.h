@@ -12,7 +12,7 @@
 /*Ext Function*/
 #define DEBUG_PRINTF(format, ...) Serial.printf(format, ##__VA_ARGS__)
 
-#define KByteToWord(kb) (kb * 1024 / 4)
+#define KByteToWord(kb) ((int)(kb * 1024 / 4))
 #define uxTaskGetFreeStackByte(TaskHandle_x) (uxTaskGetStackHighWaterMark(TaskHandle_x)*4)
 
 

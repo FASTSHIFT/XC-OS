@@ -171,7 +171,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_RadioCfg(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
     *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, Loop, Exit, Event);

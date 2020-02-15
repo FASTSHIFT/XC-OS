@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 #include "lv_settings.h"
+#include "stdio.h"
 //#include "lv_drivers/indev/keyboard.h"
 //#include "lv_drivers/indev/mousewheel.h"
 

@@ -1,32 +1,35 @@
 #include "DisplayPrivate.h"
 
-extern lv_obj_t * barStatus;
-
 typedef struct{
     lv_obj_t * cont;
     lv_style_t style;
 }AppWindow_TypeDef;
 
-AppWindow_TypeDef appWindow_Grp[PAGE_MAX];
+static AppWindow_TypeDef appWindow_Grp[PAGE_MAX];
 
-lv_obj_t * Page_GetAppWindow(uint8_t pageID)
+lv_obj_t * AppWindow_GetCont(uint8_t pageID)
 {
-    lv_obj_t * win = NULL;
-    if(pageID < PAGE_MAX)
-    {
-        win = appWindow_Grp[pageID].cont;
-    }
-    return win;
+    return (pageID < PAGE_MAX) ? appWindow_Grp[pageID].cont : NULL;
+}
+
+lv_coord_t AppWindow_GetHeight()
+{
+    return (lv_obj_get_height(lv_scr_act()) - BarStatus_GetHeight() - BarNavigation_GetHeight());
+}
+
+lv_coord_t AppWindow_GetWidth()
+{
+    return (lv_obj_get_width(lv_scr_act()));
 }
 
 void Creat_AppWindow()
 {
-    for(uint8_t i = 0; i < PAGE_MAX; i++)
+    for(int i = 0; i < PAGE_MAX; i++)
     {
         appWindow_Grp[i].cont = lv_cont_create(lv_scr_act(), NULL);
 
-        lv_obj_set_size(appWindow_Grp[i].cont, APP_WIN_WIDTH, APP_WIN_HEIGHT);
-        lv_obj_align(appWindow_Grp[i].cont, barStatus, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        lv_obj_set_size(appWindow_Grp[i].cont, AppWindow_GetWidth(), AppWindow_GetHeight());
+        lv_obj_align(appWindow_Grp[i].cont, BarStatus_GetObj(), LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         lv_cont_set_fit(appWindow_Grp[i].cont, LV_FIT_NONE);
         
         appWindow_Grp[i].style = lv_style_plain;

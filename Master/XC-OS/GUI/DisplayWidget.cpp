@@ -1,8 +1,6 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 
-extern lv_obj_t * barNavigation;
-
 /***************************Preloader****************************/
 static lv_obj_t * preloader = NULL;
 
@@ -39,7 +37,7 @@ static void Creat_Keyboard(lv_obj_t** kb, lv_obj_t * parent, lv_obj_t * ta, lv_e
         APP_WIN_WIDTH,
         APP_WIN_HEIGHT / 2
     );
-    lv_obj_align(*kb, barNavigation, LV_ALIGN_OUT_TOP_MID, 0, 0);
+    lv_obj_align(*kb, BarNavigation_GetObj(), LV_ALIGN_OUT_TOP_MID, 0, 0);
     
     if(ta)
     {

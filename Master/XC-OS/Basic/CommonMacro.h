@@ -7,11 +7,12 @@
 /*    Designed by _VIFEXTech     */
 /*********************************/
 
-//Finish  2019.3.21 v1.0 添加注释
-//Upgrade 2019.3.21 v1.1 添加__ValueCloseTo
-//Upgrade 2019.5.16 v1.2 添加__ExecuteFuncWithTimeout
-//Upgrade 2019.5.16 v1.3 添加__ValueStep
-//Upgrade 2019.9.25 v1.4 添加__ExecuteOnce
+//Finish  2019-03-21 v1.0 添加注释
+//Upgrade 2019-03-21 v1.1 添加__ValueCloseTo
+//Upgrade 2019-05-16 v1.2 添加__ExecuteFuncWithTimeout
+//Upgrade 2019-05-16 v1.3 添加__ValueStep
+//Upgrade 2019-09-25 v1.4 添加__ExecuteOnce
+//Upgrade 2020-01-27 v1.5 添加__SemaphoreTake
 
 /**
   * @brief  变量监视器，当变量改变时触发一个事件
@@ -21,10 +22,10 @@
   */
 #define __ValueMonitor(now,func) \
 do{\
-    static int last=now;\
-    if(last!=now)func,last=now;\
+    static int last=(now);\
+    if(last!=(now))func,last=(now);\
 }while(0)
-#define __EventMonitor(now,func) __ValueMonitor(now,func)//兼容旧代码
+#define __EventMonitor(now,func) __ValueMonitor((now),func)//兼容旧代码
 
 /**
   * @brief  让一个变量以设计的步近接近指定值
@@ -35,8 +36,8 @@ do{\
   */
 #define __ValueCloseTo(src,dest,step) \
 do{\
-    if(src<dest)src+=step;\
-    else if(src>dest)src-=step;\
+    if((src)<(dest))(src)+=(step);\
+    else if((src)>(dest))(src)-=(step);\
 }while(0)
 
 /**
@@ -46,7 +47,7 @@ do{\
   * @param  max:最大值
   * @retval 无
   */
-#define __ValueStep(src,step,max) (src=(step>=0)?((src+step)%max):((src+max+step)%max))
+#define __ValueStep(src,step,max) ((src)=(((step)>=0)?(((src)+(step))%(max)):(((src)+(max)+(step))%(max))))
 
 /**
   * @brief  非阻塞式间隔指定时间执行一个函数
@@ -57,7 +58,7 @@ do{\
 #define __IntervalExecute(func,time) \
 do{\
     static unsigned long lasttime=0;\
-    if(millis()-lasttime>=time)func,lasttime=millis();\
+    if(millis()-lasttime>=(time))func,lasttime=millis();\
 }while(0)
 
 /**
@@ -66,7 +67,7 @@ do{\
   * @param  n:重复调用次数
   * @retval 无
   */
-#define __LoopExecute(func,n) for(unsigned long i=0;i<n;i++)func
+#define __LoopExecute(func,n) for(unsigned long i=0;i<(n);i++)func
 
 /**
   * @brief  将一个值限制在一个范围内
@@ -75,7 +76,7 @@ do{\
   * @param  max:最大值(任意类型)
   * @retval 无
   */
-#define __LimitValue(x,min,max) (x=constrain(x,min,max))
+#define __LimitValue(x,min,max) ((x)=constrain((x),(min),(max)))
 
 /**
   * @brief  将一个值的变化区间线性映射到另一个区间
@@ -87,7 +88,7 @@ do{\
   * @retval 映射值输出
   */
 #define __Map(x,in_min,in_max,out_min,out_max) \
-    ((x-in_min)*(out_max-out_min)/(in_max-in_min)+out_min)
+    (((x)-(in_min))*((out_max)-(out_min))/((in_max)-(in_min))+(out_min))
 
 /**
   * @brief  获取一个数组的元素个数
@@ -102,7 +103,7 @@ do{\
   * @param  data:被解释的数据(任意类型)
   * @retval 解释输出
   */
-#define __TypeExplain(type,data) (*(type*)&data)
+#define __TypeExplain(type,data) (*((type*)(&(data))))
 
 /**
   * @brief  执行一个函数在不超时的情况下直到函数的返回值为指定值
@@ -115,9 +116,9 @@ do{\
 #define __ExecuteFuncWithTimeout(func,n,timeout,flag)\
 do{\
     volatile unsigned long start=millis();\
-    flag=false;\
-    while(millis()-start<timeout){\
-        if(func==n){flag=true;break;}\
+    (flag)=false;\
+    while(millis()-start<(timeout)){\
+        if(func==(n)){(flag)=true;break;}\
     }\
 }while(0)
 
@@ -130,6 +131,17 @@ do{\
 do{\
     static bool isInit = false;\
     if(!isInit){func,isInit=true;}\
+}while(0)
+
+/**
+  * @brief  获取信号量，当sem为true时执行一次func
+  * @param  sem:信号量(bool类型)
+  * @param  func:被调用函数(也可以是赋值等其他语句)
+  * @retval 无
+  */
+#define __SemaphoreTake(sem,func)\
+do{\
+    if((sem)){func,(sem)=false;}\
 }while(0)
 
 #endif

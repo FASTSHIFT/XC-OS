@@ -24,7 +24,7 @@ extern SCREEN_CLASS screen;
 void lv_disp_init();
 void lv_fsys_init();
 
-/*lv扩展函数*/
+/*lvgl扩展函数*/
 bool lv_obj_del_safe(lv_obj_t** obj);
 void lv_label_set_text_add(lv_obj_t * label, const char * text);
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj);
@@ -47,7 +47,7 @@ void lv_obj_add_anim(
 typedef enum
 {
     /*保留*/
-    PAGE_None,
+    PAGE_NONE,
     /*用户页面*/
     PAGE_About,
     PAGE_BattInfo,
@@ -61,22 +61,20 @@ typedef enum
     PAGE_SetDisplay,
     PAGE_SubAPPs,
     PAGE_TextEditor,
+    PAGE_USB,
     PAGE_WavPlayer,
     /*保留*/
     PAGE_MAX
 } Page_Type;
 
 extern PageManager page;
-#define PAGE_REG(name)\
-do{\
-    extern void PageRegister_##name(uint8_t pageID);\
-    PageRegister_##name(PAGE_##name);\
-}while(0)
 
 /*Bar*/
 void Init_Bar();
 lv_coord_t BarStatus_GetHeight();
+lv_obj_t * BarStatus_GetObj();
 lv_coord_t BarNavigation_GetHeight();
+lv_obj_t * BarNavigation_GetObj();
 
 extern lv_obj_t * btnMenu;
 extern lv_obj_t * btnHome;
@@ -94,10 +92,12 @@ void WinOSState_SetClose();
 
 /*AppWindow*/
 void Creat_AppWindow();
-lv_obj_t * Page_GetAppWindow(uint8_t pageID);
+lv_obj_t * AppWindow_GetCont(uint8_t pageID);
+lv_coord_t AppWindow_GetHeight();
+lv_coord_t AppWindow_GetWidth();
 
-#define APP_WIN_HEIGHT (lv_obj_get_height(lv_scr_act()) - BarStatus_GetHeight() - BarNavigation_GetHeight())
-#define APP_WIN_WIDTH  (lv_obj_get_width(lv_scr_act()))
+#define APP_WIN_HEIGHT AppWindow_GetHeight()
+#define APP_WIN_WIDTH  AppWindow_GetWidth()
 
 /*Widget*/
 void Preloader_Activate(

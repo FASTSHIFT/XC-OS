@@ -125,6 +125,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_About(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

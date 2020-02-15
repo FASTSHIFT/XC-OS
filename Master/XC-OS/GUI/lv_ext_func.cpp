@@ -68,7 +68,10 @@ void lv_obj_add_anim(
 {
     lv_anim_t a_tmp;
     if(a == NULL)
+    {
+        lv_anim_init(&a_tmp);
         a = &a_tmp;
+    }
 
     a->var = obj;
     a->start = start;

@@ -15,7 +15,7 @@ extern "C" {
  *********************/
 
 #ifdef LV_LVGL_H_INCLUDE_SIMPLE
-#include "lvgl.h"
+#include "lvgl/lvgl.h"
 #else
 #include "lvgl.h"
 #endif

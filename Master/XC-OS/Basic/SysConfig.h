@@ -2,7 +2,7 @@
 #define __SYSCONFIG_H
 
 /***************** ª˘±æ…Ë÷√ *****************/
-#define XC_VERSION_HW               "v1.9"
+#define XC_VERSION_HW               "v2.3"
 #define XC_VERSION_SW               __DATE__
 #define XC_OS_NAME                  "XC-OS"
 #define XC_CPU_NAME                 "STM32F405RGT6"
@@ -11,7 +11,7 @@
 #define XC_ROM_SIZE                 (XC_KB(1024))
 #define XC_RAM_SIZE                 (XC_KB(192))
 
-#define XC_USE_LUA                  1
+#define XC_USE_LUA                  0
 #define XC_TIM_WAVPLAYER            TIM8
 #define XC_TIM_RUNTIME              TIM7
 

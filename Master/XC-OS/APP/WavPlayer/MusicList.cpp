@@ -119,7 +119,7 @@ static void Creat_MusicList(const char* path)
 void MusicList_Init(const char* path)
 {
     musicListPath = String(path);
-    appWindow = Page_GetAppWindow(PAGE_WavPlayer);
+    appWindow = AppWindow_GetCont(PAGE_WavPlayer);
     Creat_MusicList(path);
 }
 

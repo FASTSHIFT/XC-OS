@@ -1,7 +1,7 @@
 #include "FileGroup.h"
 #include "DisplayPrivate.h"
 #include "LuaScript.h"
-#include "Module.h"
+#include "BSP.h"
 
 /*电池信息更新任务*/
 static void Task_BattUpdate(lv_task_t * task);

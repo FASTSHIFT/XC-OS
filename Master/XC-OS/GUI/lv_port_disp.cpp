@@ -53,7 +53,6 @@ static void lv_indev_init()
     indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
     indev_drv.read_cb = touchpad_read;      /*Set your driver function*/
     lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
-
 }
 
 void lv_disp_init()

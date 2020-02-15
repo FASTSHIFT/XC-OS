@@ -265,8 +265,9 @@ int Print::printf (const char *__restrict __format, ...)
     va_list args;
     va_start(args, __format);
     int ret_status = vsnprintf(printf_buff, sizeof(printf_buff), __format, args);
-    //int ret_status = vsprintf(printf_buff,__format, args);
     va_end(args);
+    
+    printf_buff[PRINTF_BUFFER_LENGTH - 1] = '\0';
     print(printf_buff);
 
     return ret_status;

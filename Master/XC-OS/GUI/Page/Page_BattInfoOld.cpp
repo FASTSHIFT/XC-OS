@@ -1,7 +1,7 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "LuaInterface/LuaScript.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 
 static lv_obj_t * appWindow;
 
@@ -166,7 +166,7 @@ static void Event(int event, void* param)
   */
 void PageRegister_BattInfo(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     lv_style_t * style = (lv_style_t *)lv_cont_get_style(appWindow, LV_CONT_STYLE_MAIN);
     *style = lv_style_pretty;
     page.PageRegister(pageID, Setup, NULL, Exit, Event);

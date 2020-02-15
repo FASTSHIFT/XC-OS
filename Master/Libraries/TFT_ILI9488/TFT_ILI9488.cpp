@@ -31,6 +31,33 @@
 #define TFT_RD_CLR      digitalWrite(RD,LOW)
 #endif
 
+#define TFT_WRITE_DATA(data) \
+do{\
+    *TFT_Port = (data);\
+    TFT_RW_CLR;\
+    TFT_RW_SET;\
+}while(0)
+
+#define TFT_SET_ADDR_WINDOW(x0,y0,x1,y1) \
+do{\
+    TFT_RS_CLR;\
+    TFT_WRITE_DATA(TFT_CMD_SET_X);\
+    TFT_RS_SET;\
+    TFT_WRITE_DATA((x0) >> 8);\
+    TFT_WRITE_DATA(0x00FF & (x0));\
+    TFT_WRITE_DATA((x1) >> 8);\
+    TFT_WRITE_DATA(0x00FF & (x1));\
+    TFT_RS_CLR;\
+    TFT_WRITE_DATA(TFT_CMD_SET_Y);\
+    TFT_RS_SET;\
+    TFT_WRITE_DATA((y0) >> 8);\
+    TFT_WRITE_DATA(0x00FF & (y0));\
+    TFT_WRITE_DATA((y1) >> 8);\
+    TFT_WRITE_DATA(0x00FF & (y1));\
+    TFT_RS_CLR;\
+    TFT_WRITE_DATA(TFT_CMD_WRITE_RAM);\
+}while(0)
+
 TFT_ILI9488::TFT_ILI9488(uint8_t port_start, uint8_t rst, uint8_t cs, uint8_t rs, uint8_t rw, uint8_t rd)
     : Adafruit_GFX(ILI9488_TFTWIDTH, ILI9488_TFTHEIGHT)
 {
@@ -357,9 +384,9 @@ void TFT_ILI9488::drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t 
     {
         actual_cursor_y1 = _height - 1;
     }
-
-    setAddrWindow(actual_cursor_x, actual_cursor_y, actual_cursor_x1, actual_cursor_y1);
-
+    TFT_CS_CLR;
+    TFT_SET_ADDR_WINDOW(actual_cursor_x, actual_cursor_y, actual_cursor_x1, actual_cursor_y1);
+    TFT_RS_SET;
     for(int16_t Y = 0; Y < h; Y++)
     {
         for(int16_t X = 0; X < w; X++)
@@ -369,35 +396,37 @@ void TFT_ILI9488::drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t 
             int16_t actualY = y + Y;
             if(actualX >= 0 && actualX < _width && actualY >= 0 && actualY < _height)
             {
-                writeData(bitmap[index]);
+                TFT_WRITE_DATA(bitmap[index]);
             }
         }
     }
+    TFT_CS_SET;
 }
 
 void TFT_ILI9488::drawFastRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap, int16_t w, int16_t h)
 {
-    setAddrWindow(x, y, x + w - 1, y + h - 1);
-    uint32_t size = w * h;
     TFT_CS_CLR;
+    
+    TFT_SET_ADDR_WINDOW(x, y, (x + w - 1), (y + h - 1));
+    uint32_t size = w * h;
+    
     TFT_RS_SET;
     for(uint32_t i = 0; i < size; i++)
     {
-        *TFT_Port = bitmap[i];
-        TFT_RW_CLR;
-        TFT_RW_SET;
+        TFT_WRITE_DATA(bitmap[i]);
     }
     TFT_CS_SET;
 }
 
 void TFT_ILI9488::drawFastBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w, int16_t h)
 {
-    setAddrWindow(x, y, x + w - 1, y + h - 1);
+    TFT_CS_CLR;
+    
+    TFT_SET_ADDR_WINDOW(x, y, (x + w - 1), (y + h - 1));
 
     int16_t byteWidth = (w + 7) / 8;
     uint8_t b = 0;
 
-    TFT_CS_CLR;
     TFT_RS_SET;
     for(int16_t j = 0; j < h; j++)
     {
@@ -405,9 +434,7 @@ void TFT_ILI9488::drawFastBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t 
         {
             if(i & 7) b <<= 1;
             else      b   = bitmap[j * byteWidth + i / 8];
-            *TFT_Port = (b & 0x80) ? White : Black;
-            TFT_RW_CLR;
-            TFT_RW_SET;
+            TFT_WRITE_DATA((b & 0x80) ? White : Black);
         }
     }
     TFT_CS_SET;
@@ -415,15 +442,15 @@ void TFT_ILI9488::drawFastBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t 
 
 void TFT_ILI9488::fillScreen(uint16_t color)
 {
-    setAddrWindow(0, 0, _width - 1, _height - 1);
-    uint32_t size = _width * _height;
     TFT_CS_CLR;
+    
+    TFT_SET_ADDR_WINDOW(0, 0, (_width - 1), (_height - 1));
+    uint32_t size = _width * _height;
+    
     TFT_RS_SET;
     for(uint32_t i = 0; i < size; i++)
     {
-        *TFT_Port = color;
-        TFT_RW_CLR;
-        TFT_RW_SET;
+        TFT_WRITE_DATA(color);
     }
     TFT_CS_SET;
 }

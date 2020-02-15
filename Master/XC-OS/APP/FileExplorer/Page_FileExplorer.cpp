@@ -2,7 +2,7 @@
 #include "DisplayPrivate.h"
 #include "APP/TextEditor/TextEditor_Private.h"
 #include "LuaInterface/LuaScript.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 #include "Basic/TasksManage.h"
 #include "GUI/Page/APP_Type.h"
 
@@ -13,10 +13,11 @@ static lv_obj_t * appWindow;
 /*文件根路径*/
 static SdFile root;
 
-/*控件们*/
+/*控件*/
 static lv_obj_t * tabviewFm;
 static lv_obj_t * tabDrive;
 static lv_obj_t * tabFileList;
+static lv_obj_t * labelPath;
 static lv_obj_t * listFiles;
 
 /**
@@ -215,7 +216,7 @@ typedef struct{
     OpenFileFunc_t openFileFunc;
 }FileTypeList_TypeDef;
 /*扩展名图标映射表*/
-static FileTypeList_TypeDef FileTypeList[] = {
+static const FileTypeList_TypeDef FileTypeList[] = {
     {"",     LV_SYMBOL_FILE,   FT_UNKONWN},
     {".bv",  LV_SYMBOL_VIDEO,  FT_VIDEO, Bv_OpenFile},
     {".wav", LV_SYMBOL_AUDIO,  FT_AUDIO, Wav_OpenFile},
@@ -225,6 +226,9 @@ static FileTypeList_TypeDef FileTypeList[] = {
     {".log", LV_SYMBOL_EDIT,   FT_TEXT},
     {".xtrc",LV_SYMBOL_EDIT,   FT_TEXT},
     {".xlrc",LV_SYMBOL_EDIT,   FT_TEXT},
+    {".c",   LV_SYMBOL_EDIT,   FT_TEXT},
+    {".h",   LV_SYMBOL_EDIT,   FT_TEXT},
+    {".cpp", LV_SYMBOL_EDIT,   FT_TEXT},
     {".png", LV_SYMBOL_IMAGE,  FT_IMG},
     {".jpg", LV_SYMBOL_IMAGE,  FT_IMG},
     {".gif", LV_SYMBOL_IMAGE,  FT_IMG},
@@ -335,6 +339,35 @@ static void FileEvent_Handler(lv_obj_t * obj, lv_event_t event)
 }
 
 /**
+  * @brief  创建路径文本显示
+  * @param  path:路径字符串
+  * @retval None
+  */
+static void Creat_LabelPath(const char* path)
+{
+    /*过滤根目录*/
+    String text = String(path + 1);
+    
+    /*替换'/'*/
+    text.replace("/"," "LV_SYMBOL_RIGHT" ");
+    
+    /*添加根目录*/
+    text = "/" + text;
+    
+    labelPath = lv_label_create(tabFileList, NULL);
+    lv_label_set_text(labelPath, text.c_str());
+    if(lv_obj_get_width(labelPath) >= APP_WIN_WIDTH - 10)
+    {
+        lv_label_set_align(labelPath, LV_LABEL_ALIGN_RIGHT);
+    }
+    lv_label_set_long_mode(labelPath, LV_LABEL_LONG_CROP);
+    lv_label_set_anim_speed(labelPath, 20);
+//    lv_label_set_body_draw(labelPath, true);
+    lv_obj_set_width(labelPath, APP_WIN_WIDTH - 10);
+    lv_obj_align(labelPath, NULL, LV_ALIGN_IN_TOP_MID, 0, 5);
+}
+
+/**
   * @brief  创建文件列表
   * @param  *tab: tab对象
   * @param  **list:list控件二级地址
@@ -347,10 +380,13 @@ static void Creat_TabFileList(lv_obj_t * tab, lv_obj_t** list, const char *path)
     if (!root.open(path))
         return;
     
+    Creat_LabelPath(path);
+    
     /*Create a list*/
     *list = lv_list_create(tab, NULL);
-    lv_obj_set_size(*list, lv_obj_get_width_fit(tab) - 10, lv_obj_get_height_fit(tab) - 10);
-    lv_obj_align(*list, NULL, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_width(*list, lv_obj_get_width_fit(tab) - 10);
+    lv_obj_set_height(*list, lv_obj_get_height_fit(tab) - 15 - lv_obj_get_height(labelPath));
+    lv_obj_align(*list, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, -5);
     lv_obj_set_auto_realign(*list, true);
     lv_list_set_edge_flash(*list, true);
     
@@ -391,6 +427,7 @@ static void Creat_TabFileList(lv_obj_t * tab, lv_obj_t** list, const char *path)
 static void PathChange(lv_obj_t * tab, const char *newPath)
 {
     lv_obj_del_safe(&listFiles);
+    lv_obj_del_safe(&labelPath);
     root.close();
     Creat_TabFileList(tab, &listFiles, newPath);
 }
@@ -492,6 +529,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_FileExplorer(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     page.PageRegister(pageID, Setup, Loop, Exit, Event);
 }

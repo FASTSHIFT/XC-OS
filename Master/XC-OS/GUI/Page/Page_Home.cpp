@@ -2,7 +2,7 @@
 #include "DisplayPrivate.h"
 #include "Basic/TasksManage.h"
 #include "APP_Type.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 
 static lv_obj_t * appWindow;
 
@@ -54,7 +54,7 @@ static APP_TypeDef APP_Grp[] =
     {&ImgVideo,    "Video",    TYPE_PageJump, PAGE_BvPlayer},
     {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
     {&ImgMusic,    "Music",    TYPE_PageJump, PAGE_WavPlayer},
-    {&ImgUSB,      "USB"},
+    {&ImgUSB,      "USB",      TYPE_PageJump, PAGE_USB},
 };
 
 /**
@@ -349,6 +349,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Home(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }

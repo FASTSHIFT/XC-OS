@@ -1,10 +1,10 @@
 #include "Basic/FileGroup.h"
 #include "Basic/TasksManage.h"
 #include "DisplayPrivate.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 
 /*×´Ì¬À¸*/
-lv_obj_t * barStatus;
+static lv_obj_t * barStatus;
 
 static lv_obj_t * labelSignal;
 static lv_obj_t * labelTime;
@@ -12,7 +12,7 @@ static lv_obj_t * labelCPUusage;
 static lv_obj_t * labelBattUsage;
 
 /*µ¼º½À¸*/
-lv_obj_t * barNavigation;
+static lv_obj_t * barNavigation;
 
 lv_obj_t * btnMenu;
 lv_obj_t * btnHome;
@@ -23,9 +23,19 @@ lv_coord_t BarStatus_GetHeight()
     return lv_obj_get_height(barStatus);
 }
 
+lv_obj_t * BarStatus_GetObj()
+{
+    return barStatus;
+}
+
 lv_coord_t BarNavigation_GetHeight()
 {
     return lv_obj_get_height(barNavigation);
+}
+
+lv_obj_t * BarNavigation_GetObj()
+{
+    return barNavigation;
 }
 
 static void Task_UpdateStatusBar(lv_task_t * task)

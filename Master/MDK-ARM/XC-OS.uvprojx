@@ -337,7 +337,7 @@
               <MiscControls>--gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,PLL_M=8,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src\FatLib;..\Libraries\SdFat\src\SdCard;..\Libraries\SdFat\src\SpiDriver;..\Libraries\SdFat\src;..\XC-OS;..\XC-OS\GUI;..\Libraries\Adafruit_GFX_Library;..\Libraries\cm_backtrace;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries;..\Libraries\lvgl</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src;..\XC-OS;..\XC-OS\GUI;..\Libraries\Adafruit_GFX_Library;..\Libraries\cm_backtrace;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries;..\Libraries\lvgl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -407,9 +407,49 @@
               <FilePath>..\XC-OS\Basic\system.c</FilePath>
             </File>
             <File>
-              <FileName>sys_io.cpp</FileName>
+              <FileName>rt_sys.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\Basic\sys_io.cpp</FilePath>
+              <FilePath>..\XC-OS\Basic\rt_sys.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BSP</GroupName>
+          <Files>
+            <File>
+              <FileName>BSP.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\BSP\BSP.h</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_Audio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_Audio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_Brightness.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_Brightness.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_IMU.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_IMU.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_Motor.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_Motor.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_Power.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_Power.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>BSP_TextBuf.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\BSP\BSP_TextBuf.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -774,29 +814,24 @@
           <GroupName>APP/Game</GroupName>
           <Files>
             <File>
-              <FileName>doom-nano.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\APP\Game\doom-nano\doom-nano.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>entities.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\APP\Game\doom-nano\entities.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>input.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\APP\Game\doom-nano\input.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>types.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\APP\Game\doom-nano\types.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Page_Game.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\APP\Game\Page_Game.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GameManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Game\GameManager.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GamePrivate.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\Game\GamePrivate.h</FilePath>
+            </File>
+            <File>
+              <FileName>GameDef.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\Game\GameDef.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -891,6 +926,215 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>APP/USB</GroupName>
+          <Files>
+            <File>
+              <FileName>USB_Private.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\USB\USB_Private.h</FilePath>
+            </File>
+            <File>
+              <FileName>Page_USB.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\USB\Page_USB.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Shell.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\APP\USB\Shell\Shell.c</FilePath>
+            </File>
+            <File>
+              <FileName>Shell.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\USB\Shell\Shell.h</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_Shell.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\USB\Interface_Shell.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_FileSystem.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\USB\Interface_FileSystem.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Interface_HW.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\USB\Interface_HW.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>XC_COM.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\USB\XC_COM\XC_COM.h</FilePath>
+            </File>
+            <File>
+              <FileName>XC_COM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\USB\XC_COM\XC_COM.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>CRC32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\APP\USB\XC_COM\CRC32.c</FilePath>
+            </File>
+            <File>
+              <FileName>CRC32.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\USB\XC_COM\CRC32.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Game/MicroCity</GroupName>
+          <Files>
+            <File>
+              <FileName>MicroCity.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\MicroCity.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Building.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Building.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Connectivity.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Connectivity.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Draw.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Draw.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Font.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Font.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Game.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Game.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Interface.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Interface.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Simulation.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Simulation.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Strings.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Strings.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Terrain.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\MicroCity\Terrain.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Game/doom-nano</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>0</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>doom-nano.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\doom-nano.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>entities.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\entities.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>input.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\input.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>types.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\Game\doom-nano\types.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>Communication</GroupName>
           <Files>
             <File>
@@ -947,46 +1191,6 @@
               <FileName>LuaTime.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\LuaInterface\LuaTime.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Module</GroupName>
-          <Files>
-            <File>
-              <FileName>Module.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\XC-OS\Module\Module.h</FilePath>
-            </File>
-            <File>
-              <FileName>Audio.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Audio.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Brightness.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Brightness.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>IMU.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\IMU.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Motor.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Motor.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Power.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\Power.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>TextBuf.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\Module\TextBuf.cpp</FilePath>
             </File>
           </Files>
         </Group>

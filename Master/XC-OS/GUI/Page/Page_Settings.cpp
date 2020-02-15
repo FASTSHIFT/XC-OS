@@ -1,6 +1,6 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
-#include "Module/Module.h"
+#include "BSP/BSP.h"
 #include "APP_Type.h"
 
 static lv_obj_t * appWindow;
@@ -171,6 +171,6 @@ static void Event(int event, void* param)
   */
 void PageRegister_Settings(uint8_t pageID)
 {
-    appWindow = Page_GetAppWindow(pageID);
+    appWindow = AppWindow_GetCont(pageID);
     page.PageRegister(pageID, Setup, NULL, Exit, Event);
 }
