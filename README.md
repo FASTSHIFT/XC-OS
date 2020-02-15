@@ -23,9 +23,10 @@
 * 5.文本编辑器
 * 6.音乐播放器(支持同步显示xtrc、xlrc、lrc歌词,支持同步FFT(256点)频谱显示)
 * 7.视频播放器(BmpVideo)
-* 8.毁灭战士nano 3D ([doom-nano](https://github.com/daveruiz/doom-nano))
+* 8.[MicroCity](https://github.com/jhhoward/MicroCity)
 * 9.任务管理器
-* 10.待续...
+* 10.USB功能(Shell+文件透传)
+* 11.待续...
 ## 硬件配置
 * 主控: STM32F405RGT6(RAM:192KB ROM:1024KB 超频216MHz)
 * 屏幕: LCD ILI9488(3.5inch 480x320 16bit总线 70Hz刷新率)
