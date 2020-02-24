@@ -13,22 +13,22 @@
 ## 特点
 * 1.无需外扩**RAM**和**FLASH**
 * 2.支持安装第三方APP以及驱动程序，使用Lua脚本语言编写
-* 3.支持总线式扩展外部设备
-* 4.系统自动识别新设备，安装驱动程序，并生成图形界面
+* ~~3.支持总线式扩展外部设备~~
+* ~~4.系统自动识别新设备，安装驱动程序，并生成图形界面~~
 ## APPs
 * 1.系统设置(主题颜色、电池信息、电源控制、下拉菜单)
 * 2.Lua代码编辑器+调试终端
 * 3.APP启动器
 * 4.文件浏览器
 * 5.文本编辑器
-* 6.音乐播放器(支持同步显示xtrc、xlrc、lrc歌词,支持同步FFT(256点)频谱显示)
-* 7.视频播放器(BmpVideo)
-* 8.[MicroCity](https://github.com/jhhoward/MicroCity)
+* 6.音乐播放器(WAV格式; 支持同步显示xtrc、xlrc、lrc歌词; 同步FFT(256点)频谱显示)
+* 7.视频播放器[BmpVideo](https://github.com/FASTSHIFT/BvPlayer)
+* 8.[Arduboy](https://github.com/Arduboy/Arduboy)/[Arduboy2](https://github.com/MLXXXp/Arduboy2) Game System(支持多开、前后台切换)
 * 9.任务管理器
-* 10.USB功能(Shell+文件透传)
+* 10.[Shell](https://github.com/geekfactory/Shell) + 文件透传协议
 * 11.待续...
 ## 硬件配置
-* 主控: STM32F405RGT6(RAM:192KB ROM:1024KB 超频216MHz)
+* 主控: STM32F405RGT6(RAM:192KB ROM:1024KB FREQ:216MHz(over clock))
 * 屏幕: LCD ILI9488(3.5inch 480x320 16bit总线 70Hz刷新率)
 * 触控: GT911
 * 功放: PAM8403(3W)
