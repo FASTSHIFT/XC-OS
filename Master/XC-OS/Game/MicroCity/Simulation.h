@@ -1,7 +1,4 @@
-#ifndef __SIMULATION_H
-#define __SIMULATION_H
+#pragma once
 
 void Simulate(void);
 bool StartRandomFire(void);
-
-#endif

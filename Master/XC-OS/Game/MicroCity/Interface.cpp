@@ -2,12 +2,14 @@
 #include "Interface.h"
 #include "Draw.h"
 
+using namespace MicroCity;
+
 UIStateStruct UIState;
 
 static uint8_t LastInput = 0;
 static uint8_t InputRepeatCounter = 0;
 
-void UpdateInterface()
+void MicroCity::UpdateInterface()
 {
 	// Scroll screen to center the selected tile
 	int targetX = UIState.selectX * 8 + TILE_SIZE / 2 - DISPLAY_WIDTH / 2;
@@ -28,7 +30,7 @@ void UpdateInterface()
 	UIState.scrollY --;*/
 }
 
-void GetBuildingBrushLocation(BuildingType buildingType, uint8_t* outX, uint8_t* outY)
+void MicroCity::GetBuildingBrushLocation(BuildingType buildingType, uint8_t* outX, uint8_t* outY)
 {
 	const BuildingInfo* buildingInfo = GetBuildingInfo(buildingType);
 	uint8_t width = pgm_read_byte(&buildingInfo->width);
@@ -376,7 +378,7 @@ void HandleInput(uint8_t input)
 	}
 }
 
-void ProcessInput()
+void MicroCity::ProcessInput()
 {
 	uint8_t input = GetInput();
 

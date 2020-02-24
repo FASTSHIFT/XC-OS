@@ -24,8 +24,7 @@ enum {
  */
 const char __stdin_name[] =  "__stdin";
 const char __stdout_name[] =  "__stdout";
-const char __stderr_name[] =  "__stderr";
-
+const char __stderr_name[] =  "__stderr"; 
 /*
  * Open a file. May return -1 if the file failed to open.
  */
@@ -38,15 +37,15 @@ FILEHANDLE _sys_open(const char *name, int openmode)
     else if (name == __stderr_name)
         return STDERR;
     
-    uint8_t flags = O_RDONLY;
-    if(openmode & OPEN_R) flags |= O_RDONLY;
-    if(openmode & OPEN_W) flags |= (O_WRONLY | O_CREAT);
-    if(openmode & OPEN_A) flags |= O_APPEND;
-    if(openmode & OPEN_B) flags |= (O_WRONLY | O_CREAT);;
-    if(openmode & OPEN_PLUS) flags |= O_CREAT;
+    uint8_t oflag = O_RDONLY;
+    if(openmode & OPEN_R) oflag |= O_RDONLY;
+    if(openmode & OPEN_W) oflag |= (O_WRONLY | O_CREAT);
+    if(openmode & OPEN_A) oflag |= O_APPEND;
+    if(openmode & OPEN_B) oflag |= O_RDWR;
+    if(openmode & OPEN_PLUS) oflag |= O_CREAT;
 
     file_t* file_p = new file_t;
-    if(file_p->open(name, flags))
+    if(file_p->open(name, oflag))
     {
         file_p->seekSet(0);
         return (int)file_p;
@@ -86,7 +85,15 @@ int _sys_write(FILEHANDLE fh, const unsigned char *buf,
                unsigned len, int mode)
 {
     if(IS_STD(fh))
+    {
+        if(fh == STDOUT || fh == STDERR)
+        {
+            Serial.write(buf, len);
+        }
+        
         return 0;
+    }
+        
     
     file_t *file_p = ((file_t*)fh); 
     int bw = file_p->write(buf, len);

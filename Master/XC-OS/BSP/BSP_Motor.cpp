@@ -2,7 +2,7 @@
 #include "Basic/TasksManage.h"
 #include "BSP.h"
 
-bool State_MotorVibrate = true;
+static bool State_MotorVibrate = true;
 static uint32_t MotorStop_TimePoint = 0;
 static bool IsMotorRunning = false;
 
@@ -10,7 +10,6 @@ static void Init_Motor()
 {
     PWM_Init(Motor_Pin, 1000, 1000);
     analogWrite(Motor_Pin, 0);
-    Audio_SetEnable(false);
 }
 
 void Task_MotorRunning(TimerHandle_t xTimer)
@@ -22,6 +21,11 @@ void Task_MotorRunning(TimerHandle_t xTimer)
         analogWrite(Motor_Pin, 0);
         IsMotorRunning = false;
     }
+}
+
+void Motor_SetEnable(bool en)
+{
+    State_MotorVibrate = en;
 }
 
 void Motor_Vibrate(float strength, uint32_t time)

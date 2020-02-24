@@ -1,90 +1,73 @@
-#include "Arduino.h"
+#include "Basic/FileGroup.h"
 #include "LuaScript.h"
 
-#define LUA_GET_PIN() int pin = Lua_CheckGPIO(L);if(pin < 0)return 0
-
-static int Lua_CheckGPIO(lua_State *L)
+static int GetPin(const char* str)
 {
-    int GPIOx = luaL_checkinteger(L, 1);
-    int Pinx = luaL_checkinteger(L, 2);
-
-    if(GPIOx < 1 || GPIOx > 11)
+    if(strlen(str) != 2)
+        return -1;
+    
+    if(
+        str[0] < 'A' || str[0] > 'Z' 
+     || str[1] < '0' || str[1] > '9')
     {
-        lua_pushstring(L, "Error GPIOx is'A'->1 ~'K'->11!");
-        lua_error(L);
         return -1;
     }
-    if(Pinx < 0 || Pinx > 15)
+    
+    int GPIOx = str[0] - 'A';
+    int Pinx = str[1] - '0';
+
+    return (GPIOx * 16 + Pinx);
+}
+
+static int GetPinMode(const char* str)
+{
+    typedef struct{
+        const char* str;
+        pinMode_TypeDef mode;
+    }ModeMap_t;
+    
+    const ModeMap_t map[]={
+        {"INPUT", INPUT},
+        {"INPUT_PULLUP", INPUT_PULLUP},
+        {"INPUT_PULLDOWN", INPUT_PULLDOWN},
+        {"INPUT_ANALOG", INPUT_ANALOG},
+        {"INPUT_ANALOG_DMA", INPUT_ANALOG_DMA},
+        {"OUTPUT", OUTPUT},
+        {"OUTPUT_OPEN_DRAIN", OUTPUT_OPEN_DRAIN},
+        {"OUTPUT_AF", OUTPUT_AF},
+        {"PWM", PWM},
+    };
+    
+    for(int i; i < __Sizeof(map);i++)
     {
-        lua_pushstring(L, "Error Pinx is 0~15!");
-        lua_error(L);
-        return -1;
-    }
-
-    return ((GPIOx - 1) * 16 + Pinx);
-}
-
-static int Lua_pinMode(lua_State *L)
-{
-    LUA_GET_PIN();
-
-    String Mode = String(luaL_checkstring(L, 3));
-    Mode.toUpperCase();
-    if(Mode == "OUTPUT")pinMode(pin, OUTPUT);
-    else if(Mode == "INPUT")pinMode(pin, INPUT);
-    else if(Mode == "INPUT_PULLUP")pinMode(pin, INPUT_PULLUP);
-    else if(Mode == "INPUT_PULLDOWN")pinMode(pin, INPUT_PULLDOWN);
-    else if(Mode == "INPUT_ANALOG")pinMode(pin, INPUT_ANALOG);
-    else if(Mode == "PWM")pinMode(pin, PWM);
-    else
-    {
-        lua_pushstring(L, "Error Pin Mode! \r\nMode: OUTPUT, INPUT, INPUT_PULLUP, INPUT_PULLDOWN, INPUT_ANALOG, PWM");
-        lua_error(L);
+        if(strcmp(str, map[i].str)==0)
+        {
+            return map[i].mode;
+        }
     }
     return 0;
 }
 
-static int Lua_togglePin(lua_State *L)
+static void Lua_togglePin(uint8_t pin)
 {
-    LUA_GET_PIN();
-    togglePin(pin);
-    return 0;
-}
-
-static int Lua_digitalWrite(lua_State *L)
-{
-    LUA_GET_PIN();
-    digitalWrite(pin, luaL_checkinteger(L, 3));
-    return 0;
-}
-
-static int Lua_digitalRead(lua_State *L)
-{
-    LUA_GET_PIN();
-    lua_pushnumber(L, digitalRead(pin));
-    return 1;
-}
-
-static int Lua_analogWrite(lua_State *L)
-{
-    LUA_GET_PIN();
-    analogWrite(pin, luaL_checkinteger(L, 3));
-    return 0;
-}
-
-static int Lua_analogRead(lua_State *L)
-{
-    LUA_GET_PIN();
-    lua_pushnumber(L, analogRead(pin));
-    return 1;
+    if(IS_PIN(pin))
+        togglePin(pin);
 }
 
 void LuaReg_GPIO()
 {
-    luaScript.registerFunc("pinMode", Lua_pinMode);
-    luaScript.registerFunc("togglePin", Lua_togglePin);
-    luaScript.registerFunc("digitalWrite", Lua_digitalWrite);
-    luaScript.registerFunc("digitalRead", Lua_digitalRead);
-    luaScript.registerFunc("analogWrite", Lua_analogWrite);
-    luaScript.registerFunc("analogRead", Lua_analogRead);
+    lua_tinker::def(luaScript.L, "P", GetPin);
+    lua_tinker::def(luaScript.L, "Mode", GetPinMode);
+    lua_tinker::def(luaScript.L, "pinMode", pinMode);
+    lua_tinker::def(luaScript.L, "togglePin", Lua_togglePin);
+    lua_tinker::def(luaScript.L, "digitalWrite", digitalWrite);
+    lua_tinker::def(luaScript.L, "digitalRead", digitalRead);
+    lua_tinker::def(luaScript.L, "analogWrite", analogWrite);
+    lua_tinker::def(luaScript.L, "analogRead", analogRead);
+//    luaScript.registerFunc("pinMode", Lua_pinMode);
+//    luaScript.registerFunc("togglePin", Lua_togglePin);
+//    luaScript.registerFunc("digitalWrite", Lua_digitalWrite);
+//    luaScript.registerFunc("digitalRead", Lua_digitalRead);
+//    luaScript.registerFunc("analogWrite", Lua_analogWrite);
+//    luaScript.registerFunc("analogRead", Lua_analogRead);
 }

@@ -8,28 +8,28 @@ static lv_task_t * taskOSState;
 
 #define TASK_NUM_MAX 10
 
-TaskStatus_t TaskStatus_Grp[TASK_NUM_MAX];
-uint32_t TaskLastRunTime[TASK_NUM_MAX];
-UBaseType_t TaskStatusNum = 0;
+static TaskStatus_t TaskStatus_Grp[TASK_NUM_MAX];
+static uint32_t TaskLastRunTime[TASK_NUM_MAX];
+static UBaseType_t TaskStatusNum = 0;
 uint32_t RunTimeCounter = 0;
 
 #define TASK_INFO_COL 5
 #define TASK_INFO_ROW (TaskStatusNum+1)
 
-static void TimerForRuntime_Callback()
+static inline void TimerForRuntime_Callback()
 {
     RunTimeCounter++;
 }
 
 static void AppConfigureTimerForRuntimeStats()
 {
-    Timer_SetInterrupt(XC_TIM_RUNTIME, 10, TimerForRuntime_Callback);
+    Timer_SetInterruptBase(XC_TIM_RUNTIME, 0xFF, 0xFF, TimerForRuntime_Callback, 1, 1);
+    Timer_SetInterruptTimeUpdate(XC_TIM_RUNTIME, 10);
     TIM_Cmd(XC_TIM_RUNTIME, ENABLE);
 }
 
 static void Task_UpdateTaskStatus(lv_task_t * task)
 {
-
     if(!winOSState)
     {
         lv_task_del(task);

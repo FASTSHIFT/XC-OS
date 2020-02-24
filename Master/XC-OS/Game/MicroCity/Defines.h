@@ -1,5 +1,4 @@
-#ifndef __DEFINES_H
-#define __DEFINES_H
+#pragma once
 
 #if _WIN32
 #include <stdint.h>
@@ -12,7 +11,7 @@
 #define strlen_P(x) strlen(x)
 #else
 #include <avr/pgmspace.h>
-//#define pgm_read_ptr pgm_read_word
+#define pgm_read_ptr(pVal) (*(pVal))
 #endif
 
 #define TILE_SIZE 8
@@ -104,5 +103,3 @@
 #define MAX_TIME_BETWEEN_DISASTERS (FRAMES_PER_YEAR * 6)
 
 #define DISASTER_MESSAGE_DISPLAY_TIME 60
-
-#endif

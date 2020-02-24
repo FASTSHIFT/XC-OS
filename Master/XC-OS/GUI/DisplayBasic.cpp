@@ -26,16 +26,18 @@ static void Init_Pages()
     PAGE_REG(Settings);
     PAGE_REG(BattInfo);
     PAGE_REG(LuaScript);
+    PAGE_REG(LuaAppSel);
+    PAGE_REG(LuaAppWin);
     PAGE_REG(SetDisplay);
     PAGE_REG(FileExplorer);
-    PAGE_REG(SubAPPs);
     PAGE_REG(TextEditor);
     PAGE_REG(WavPlayer);
     PAGE_REG(BvPlayer);
     PAGE_REG(Game);
+    PAGE_REG(GameSelect);
     PAGE_REG(About);
     PAGE_REG(RadioCfg);
-    PAGE_REG(USB);
+    PAGE_REG(Shell);
     
     page.PagePush(PAGE_Home);
 }

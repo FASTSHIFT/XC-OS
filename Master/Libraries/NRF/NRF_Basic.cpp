@@ -38,7 +38,9 @@
 #  define NRF_CSN_LOW()   digitalWrite(CSN_Pin,0)
 #endif
 
+/*寄存器结构体转u8变量*/
 #define REG2U8(reg)   (*((uint8_t*)(&(reg))))
+/*读写寄存器到结构体*/
 #define REGREAD(reg)  REG2U8((REG_##reg))=SPI_Read(READ_REG+reg)
 #define REGWRITE(reg) SPI_RW_Reg(WRITE_REG+reg,REG2U8(REG_##reg))
     
@@ -97,10 +99,10 @@ NRF_Basic::NRF_Basic(uint8_t ce, uint8_t csn)
     CSN_Pin = csn;
 #ifdef USE_FAST_IO
     /*取GPIO寄存器地址，用于高速控制IO*/
-    ceport  = portOutputRegister(digitalPinToPort(CE_Pin));
-    cepinmask   = digitalPinToBitMask(CE_Pin);
+    ceport = portOutputRegister(digitalPinToPort(CE_Pin));
+    cepinmask = digitalPinToBitMask(CE_Pin);
     csnport = portOutputRegister(digitalPinToPort(CSN_Pin));
-    csnpinmask  = digitalPinToBitMask(CSN_Pin);
+    csnpinmask = digitalPinToBitMask(CSN_Pin);
 #endif
 }
 #endif
@@ -108,7 +110,7 @@ NRF_Basic::NRF_Basic(uint8_t ce, uint8_t csn)
 /**
   * @brief  初始化
   * @param  无
-  * @retval 是否通信成功
+  * @retval 是否初始化成功
   */
 bool NRF_Basic::Init()
 {
@@ -132,24 +134,44 @@ bool NRF_Basic::Init()
     pinMode(CE_Pin, OUTPUT);
     pinMode(CSN_Pin, OUTPUT);
     
-    NRF_CE_HIGH();
-    delay(100);
     NRF_CE_LOW();
     NRF_CSN_HIGH();
     
+    bool isRst = Reset();
     ClearFlag();
     SetDefault();
     
-    return IsDetect();
+    return (IsDetect() && isRst);
 }
 
+/**
+  * @brief  复位
+  * @param  无
+  * @retval true成功 false失败
+  */
+bool NRF_Basic::Reset()
+{
+    SetRF_Enable(false);
+    SPI_RW_Reg(FLUSH_TX, 0);
+    SPI_RW_Reg(FLUSH_RX, 0);
+    uint8_t status1 = SPI_RW_Reg(NOP, 0);
+    uint8_t status2 = GetStatus();
+    SetPowerUp(false);
+    return (status1 == status2 && (status1 & 0x0F) == 0x0E);
+}
+
+/**
+  * @brief  设置默认参数
+  * @param  无
+  * @retval 无
+  */
 void NRF_Basic::SetDefault()
 {
     /*默认参数*/
     RF_Speed = SPEED_1Mbps;//通信速率:1Mb/s
     RF_Power = POWER_0dBm;//通信功率:0dBm(最大)
     RF_Freq = 40;//通信频率40
-    RF_AutoRetryDelay = 1;//自动重发延时(us) = 250 + n * 250 + 86 us
+    RF_AutoRetryDelay = 1;//自动重发延时(us) = 250 + n * 250
     RF_AutoRetryCount = 15;//自动重发次数15
     RF_AddressWidth = sizeof(RF_Address);//地址宽度5字节
     RF_TX_PloadWidth = 32;//发送数据包长度
@@ -195,6 +217,11 @@ void NRF_Basic::SetDefault()
     SPI_RW_Reg(WRITE_REG + RX_PW_P0, RF_RX_PloadWidth);
 }
 
+/**
+  * @brief  更新寄存器到结构体
+  * @param  无
+  * @retval 无
+  */
 void NRF_Basic::UpdateRegs()
 {
     REGREAD(CONFIG);
@@ -297,7 +324,12 @@ void NRF_Basic::SetFreqency(uint8_t freq)
     SetRF_Enable(RF_Enabled);
 }
 
-void NRF_Basic::SetAutoRetryTimeout(uint32_t timeMs)
+/**
+  * @brief  设置自动重发总时间
+  * @param  timeMs:时间
+  * @retval 无
+  */
+void NRF_Basic::SetAutoRetryTimeout(uint16_t timeMs)
 {
     /* 250Kbps: 1Byte 32us */
     uint8_t byteTimeUs = 32;
@@ -317,6 +349,12 @@ void NRF_Basic::SetAutoRetryTimeout(uint32_t timeMs)
     SetAutoRetry(RF_AutoRetryDelay, retryCount);
 }
 
+/**
+  * @brief  设置自动重发
+  * @param  delay:自动重发延时
+  * @param  count:自动重发次数
+  * @retval 无
+  */
 void NRF_Basic::SetAutoRetry(uint8_t delay, uint8_t count)
 {
     NRF_CE_LOW();
@@ -343,6 +381,11 @@ void NRF_Basic::SetAutoRetry(uint8_t delay, uint8_t count)
     SetRF_Enable(RF_Enabled);
 }
 
+/**
+  * @brief  设置自动返回ACK
+  * @param  en:使能
+  * @retval 无
+  */
 void NRF_Basic::SetAutoAck(bool en)
 {
     NRF_CE_LOW();
@@ -357,6 +400,12 @@ void NRF_Basic::SetAutoAck(bool en)
     SetRF_Enable(RF_Enabled);
 }
 
+/**
+  * @brief  设置数据包长度
+  * @param  tx_payload:发送数据包长度
+  * @param  rx_payload:接收数据包长度
+  * @retval 无
+  */
 void NRF_Basic::SetPayloadWidth(uint8_t tx_payload, uint8_t rx_payload)
 {
     NRF_CE_LOW();
@@ -390,6 +439,7 @@ uint8_t NRF_Basic::GetAddress(uint8_t addr)
 /**
   * @brief  获取当前通信地址
   * @param  addr:地址
+  * @param  istx:是否为发送地址
   * @retval 无
   */
 void NRF_Basic::GetAddress(uint8_t *addr, bool istx)
@@ -499,14 +549,22 @@ uint8_t NRF_Basic::GetStatus(void)
     return REG2U8(REG_STATUS);
 }
 
+/**
+  * @brief  清状态寄存器标志位
+  * @param  无
+  * @retval 无
+  */
 void NRF_Basic::ClearFlag()
 {
-    uint8_t status = GetStatus();
-    SPI_RW_Reg(WRITE_REG + STATUS, status);//清状态寄存器标志位
+    REGREAD(STATUS);
+    REG_STATUS.RX_DR = 1;
+    REG_STATUS.TX_DS = 1;
+    REG_STATUS.MAX_RT = 1;
+    REGWRITE(STATUS);
 }
 
 /**
-  * @brief  判断NRF_Basic硬件连线是否正确
+  * @brief  判断硬件连线是否正确
   * @param  无
   * @retval true 已正确连接; false 连接不正确
   */
@@ -565,20 +623,23 @@ uint8_t NRF_Basic::SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes)
 
 /**
   * @brief  设置为发送模式
-  * @param  *txbuff:发送缓冲区地址
+  * @param  rfDelay:是否延时
   * @retval 无
   */
-void NRF_Basic::TX_Mode()
+void NRF_Basic::TX_Mode(bool rfDelay)
 {
     RF_State = State_TX;
-    REGREAD(CONFIG);
-    if(REG_CONFIG.PRIM_RX == 0)
-        return;
     
     NRF_CE_LOW();
     ClearFlag();
     REG_CONFIG.PRIM_RX = 0;
     REGWRITE(CONFIG);
+    
+    if(rfDelay)
+    {
+        delayMicroseconds(130);
+    }
+    
     SetRF_Enable(RF_Enabled);
 }
 
@@ -587,17 +648,20 @@ void NRF_Basic::TX_Mode()
   * @param  无
   * @retval 无
   */
-void NRF_Basic::RX_Mode()
+void NRF_Basic::RX_Mode(bool rfDelay)
 {
     RF_State = State_RX;
-    REGREAD(CONFIG);
-    if(REG_CONFIG.PRIM_RX == 1)
-        return;
     
     NRF_CE_LOW();
     ClearFlag();
     REG_CONFIG.PRIM_RX = 1;
     REGWRITE(CONFIG);
+    
+    if(rfDelay)
+    {
+        delayMicroseconds(130);
+    }
+    
     SetRF_Enable(RF_Enabled);
 }
 
@@ -610,7 +674,16 @@ void NRF_Basic::SetPowerUp(bool en)
 {
     NRF_CE_LOW();
     REGREAD(CONFIG);
-    REG_CONFIG.PWR_UP = en;
+    if(en)
+    {
+        REG_CONFIG.PWR_UP = 1;
+    }
+    else
+    {
+        REG2U8(REG_CONFIG) = 0;
+        REG_CONFIG.EN_CRC = 1;
+        RF_Enabled = false;
+    }
     REGWRITE(CONFIG);
     SetRF_Enable(RF_Enabled);
 }
@@ -618,6 +691,7 @@ void NRF_Basic::SetPowerUp(bool en)
 /**
   * @brief  发送缓冲区数据
   * @param  *txbuff:发送缓冲区地址
+  * @retval 无
   */
 void NRF_Basic::Tran(void* txbuff)
 {  
@@ -631,6 +705,11 @@ void NRF_Basic::Tran(void* txbuff)
     Tran_Cnt++;
 }
 
+/**
+  * @brief  发送检查
+  * @param  无
+  * @retval 1:发送成功 -1:发送超时
+  */
 int8_t NRF_Basic::TranCheck()
 {
     int8_t retval = 0;
@@ -692,6 +771,7 @@ float NRF_Basic::GetRSSI()
 {
     if(Tran_Cnt == 0) return 0.0;
 
+    /*发送成功次数 除以 发送总次数 * 100% */
     float rssi = (float)TranSuccess_Cnt * 100.0f / Tran_Cnt;
     
     if(rssi > 100.0f)

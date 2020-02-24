@@ -48,6 +48,8 @@ void FFT_Process()
     if(!FFT_Ready)
         return;
     
+    uint32_t start = micros();
+    
     int64_t avg = 0;
     for(int i = 0; i < BufferCount; i++)
     {
@@ -62,9 +64,10 @@ void FFT_Process()
 
     fast_fft_256_res_2p8_analyse(OriBuffer, ImagBuffer);
 
-    for(int i = 0 ; i < BufferCount / 2; i++)
+//    Strength[0] = 0;
+    for(int i = 1 ; i < BufferCount / 2; i++)
     {
-        Strength[i] = sqrtf((float)(sq(OriBuffer[i]) + sq(ImagBuffer[i]))) * !!i;
+        Strength[i] = sqrtf((float)(sq(OriBuffer[i]) + sq(ImagBuffer[i])));
     }
     
     FFT_Ready = false;

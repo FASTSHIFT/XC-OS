@@ -1,39 +1,37 @@
-//#include <Arduboy2.h>
-//#include <EEPROM.h>
+#include "APP/Game/Arduboy2/Arduboy2.h"
+#include "APP/Game/GamePrivate.h"
 #include "Draw.h"
 #include "Interface.h"
 #include "Game.h"
 #include "Simulation.h"
-#include "APP/Game/GamePrivate.h"
-#include "Basic/TasksManage.h"
 
-//Arduboy2Base arduboy;
+static Arduboy2Base arduboy;
 
-uint8_t GetInput()
+uint8_t MicroCity::GetInput()
 {
     uint8_t result = 0;
 
-    if(Game_GetButtonPressed(A_BUTTON))
+    if(arduboy.pressed(A_BUTTON))
     {
         result |= INPUT_A;
     }
-    if(Game_GetButtonPressed(B_BUTTON))
+    if(arduboy.pressed(B_BUTTON))
     {
         result |= INPUT_B;
     }
-    if(Game_GetButtonPressed(UP_BUTTON))
+    if(arduboy.pressed(UP_BUTTON))
     {
         result |= INPUT_UP;
     }
-    if(Game_GetButtonPressed(DOWN_BUTTON))
+    if(arduboy.pressed(DOWN_BUTTON))
     {
         result |= INPUT_DOWN;
     }
-    if(Game_GetButtonPressed(LEFT_BUTTON))
+    if(arduboy.pressed(LEFT_BUTTON))
     {
         result |= INPUT_LEFT;
     }
-    if(Game_GetButtonPressed(RIGHT_BUTTON))
+    if(arduboy.pressed(RIGHT_BUTTON))
     {
         result |= INPUT_RIGHT;
     }
@@ -41,9 +39,9 @@ uint8_t GetInput()
     return result;
 }
 
-void PutPixel(uint8_t x, uint8_t y, uint8_t color)
+void MicroCity::PutPixel(uint8_t x, uint8_t y, uint8_t colour)
 {
-    Game_DispDrawPixel(x, y, color);
+    arduboy.drawPixel(x, y, colour);
 }
 
 /*
@@ -58,47 +56,83 @@ void DrawRect(uint8_t x, uint8_t y, uint8_t w, uint8_t h, uint8_t colour)
 }
 */
 
-void DrawBitmap(const uint8_t* bmp, uint8_t x, uint8_t y, uint8_t w, uint8_t h)
+void MicroCity::DrawBitmap(const uint8_t* bmp, uint8_t x, uint8_t y, uint8_t w, uint8_t h)
 {
-    Game_DispDrawBitmap(x, y, bmp, w, h, 1);
+    arduboy.drawBitmap(x, y, bmp, w, h, WHITE);
 }
 
-void SaveCity()
+void MicroCity::SaveCity()
 {
-    Game_WriteDataToFile(&State, sizeof(State), "MicroCity");
+    uint16_t address = EEPROM_STORAGE_SPACE_START;
+
+    // Add a header so we know that the EEPROM contains a saved city
+    arduboy.EEPROM.update(address++, 'C');
+    arduboy.EEPROM.update(address++, 'T');
+    arduboy.EEPROM.update(address++, 'Y');
+    arduboy.EEPROM.update(address++, '1');
+
+    uint8_t* ptr = (uint8_t*) &State;
+    for(size_t n = 0; n < sizeof(GameState); n++)
+    {
+        arduboy.EEPROM.update(address++, *ptr);
+        ptr++;
+    }
 }
 
-bool LoadCity()
+bool MicroCity::LoadCity()
 {
-    return Game_ReadDataFromFile(&State, sizeof(State), "MicroCity");
+    uint16_t address = EEPROM_STORAGE_SPACE_START;
+
+    if(arduboy.EEPROM.read(address++) != 'C') return false;
+    if(arduboy.EEPROM.read(address++) != 'T') return false;
+    if(arduboy.EEPROM.read(address++) != 'Y') return false;
+    if(arduboy.EEPROM.read(address++) != '1') return false;
+
+    uint8_t* ptr = (uint8_t*) &State;
+    for(size_t n = 0; n < sizeof(GameState); n++)
+    {
+        *ptr = arduboy.EEPROM.read(address++);
+        ptr++;
+    }
+
+    return true;
 }
 
 uint8_t* GetPowerGrid()
 {
-    return Game_DispGetBuffer();
+    return arduboy.getBuffer();
 }
 
-static void Setup()
+static void setup()
 {
-    InitGame();
+    arduboy.EEPROM.begin(GAME_FILE_PATH"MicroCity", "save.bin");
+    
+    GAME_SETUP_ONCE();
+
+    arduboy.boot();
+    arduboy.flashlight();
+    arduboy.systemButtons();
+    arduboy.bootLogo();
+    arduboy.setFrameRate(25);
+
+    MicroCity::InitGame();
 }
 
-static void CityLoop()
+static void loop()
 {
-    if(!Game_DispBusy())
+    if(arduboy.nextFrame())
     {
-        TickGame();
-        Game_ClearButtonState();
-        Game_DispReqUpdate();
+        MicroCity::TickGame();
+        arduboy.display(false);
     }
 }
 
-static void Loop()
+static void exit()
 {
-    __IntervalExecute(CityLoop(), 1000 / GAME_FRAME_RATE);
+    arduboy.EEPROM.end();
 }
 
 void GameRegister_MicroCity(uint8_t gameID)
 {
-    GamePage.PageRegister(gameID, Setup, Loop, NULL, NULL);
+    GamePage.PageRegister(gameID, setup, loop, exit, NULL);
 }

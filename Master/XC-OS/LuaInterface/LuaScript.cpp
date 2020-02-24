@@ -1,8 +1,10 @@
 #include "LuaScript.h"
+#include "Arduino.h"
 
 void lua_string_print(const char *s)
 {
-    luaScript.printStr(s);
+    Serial.print(s);
+    //luaScript.printStr(s);
 }
 
 LuaScript::LuaScript()
@@ -22,11 +24,12 @@ LuaScript::~LuaScript()
 
 bool LuaScript::begin()
 {
-    if(isBegun)
-        return true;
+//    if(isBegun)
+//        return true;
 
     L = luaL_newstate();
     luaL_openlibs(L);
+    luaopen_base(L);
     
     isBegun = true;
     

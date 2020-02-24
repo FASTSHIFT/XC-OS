@@ -120,12 +120,27 @@
 * 1.文件管理器添加路径显示
 * 2.更新HardwareSerial库
 * 3.Page_GetAppWindow更名AppWindow_GetCont
-* 4.Module更名BSP
-* 5.添加GameDef寄存器级别优化屏幕操作，显著提升游戏模拟器帧率，CPU占用率从70%降至18%
-* 6.添加Shell模块，类LINUX操作
-* 7.编写SerialUploader上位机，支持透传SD卡文件，CRC32校验
-* 8.优化WAV播放器体验
-* 9.更新CommonMacro库
-* 10.sys_io更名rt_sys，添加注释
-* 11.修复栈大小显示错误的BUG
-* 12.彻底消灭DisplayPrivate全局变量
+* 4.添加GameDef寄存器级别优化屏幕操作，显著提升游戏模拟器帧率，CPU占用率从70%降至18%
+* 5.添加Shell模块，类LINUX操作
+* 6.编写SerialUploader上位机，支持透传SD卡文件，CRC32校验
+* 7.优化WAV播放器体验
+* 8.更新CommonMacro库
+* 9.sys_io更名rt_sys，添加注释
+* 10.修复栈大小显示错误的BUG
+* 11.彻底消灭DisplayPrivate全局变量
+
+## [v2.4] - 2020-02-24
+* 1.为CmBacktrace添加操作系统支持
+* 2.添加EEPRON_File库，支持使用文件模拟EEPROM
+* 3.添加lua_tinker库，lua解释器版本降级至v5.1.5
+* 4.更新NRF库，添加注释
+* 5.添加 Arduboy+Arduboy2 Framework
+* 6.移植游戏:Ardutosh、BoneShakers、FlightSim等
+* 7.添加游戏选择页面，完善模拟器体验，支持游戏独立存档
+* 8.调整屏幕和播放器的缓冲区，降低内存占用
+* 9.GameDef更名GameDisp
+* 10.移植RCX遥控协议框架
+* 11.为Audio添加Tone功能(DAC版的tone，正弦波输出)
+* 12.更新IMU管理模块
+* 13.优化文件透传协议，降低透传中断的几率
+

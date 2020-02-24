@@ -1,7 +1,5 @@
-#ifndef __STRINGS_H
-#define __STRINGS_H
+#pragma once
 
 const char* GetToolbarString(int index);
 const char* GetMonthString(int index);
 
-#endif

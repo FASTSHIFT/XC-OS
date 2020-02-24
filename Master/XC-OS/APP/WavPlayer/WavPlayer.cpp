@@ -4,8 +4,9 @@
 #include "WavPlayer_Private.h"
 
 /*WAV缓冲队列*/
-static uint8_t waveBuff[10 * 1024];
-static FifoQueue<uint8_t> WaveFifo(waveBuff, sizeof(waveBuff));
+#define WAV_BUFF_SIZE (8 * 1024)
+static uint8_t waveBuff[WAV_BUFF_SIZE];
+static FifoQueue<uint8_t> WaveFifo(waveBuff, WAV_BUFF_SIZE);
 
 /*WAV文件信息*/
 static File WavFile;
@@ -30,7 +31,7 @@ static void WavTimer_Handler()
     {
         uint16_t data = ((Wav_Handle.CurrentData.LeftVal + 32768) >> 6) * Wav_Volume;
         Wav_Next_16Bit2Channel(&Wav_Handle);
-        DAC_SetChannel1Data(DAC_Align_12b_R, data);
+        Audio_WriteData(data);
         FFT_AddData(data);
     }
 }

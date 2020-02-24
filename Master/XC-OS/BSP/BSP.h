@@ -4,6 +4,7 @@
 #include "Arduino.h"
 
 /*Motor*/
+void Motor_SetEnable(bool en);
 void Motor_Vibrate(float strength, uint32_t time);
 
 /*Power*/
@@ -13,6 +14,12 @@ float Power_GetBattUsage();
 
 /*Audio*/
 void Audio_SetEnable(bool en);
+void Audio_WriteData(uint16_t data);
+void Audio_ToneSetVolume(uint16_t volume);
+uint16_t Audio_ToneGetVolume();
+void Audio_NoTone();
+void Audio_Tone(float freq);
+void Audio_Tone(float freq, uint32_t time);
 
 /*TextBuf*/
 char *   TextBuf_GetBuff(uint32_t start = 0);

@@ -1,5 +1,4 @@
-#ifndef __INTERFACE_H
-#define __INTERFACE_H
+#pragma once
 
 #include <stdint.h>
 #include "Building.h"
@@ -13,41 +12,43 @@
 
 enum BrushTypes
 {
-    Bulldozer,
-    RoadBrush,
-    PowerlineBrush,
-    FirstBuildingBrush,
-    LastBuildingBrush = FirstBuildingBrush + Num_BuildingTypes - 2
+	Bulldozer,
+	RoadBrush,
+	PowerlineBrush,
+	FirstBuildingBrush,
+	LastBuildingBrush = FirstBuildingBrush + Num_BuildingTypes - 2
 };
 
 enum
 {
-    SaveLoadToolbarButton = LastBuildingBrush + 1,
-    BudgetToolbarButton
+	SaveLoadToolbarButton = LastBuildingBrush + 1,
+	BudgetToolbarButton
 };
 
 enum
 {
-    StartScreen,
-    NewCityMenu,
-    InGame,
-    InGameDisaster,
-    ShowingToolbar,
-    SaveLoadMenu,
-    BudgetMenu
+	StartScreen,
+	NewCityMenu,
+	InGame,
+	InGameDisaster,
+	ShowingToolbar,
+	SaveLoadMenu,
+	BudgetMenu
 };
 
 typedef struct
 {
-    int16_t scrollX, scrollY;       // Where on the map (in pixels) display is scrolled to
-    uint8_t selectX, selectY;       // Which tile is selected
-    uint8_t brush;                  // What will be placed
-    uint8_t selection;      // For when toolbar is open or in a menu
-    uint8_t state;    // Which state the game is in
-    bool autoBudget : 1;
+	int16_t scrollX, scrollY;		// Where on the map (in pixels) display is scrolled to
+	uint8_t selectX, selectY;		// Which tile is selected
+	uint8_t brush;					// What will be placed 
+	uint8_t selection;      // For when toolbar is open or in a menu
+	uint8_t state;    // Which state the game is in
+	bool autoBudget : 1;
 } UIStateStruct;
 
 extern UIStateStruct UIState;
+
+namespace MicroCity{
 
 uint8_t GetInput();
 
@@ -56,4 +57,4 @@ void UpdateInterface(void);
 
 void GetBuildingBrushLocation(BuildingType buildingType, uint8_t* outX, uint8_t* outY);
 
-#endif
+}

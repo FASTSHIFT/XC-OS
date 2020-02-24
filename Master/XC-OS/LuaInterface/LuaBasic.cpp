@@ -24,14 +24,15 @@ void LuaScriptExecuteFile(String file)
 
 void Task_LuaScript(void *pvParameters)
 {
-    luaScript.begin();
-    LuaReg_Time();
-    LuaReg_GPIO();
-    LuaReg_ModuleCtrl();
-    LuaReg_Com();
-
     for(;;)
     {
+        luaScript.begin();
+        LuaReg_Time();
+        //LuaReg_GPIO();
+        LuaReg_ModuleCtrl();
+        //LuaReg_Com();
+        LuaReg_LVGL();
+        
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
         if(ScriptText)
@@ -43,5 +44,9 @@ void Task_LuaScript(void *pvParameters)
         {
             luaScript.doFile(ScriptFilePath.c_str());
         }
+        
+        luaScript.end();
+        lua_close(luaScript.L);
+        luaScript.L = 0;
     }
 }

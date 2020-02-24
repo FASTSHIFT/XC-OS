@@ -10,7 +10,7 @@
 #include "Source/cpu_utils.h"
 
 /*Ext Function*/
-#define DEBUG_PRINTF(format, ...) Serial.printf(format, ##__VA_ARGS__)
+#define TSK_DEBUG_PRINTF(format, ...) Serial.printf(format, ##__VA_ARGS__)
 
 #define KByteToWord(kb) ((int)(kb * 1024 / 4))
 #define uxTaskGetFreeStackByte(TaskHandle_x) (uxTaskGetStackHighWaterMark(TaskHandle_x)*4)
@@ -19,19 +19,19 @@
 #define xTaskReg(func,stack,priority,handle) \
 do{\
     xTaskCreate(func,#func,stack,NULL,priority,handle);\
-    DEBUG_PRINTF("Creat: task:%s, stack:%d, priority:%d\r\n",#func,stack,priority);\
+    TSK_DEBUG_PRINTF("Creat: task:%s, stack:%d, priority:%d\r\n",#func,stack,priority);\
 }while(0)
 
 #define xTimerReg(func,time)\
 do{\
     TimerHandle_t xTimer = xTimerCreate(#func,time,pdTRUE,0,func);\
     if(xTimer)xTimerStart(xTimer,0);\
-    DEBUG_PRINTF("Creat: timer:%s, time:%d\r\n",#func,time);\
+    TSK_DEBUG_PRINTF("Creat: timer:%s, time:%d\r\n",#func,time);\
 }while(0)
 
 /*Task Functions*/
 void Task_Dispaly(void *pvParameters);
-void Task_Commmunicate(void *pvParameters);
+void Task_Communicate(void *pvParameters);
 void Task_LuaScript(void *pvParameters);
 void Task_WavPlayer(void *pvParameters);
 void Task_PageRun(void *pvParameters);
@@ -46,7 +46,7 @@ extern TaskHandle_t TaskHandle_LuaScript;
 extern TaskHandle_t TaskHandle_WavPlayer;
 extern TaskHandle_t TaskHandle_Display;
 extern TaskHandle_t TaskHandle_PageRun;
-extern TaskHandle_t TaskHandle_Commmunicate;
+extern TaskHandle_t TaskHandle_Communicate;
 
 /*TimerHandle*/
 

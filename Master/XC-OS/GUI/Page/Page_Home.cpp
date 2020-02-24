@@ -48,13 +48,13 @@ static APP_TypeDef APP_Grp[] =
 {
     {&ImgSettings, "Settings", TYPE_PageJump, PAGE_Settings},
     {&ImgCode,     "IDE",      TYPE_PageJump, PAGE_LuaScript},
-    {&ImgGame,     "Game",     TYPE_PageJump, PAGE_Game},
-    {&ImgSubApps,  "APPs",     TYPE_PageJump, PAGE_SubAPPs},
+    {&ImgGame,     "Game",     TYPE_PageJump, PAGE_GameSelect},
+    {&ImgSubApps,  "APPs",     TYPE_PageJump, PAGE_LuaAppSel},
     {&ImgFiles,    "Files",    TYPE_PageJump, PAGE_FileExplorer},
     {&ImgVideo,    "Video",    TYPE_PageJump, PAGE_BvPlayer},
     {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
     {&ImgMusic,    "Music",    TYPE_PageJump, PAGE_WavPlayer},
-    {&ImgUSB,      "USB",      TYPE_PageJump, PAGE_USB},
+    {&ImgUSB,      "USB",      TYPE_PageJump, PAGE_Shell},
 };
 
 /**

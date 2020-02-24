@@ -2,25 +2,25 @@
 #include "TasksManage.h"
 #include "cm_backtrace.h"
 
-void setup()
+static void setup()
 {
     cm_backtrace_init(XC_OS_NAME, XC_VERSION_HW, XC_VERSION_SW);
     Serial.begin(115200);
     Serial.println("\r\n+===================== XC-OS =======================+\r\n");
     Serial.println("@FreeRTOS Kernel "tskKERNEL_VERSION_NUMBER);
     Serial.print(XC_OS_NAME"("__DATE__" "__TIME__" Build) init...\r\n");
-
+    
     Serial2.begin(115200);
     Serial3.begin(115200);
     Wire.begin();
     
     /*Task Create*/
-    xTaskReg(Task_Dispaly,      KByteToWord(5),    2, &TaskHandle_Display);
+    xTaskReg(Task_Dispaly,      KByteToWord(6),    2, &TaskHandle_Display);
     xTaskReg(Task_WavPlayer,    KByteToWord(1),    0, &TaskHandle_WavPlayer);
     xTaskReg(Task_PageRun,      KByteToWord(4),    1, &TaskHandle_PageRun);
-    xTaskReg(Task_Commmunicate, KByteToWord(0.5f), 0, &TaskHandle_Commmunicate);
+    xTaskReg(Task_Communicate,  KByteToWord(1),    0, &TaskHandle_Communicate);
 #if( XC_USE_LUA == 1 )
-    xTaskReg(Task_LuaScript,    KByteToWord(3),    0, &TaskHandle_LuaScript);
+    xTaskReg(Task_LuaScript,    KByteToWord(5),    0, &TaskHandle_LuaScript);
 #endif
     
     /*Timer Create*/
@@ -33,7 +33,7 @@ void setup()
     vTaskStartScheduler();
 }
 
-void loop()
+static void loop()
 {
 }
 

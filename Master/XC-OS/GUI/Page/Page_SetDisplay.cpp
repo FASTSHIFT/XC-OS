@@ -6,10 +6,8 @@ static lv_obj_t * colorPicker;
 static lv_obj_t * labelHue;
 static lv_obj_t * rollerTheme;
 
-static uint16_t theme_hue_now = 200;
-
-/********************* Theme Ctrl ***********************/
-static lv_theme_t * th_act;
+static uint16_t theme_hue_current = 200;
+static lv_theme_t * theme_current;
 
 static const char * th_options =
 {
@@ -85,8 +83,8 @@ static void RollerTheme_EventHandler(lv_obj_t * roller, lv_event_t event)
     if(event == LV_EVENT_VALUE_CHANGED)
     {
         uint16_t opt = lv_roller_get_selected(roller);
-        th_act = themes[opt];
-        lv_theme_set_current(th_act);
+        theme_current = themes[opt];
+        lv_theme_set_current(theme_current);
     }
 }
 
@@ -110,9 +108,9 @@ static void ColorPicker_EventHandler(lv_obj_t * obj, lv_event_t event)
     }
     else if(event == LV_EVENT_RELEASED)
     {
-        theme_hue_now = lv_cpicker_get_hue(obj);
-        init_all_themes(theme_hue_now);
-        lv_theme_set_current(th_act);
+        theme_hue_current = lv_cpicker_get_hue(obj);
+        init_all_themes(theme_hue_current);
+        lv_theme_set_current(theme_current);
     }
 }
 
@@ -146,7 +144,7 @@ static void Creat_ColorPicker()
     /* Change the knob's color to that of the selected color */
     lv_cpicker_set_indic_colored(colorPicker, true);
 
-    lv_cpicker_set_hue(colorPicker, theme_hue_now);
+    lv_cpicker_set_hue(colorPicker, theme_hue_current);
     lv_obj_set_event_cb(colorPicker, ColorPicker_EventHandler);
 }
 
@@ -167,7 +165,8 @@ static void Creat_LabelHue()
 static void Setup()
 {
     lv_obj_move_foreground(appWindow);
-    init_all_themes(theme_hue_now);
+    theme_current = lv_theme_get_current();
+    init_all_themes(theme_hue_current);
     Creat_ColorPicker();
     Creat_LabelHue();
     Creat_RollerTheme();

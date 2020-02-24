@@ -33,12 +33,15 @@ extern void InfoPrintf(const char *__restrict __format, ...);
 
 /* print line, must config by user */
 #define cmb_println(...)               InfoPrintf(__VA_ARGS__);InfoPrintf("\r\n")
-/* enable bare metal(no OS) platform */
-#define CMB_USING_BARE_METAL_PLATFORM
+/* enable OS platform */
+#define CMB_USING_OS_PLATFORM
+/* OS platform type, must config when CMB_USING_OS_PLATFORM is enable */
+#define CMB_OS_PLATFORM_TYPE           CMB_OS_PLATFORM_FREERTOS
 /* cpu platform type, must config by user */
 #define CMB_CPU_PLATFORM_TYPE          CMB_CPU_ARM_CORTEX_M4
 /* enable dump stack information */
 #define CMB_USING_DUMP_STACK_INFO
 /* language of print information */
 #define CMB_PRINT_LANGUAGE             CMB_PRINT_LANGUAGE_CHINESE
+
 #endif /* _CMB_CFG_H_ */

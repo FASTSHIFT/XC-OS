@@ -22,12 +22,14 @@ void lv_label_set_text_add(lv_obj_t * label, const char * text)
 
 lv_coord_t lv_obj_get_x_center(lv_obj_t * obj)
 {
-    return (lv_obj_get_x(obj) + lv_obj_get_width(obj) / 2);
+    return (obj->coords.x2 + obj->coords.x1) / 2; 
+    //return (lv_obj_get_x(obj) + lv_obj_get_width(obj) / 2);
 }
 
 lv_coord_t lv_obj_get_y_center(lv_obj_t * obj)
 {
-    return (lv_obj_get_y(obj) + lv_obj_get_height(obj) / 2);
+    return (obj->coords.y2 + obj->coords.y1) / 2; 
+    //return (lv_obj_get_y(obj) + lv_obj_get_height(obj) / 2);
 }
 
 /*尽量别用，可能会影响到默认的style*/

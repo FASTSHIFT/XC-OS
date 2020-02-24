@@ -4,6 +4,7 @@
 #include "lua.hpp"
 #include "stdint.h"
 #include "WString.h"
+#include "lua_tinker.h"
 
 #define registerFUNC(func) registerFunc(#func,func)
 
@@ -41,6 +42,7 @@ void LuaReg_Time();
 void LuaReg_GPIO();
 void LuaReg_ModuleCtrl();
 void LuaReg_Com();
+void LuaReg_LVGL();
 
 void LuaScriptStart(const char *script);
 void LuaScriptExecuteFile(String file);

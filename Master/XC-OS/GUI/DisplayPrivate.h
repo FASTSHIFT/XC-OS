@@ -54,14 +54,16 @@ typedef enum
     PAGE_BvPlayer,
     PAGE_FileExplorer,
     PAGE_Game,
+    PAGE_GameSelect,
     PAGE_Home,
     PAGE_LuaScript,
+    PAGE_LuaAppSel,
+    PAGE_LuaAppWin,
     PAGE_RadioCfg,
     PAGE_Settings,
     PAGE_SetDisplay,
-    PAGE_SubAPPs,
     PAGE_TextEditor,
-    PAGE_USB,
+    PAGE_Shell,
     PAGE_WavPlayer,
     /*±£¡Ù*/
     PAGE_MAX

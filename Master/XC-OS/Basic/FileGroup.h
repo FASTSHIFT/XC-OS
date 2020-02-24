@@ -9,13 +9,9 @@
 
 //************* Arduino Library **************//
 #include "Arduino.h"
-#include "HardwareSerial.h"
-#include "Stream.h"
 #include "SPI.h"
 #include "Tone.h"
-#include "WString.h"
 #include "Wire.h"
-#include "WMath.h"
 
 #include "CommonMacro.h"
 #include "SysConfig.h"

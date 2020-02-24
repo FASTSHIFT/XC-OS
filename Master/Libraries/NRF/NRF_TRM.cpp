@@ -6,19 +6,17 @@
   * @param  *rxbuff:接收缓冲区地址
   * @retval 无
   */
-void NRF_TRM::TranRecv(uint8_t *txbuff, uint8_t *rxbuff)
+void NRF_TRM::TranRecv(void* txbuff, void* rxbuff)
 {
-    uint8_t status = Basic->GetStatus();
     if(Basic->RF_State == Basic->State_TX)
     {
-        if(status & Basic->TX_DS)
+        if(Basic->TranCheck() > 0)
         {
-            Basic->TranSuccess_Cnt++;
             Basic->RX_Mode();
         }
         else
         {
-            Basic->TX_Mode();
+            Basic->TX_Mode(true);
             Basic->Tran(txbuff);
         }
     }
@@ -36,7 +34,7 @@ void NRF_TRM::TranRecv(uint8_t *txbuff, uint8_t *rxbuff)
   * @param  *txbuff:发送缓冲区地址
   * @retval 无
   */
-void NRF_TRM::RecvTran(uint8_t *rxbuff, uint8_t *txbuff)
+void NRF_TRM::RecvTran(void* rxbuff, void* txbuff)
 {
     uint8_t status = Basic->GetStatus();
     if(Basic->RF_State == Basic->State_RX)

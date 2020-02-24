@@ -4,9 +4,10 @@
 
 static lv_obj_t * appWindow;
 
-static uint8_t BvBuffer[16 * 1024];
+#define BV_BUFF_SIZE (2 * 1024)
+static uint8_t BvBuffer[BV_BUFF_SIZE];
 
-BV_Player BvPlayer(BvBuffer, sizeof(BvBuffer));
+BV_Player BvPlayer(BvBuffer, BV_BUFF_SIZE);
 static lv_task_t * taskBvPlayer;
 
 static String BvFilePath;
@@ -44,7 +45,7 @@ static void Setup()
 {
     lv_obj_move_foreground(appWindow);
     taskBvPlayer = lv_task_create(Task_BvPlyaerUpdate, 33, LV_TASK_PRIO_MID, 0);
-    memset(BvBuffer, 0, sizeof(BvBuffer));
+    memset(BvBuffer, 0, BV_BUFF_SIZE);
     if(!BvPlayer.OpenVideo(BvFilePath))
     {
         return;

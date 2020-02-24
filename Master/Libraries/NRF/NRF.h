@@ -68,6 +68,7 @@ typedef uint16_t PortMask_t;
   *----------------+-------+
   */
 
+/*NRF基础控制*/
 class NRF_Basic
 {
 public:
@@ -129,7 +130,7 @@ public:
     void SetPower(Power_Type power);
     void SetPayloadWidth(uint8_t tx_payload, uint8_t rx_payload);
     void SetAutoRetry(uint8_t delay, uint8_t count);
-    void SetAutoRetryTimeout(uint32_t timeMs);
+    void SetAutoRetryTimeout(uint16_t timeMs);
     void SetAutoAck(bool en);
     void SetRF_Enable(bool enable);
     void SetPowerUp(bool en = true);
@@ -146,13 +147,14 @@ public:
     }
 
     bool Init();
+    bool Reset();
     bool IsDetect();
     void ClearFlag();
     void Tran(void* txbuff);
     int8_t TranCheck();
     bool Recv(void* rxbuff);
-    void TX_Mode();
-    void RX_Mode();
+    void TX_Mode(bool rfDelay = false);
+    void RX_Mode(bool rfDelay = false);
     
     uint8_t SPI_RW(uint8_t Data);
     uint8_t SPI_RW_Reg(uint8_t reg, uint8_t value);
@@ -246,6 +248,7 @@ public:
     void UpdateRegs();
 };
 
+/*NRF半双工通信*/
 class NRF_TRM
 {
 public:
@@ -253,12 +256,12 @@ public:
     {
         Basic = nrf;
     }
-    void TranRecv(uint8_t* txbuff, uint8_t* rxbuff);
-    void RecvTran(uint8_t* rxbuff, uint8_t* txbuff);
-private:
     NRF_Basic* Basic;
+    void TranRecv(void* txbuff, void* rxbuff);
+    void RecvTran(void* rxbuff, void* txbuff);
 };
 
+/*NRF跳频+单工/半双工通信*/
 class NRF_FHSS
 {
 public:
@@ -272,32 +275,28 @@ public:
         LastRxTime = 0;
         InterruptTime = 10;
     }
+    NRF_Basic* Basic;
 
     void SetFreqHoppingList(uint8_t* list, uint16_t length)
     {
         FH_List = list;
         FH_List_Length = length;
     }
-    void TxProcess(uint8_t* txbuff);
-    void TxProcess(uint8_t* txbuff, uint8_t* rxbuff);
+    void TxProcess(void* txbuff);
+    void TxProcess(void* txbuff, void* rxbuff);
     
-    void RxProcess(uint8_t* rxbuff);
-    void RxProcess(uint8_t* rxbuff, uint8_t* txbuff);
+    void RxProcess(void* rxbuff);
+    void RxProcess(void* rxbuff, void* txbuff);
     
-    uint8_t InterruptTxCnt;
     uint16_t InterruptTime;
+    uint32_t LastRxTime;
     
 private:
-    NRF_Basic* Basic;
     bool FH_Enable;
     const uint8_t* FH_List;
     uint16_t FH_List_Length;
     uint16_t FH_List_Index;
     void FH_Process();
-
-    uint8_t InterruptCnt;
-    uint32_t LastInterruptTime;
-    uint32_t LastRxTime;
 };
 
 #endif

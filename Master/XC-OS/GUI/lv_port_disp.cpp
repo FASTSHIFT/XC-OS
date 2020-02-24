@@ -1,7 +1,7 @@
 #include "DisplayPrivate.h"
 
 static lv_disp_buf_t disp_buf;
-static lv_color_t lv_disp_buf[LV_HOR_RES_MAX * 20];
+static lv_color_t lv_disp_buf[LV_HOR_RES_MAX * 10];
 
 #if LV_USE_LOG != 0
 /* Serial debugging */
