@@ -38,7 +38,6 @@ extern "C" {
 #include "exti.h"
 #include "gpio.h"
 #include "pwm.h"
-#include "rng.h"
 #include "timer.h"
 
 #define __STM32__
@@ -73,7 +72,13 @@ extern "C" {
 #define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
 #define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
 
-#define _BV(bit) (1<<(bit))
+#ifndef _BV
+#define _BV(bit) (1 << (bit))
+#endif 
+
+#define clockCyclesPerMicrosecond()  ( F_CPU / 1000000L )
+#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (F_CPU / 1000L) )
+#define microsecondsToClockCycles(a) ( (a) * (F_CPU / 1000000L) )
 
 #define delay(ms)             delay_ms(ms)
 #define delayMicroseconds(us) delay_us(us)
@@ -123,6 +128,7 @@ void yield(void);
 #  include "WCharacter.h"
 #  include "WString.h"
 #  include "WMath.h"
+#  include "Tone.h"
 #  include "HardwareSerial.h"
 #endif
 

@@ -75,7 +75,7 @@ void Keyboard_Activate(
 {
     if(isact)
     {
-        if(!(*kb))
+        if((*kb) != NULL)
         {
             Creat_Keyboard(&(*kb), parent, ta, keyboard_event_cb);
         }

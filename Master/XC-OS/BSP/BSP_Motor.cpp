@@ -8,8 +8,8 @@ static bool IsMotorRunning = false;
 
 static void Init_Motor()
 {
-    PWM_Init(Motor_Pin, 1000, 1000);
-    analogWrite(Motor_Pin, 0);
+    PWM_Init(Motor_Pin, 1000, 80);
+    Motor_Vibrate(0.5f, 100);
 }
 
 void Task_MotorRunning(TimerHandle_t xTimer)
@@ -38,4 +38,12 @@ void Motor_Vibrate(float strength, uint32_t time)
    analogWrite(Motor_Pin, strength * 1000);
    IsMotorRunning = true;
    MotorStop_TimePoint = millis() + time;
+}
+
+void Motor_SetState(bool state)
+{
+    if(!State_MotorVibrate)
+       return;
+    
+    analogWrite(Motor_Pin, state ? 1000 : 0);
 }

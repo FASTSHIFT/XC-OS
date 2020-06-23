@@ -29,10 +29,10 @@
 #ifndef _CMB_CFG_H_
 #define _CMB_CFG_H_
 
-extern void InfoPrintf(const char *__restrict __format, ...);
+extern void cmb_printf_hook(const char *__restrict __format, ...);
 
 /* print line, must config by user */
-#define cmb_println(...)               InfoPrintf(__VA_ARGS__);InfoPrintf("\r\n")
+#define cmb_println(...)               cmb_printf_hook(__VA_ARGS__);cmb_printf_hook("\r\n")
 /* enable OS platform */
 #define CMB_USING_OS_PLATFORM
 /* OS platform type, must config when CMB_USING_OS_PLATFORM is enable */

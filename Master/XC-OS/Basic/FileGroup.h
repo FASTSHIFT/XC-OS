@@ -10,7 +10,6 @@
 //************* Arduino Library **************//
 #include "Arduino.h"
 #include "SPI.h"
-#include "Tone.h"
 #include "Wire.h"
 
 #include "CommonMacro.h"

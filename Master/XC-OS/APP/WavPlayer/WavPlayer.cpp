@@ -4,9 +4,8 @@
 #include "WavPlayer_Private.h"
 
 /*WAV缓冲队列*/
-#define WAV_BUFF_SIZE (8 * 1024)
-static uint8_t waveBuff[WAV_BUFF_SIZE];
-static FifoQueue<uint8_t> WaveFifo(waveBuff, WAV_BUFF_SIZE);
+static uint8_t* waveBuff;
+static FifoQueue<uint8_t> * WaveFifo;
 
 /*WAV文件信息*/
 static File WavFile;
@@ -22,7 +21,7 @@ TaskHandle_t TaskHandle_WavPlayer;
 
 static void WavTimer_Handler()
 {
-    uint32_t WavAvailable = WaveFifo.available();
+    uint32_t WavAvailable = WaveFifo->available();
     if(WavAvailable < 16)
     {
         return;
@@ -42,7 +41,7 @@ static uint8_t WavFileLoader(HWAVEFILE handle, uint8_t size, uint8_t **buffer)
     int bufferPos = 0;
     while(size --)
     {
-        buf_tmp[bufferPos ++] = WaveFifo.read();
+        buf_tmp[bufferPos ++] = WaveFifo->read();
     }
     *buffer = buf_tmp;
     return 0;
@@ -50,13 +49,13 @@ static uint8_t WavFileLoader(HWAVEFILE handle, uint8_t size, uint8_t **buffer)
 
 static void WavBufferUpdate()
 {
-    while(WaveFifo.available() < WaveFifo.size() - 16)
+    while(WaveFifo->available() < WaveFifo->size() - 16)
     {
         uint8_t buffer[4];
         WavFile.read(buffer, sizeof(buffer));
         for(int i = 0; i < sizeof(buffer); i++)
         {
-            WaveFifo.write(buffer[i]);
+            WaveFifo->write(buffer[i]);
         }
     }
 }
@@ -81,7 +80,12 @@ bool WavPlayer_LoadFile(String path)
         }
     }
     
-    while(WaveFifo.available() < WaveFifo.size() - 16)
+    uint32_t buffSize = MemPool_GetResidueSize();
+    waveBuff = (uint8_t*)MemPool_Malloc(buffSize);
+    memset(waveBuff, 0, buffSize);
+    WaveFifo = new FifoQueue<uint8_t>(waveBuff, buffSize);
+    
+    while(WaveFifo->available() < WaveFifo->size() - 16)
     {
         WavBufferUpdate();
     }
@@ -112,7 +116,7 @@ void WavPlayer_SetEnable(bool en)
     else
     {
         /*队列缓存清空*/
-        WaveFifo.flush();
+        if(WaveFifo)WaveFifo->flush();
         /*结束标志位置位*/
         Wav_Handle.IsEnd = true;
     }
@@ -171,12 +175,6 @@ void Task_WavPlayer(void *pvParameters)
         vTaskSuspend(TaskHandle_WavPlayer);
     }
     
-//    /*检测SD卡是否初始化成功*/
-//    if(!SD.begin(SD_CS_Pin, SD_SCK_MHZ(50))) 
-//    {
-//        vTaskSuspend(TaskHandle_WavPlayer);
-//    }
-    
     for(;;)
     {
         /*等待播放命令任务通知*/
@@ -192,6 +190,7 @@ void Task_WavPlayer(void *pvParameters)
                 WavBufferUpdate();
                 __IntervalExecute(FFT_Process(), 30);
             }
+            vTaskDelay(2);
         }
 
         /*播放器失能*/
@@ -200,6 +199,11 @@ void Task_WavPlayer(void *pvParameters)
         WavFile.close();
         /*歌词解析器退出*/
         Lyric_Exit();
+        
+        delete WaveFifo;
+        WaveFifo = NULL;
+        MemPool_Free(waveBuff);
+        waveBuff = NULL;
         
         /*归还文件系统使用权*/
         xSemaphoreGive(SemHandle_FileSystem);

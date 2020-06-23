@@ -1,8 +1,7 @@
 #ifndef __APP_TYPE_H
 #define __APP_TYPE_H
 
-#include "lvgl.h"
-#include "lv_conf.h"
+#include "lvgl/lvgl.h"
 
 /*Types*/
 typedef enum{

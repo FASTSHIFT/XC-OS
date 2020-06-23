@@ -241,6 +241,7 @@ bool XC_COM_SendFile(const char* filePath)
             goto failed;
         }
 
+#ifdef _WIN32
         static uint32_t lastPrintTime;
         if (millis() - lastPrintTime > 1000)
         {
@@ -249,6 +250,7 @@ bool XC_COM_SendFile(const char* filePath)
             uint32_t sum = XC_Handshake.PackCount;
             XC_DEBUG("Pack: %d/%d (%0.2f%%)\r\n", now, sum, (float)now / sum * 100);
         }
+#endif
     }
     XC_COM_LoopTime = millis() - startTime;
 

@@ -63,19 +63,22 @@ void Audio_WriteData(uint16_t data)
     *Audio_RegisterBase = data;
 }
 
-#if (USE_AUDIO_TONE == 1)
-
 #include "arm_math.h"
 
-#define AUDUIO_TONE_SAMPLE_FREQ   50000
-#define AUDUIO_TONE_HZ_TO_US(hz) (1000000.0f/(hz))
-#define AUDUIO_TONE_TIM           TIM1
+#define AUDIO_TONE_SAMPLE_FREQ   50000
+#define AUDIO_TONE_HZ_TO_US(hz) (1000000.0f/(hz))
+#define AUDIO_TONE_TIM           TIM1
+#define AUDIO_TONE_FREQ_SLIDE_TICKS  50
 
-static const uint32_t Tone_SampleTime = AUDUIO_TONE_HZ_TO_US(AUDUIO_TONE_SAMPLE_FREQ);
+static const uint32_t Tone_SampleTime = AUDIO_TONE_HZ_TO_US(AUDIO_TONE_SAMPLE_FREQ);
 static uint32_t Tone_SampleTick;
 static uint32_t Tone_StopTime;
 static bool Tone_AutoStop = false;
 static float Tone_SignalPeriod;
+static float Tone_SignalFreq = 0;
+static float Tone_CurrentSignalFreq = 0;
+static float Tone_LastSignalFreq = 0;
+static float Tone_TargetSignalFreq = 0;
 static uint16_t Tone_Volume;
 
 void Audio_ToneSetVolume(uint16_t volume)
@@ -90,7 +93,34 @@ uint16_t Audio_ToneGetVolume()
 
 void Audio_NoTone()
 {
-    TIM_Cmd(AUDUIO_TONE_TIM, DISABLE);
+    TIM_Cmd(AUDIO_TONE_TIM, DISABLE);
+    Tone_CurrentSignalFreq = Tone_LastSignalFreq = Tone_SignalFreq = 0;
+}
+void Audio_FreqSlider()
+{
+    static uint32_t freqSliderTick = 0;
+    if(Tone_SignalFreq != Tone_TargetSignalFreq)
+    {
+        freqSliderTick = 0;
+        Tone_LastSignalFreq = Tone_CurrentSignalFreq;
+        Tone_SignalFreq = Tone_TargetSignalFreq;
+    }
+    if(fabs(Tone_LastSignalFreq) <= 1)
+    {
+        Tone_CurrentSignalFreq = Tone_SignalFreq;
+    }
+    else
+    {
+        Tone_CurrentSignalFreq = fmap(
+        freqSliderTick, 0, AUDIO_TONE_FREQ_SLIDE_TICKS,
+        Tone_LastSignalFreq, Tone_SignalFreq
+        );
+    }
+    if(freqSliderTick < AUDIO_TONE_FREQ_SLIDE_TICKS)
+    {
+        freqSliderTick++;
+    }
+    Tone_SignalPeriod = AUDIO_TONE_HZ_TO_US(Tone_CurrentSignalFreq);
 }
 
 static void Audio_ToneTimerCallback()
@@ -100,20 +130,20 @@ static void Audio_ToneTimerCallback()
         Audio_NoTone();
         return;
     }
-
-    float fract = (Tone_SampleTick * Tone_SampleTime) / Tone_SignalPeriod;
-    fract -= (int)fract;
-    uint16_t output = arm_sin_q15(fract * 32767) + 32768;
+    Audio_FreqSlider();
+    Tone_SampleTick += 0x10000 * Tone_SampleTime / Tone_SignalPeriod;
+    float val = (float)Tone_SampleTick / 0x10000;
+    val -= (int)val;
+    uint16_t output = arm_sin_q15(val * 32767) + 32768;
     Audio_WriteData(output * ((float)Tone_Volume / 0xFFFF));
     Tone_SampleTick++;
 }
 
 static void Audio_ToneInit()
 {
-    Timer_SetInterrupt(AUDUIO_TONE_TIM, 0xFF, Audio_ToneTimerCallback);
-    Timer_SetInterruptFreqUpdate(AUDUIO_TONE_TIM, AUDUIO_TONE_SAMPLE_FREQ);
+    Timer_SetInterrupt(AUDIO_TONE_TIM, 0xFF, Audio_ToneTimerCallback);
+    Timer_SetInterruptFreqUpdate(AUDIO_TONE_TIM, AUDIO_TONE_SAMPLE_FREQ);
 }
-
 void Audio_Tone(float freq)
 {
     __ExecuteOnce(Audio_ToneInit());
@@ -123,11 +153,10 @@ void Audio_Tone(float freq)
         Audio_NoTone();
         return;
     }
-    TIM_Cmd(AUDUIO_TONE_TIM, DISABLE);
+    //TIM_Cmd(AUDIO_TONE_TIM, DISABLE);
     Tone_AutoStop = false;
-    Tone_SampleTick = 0;
-    Tone_SignalPeriod = AUDUIO_TONE_HZ_TO_US(freq);
-    TIM_Cmd(AUDUIO_TONE_TIM, ENABLE);
+    Tone_TargetSignalFreq = freq;
+    TIM_Cmd(AUDIO_TONE_TIM, ENABLE);
 }
 
 void Audio_Tone(float freq, uint32_t time)
@@ -142,4 +171,84 @@ void Audio_Tone(float freq, uint32_t time)
     Tone_StopTime = millis() + time;
 }
 
-#endif
+
+//#if (USE_AUDIO_TONE == 1)
+
+//#include "arm_math.h"
+
+//#define AUDIO_TONE_SAMPLE_FREQ   50000
+//#define AUDIO_TONE_HZ_TO_US(hz) (1000000.0f/(hz))
+//#define AUDIO_TONE_TIM           TIM1
+
+//static const uint32_t Tone_SamplePeriod = AUDIO_TONE_HZ_TO_US(AUDIO_TONE_SAMPLE_FREQ);
+//static uint32_t Tone_SampleTick;
+//static uint32_t Tone_StopTime;
+//static bool Tone_AutoStop = false;
+//static float Tone_SignalPeriod;
+//static uint16_t Tone_Volume;
+
+//void Audio_ToneSetVolume(uint16_t volume)
+//{
+//    Tone_Volume = volume;
+//}
+
+//uint16_t Audio_ToneGetVolume()
+//{
+//    return Tone_Volume;
+//}
+
+//void Audio_NoTone()
+//{
+//    TIM_Cmd(AUDIO_TONE_TIM, DISABLE);
+//}
+
+//static void Audio_ToneTimerCallback()
+//{
+//    if(Tone_AutoStop && millis() >= Tone_StopTime)
+//    {
+//        Audio_NoTone();
+//        return;
+//    }
+
+//    float fraction = (Tone_SampleTick * Tone_SamplePeriod) / Tone_SignalPeriod;
+//    fraction -= (int)fraction;
+//    uint16_t output = arm_sin_q15(fraction * 32767) + 32768;
+//    Audio_WriteData(output * ((float)Tone_Volume / 0xFFFF));
+//    Tone_SampleTick++;
+//}
+
+//static void Audio_ToneInit()
+//{
+//    Timer_SetInterrupt(AUDIO_TONE_TIM, 0xFF, Audio_ToneTimerCallback);
+//    Timer_SetInterruptFreqUpdate(AUDIO_TONE_TIM, AUDIO_TONE_SAMPLE_FREQ);
+//}
+
+//void Audio_Tone(float freq)
+//{
+//    __ExecuteOnce(Audio_ToneInit());
+//    
+//    if(freq <= 1 || freq > 20000)
+//    {
+//        Audio_NoTone();
+//        return;
+//    }
+//    TIM_Cmd(AUDIO_TONE_TIM, DISABLE);
+//    Tone_AutoStop = false;
+//    Tone_SampleTick = 0;
+//    Tone_SignalPeriod = AUDIO_TONE_HZ_TO_US(freq);
+//    TIM_Cmd(AUDIO_TONE_TIM, ENABLE);
+//}
+
+//void Audio_Tone(float freq, uint32_t time)
+//{
+//    if(freq <= 1 || freq > 20000 || time == 0)
+//    {
+//        Audio_NoTone();
+//        return;
+//    }
+//    Audio_Tone(freq);
+//    Tone_AutoStop = true;
+//    Tone_StopTime = millis() + time;
+//}
+
+//#endif

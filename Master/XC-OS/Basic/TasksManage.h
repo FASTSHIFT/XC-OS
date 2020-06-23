@@ -16,10 +16,10 @@
 #define uxTaskGetFreeStackByte(TaskHandle_x) (uxTaskGetStackHighWaterMark(TaskHandle_x)*4)
 
 
-#define xTaskReg(func,stack,priority,handle) \
+#define xTaskReg(task,stack,priority) \
 do{\
-    xTaskCreate(func,#func,stack,NULL,priority,handle);\
-    TSK_DEBUG_PRINTF("Creat: task:%s, stack:%d, priority:%d\r\n",#func,stack,priority);\
+    xTaskCreate(Task_##task,#task,stack,NULL,priority,&TaskHandle_##task);\
+    TSK_DEBUG_PRINTF("Creat: task:%s, stack:%d, priority:%d\r\n",#task,stack,priority);\
 }while(0)
 
 #define xTimerReg(func,time)\
@@ -30,16 +30,11 @@ do{\
 }while(0)
 
 /*Task Functions*/
-void Task_Dispaly(void *pvParameters);
+void Task_Display(void *pvParameters);
+void Task_PageRun(void *pvParameters);
 void Task_Communicate(void *pvParameters);
 void Task_LuaScript(void *pvParameters);
 void Task_WavPlayer(void *pvParameters);
-void Task_PageRun(void *pvParameters);
-
-/*Timer Functions*/
-void Task_MotorRunning(TimerHandle_t xTimer);
-void Task_BattInfoUpdate(TimerHandle_t xTimer);
-void Task_IMU_Update(TimerHandle_t xTimer);
 
 /*TaskHandle*/
 extern TaskHandle_t TaskHandle_LuaScript;
@@ -47,6 +42,11 @@ extern TaskHandle_t TaskHandle_WavPlayer;
 extern TaskHandle_t TaskHandle_Display;
 extern TaskHandle_t TaskHandle_PageRun;
 extern TaskHandle_t TaskHandle_Communicate;
+
+/*Timer Functions*/
+void Task_MotorRunning(TimerHandle_t xTimer);
+void Task_BattInfoUpdate(TimerHandle_t xTimer);
+void Task_IMU_Process(TimerHandle_t xTimer);
 
 /*TimerHandle*/
 

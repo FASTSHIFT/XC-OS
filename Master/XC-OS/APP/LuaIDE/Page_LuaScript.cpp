@@ -52,7 +52,11 @@ static void Create_Luainput(lv_obj_t * parent)
     lv_obj_set_size(ta_input, lv_page_get_scrl_width(parent), lv_obj_get_height(parent));
     lv_obj_set_event_cb(ta_input, TextAreaEvent_Handler);
     lv_ta_set_text(ta_input, luaCode);
-    lv_ta_set_placeholder_text(ta_input, "No Code...");
+#if( XC_USE_LUA == 1 )
+    lv_ta_set_placeholder_text(ta_input, "No code...");
+#else
+    lv_ta_set_placeholder_text(ta_input, "Lua is not ready...");
+#endif
 }
 
 static void Create_Luaoutput(lv_obj_t * parent)

@@ -28,9 +28,7 @@ void Task_LuaScript(void *pvParameters)
     {
         luaScript.begin();
         LuaReg_Time();
-        //LuaReg_GPIO();
         LuaReg_ModuleCtrl();
-        //LuaReg_Com();
         LuaReg_LVGL();
         
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);

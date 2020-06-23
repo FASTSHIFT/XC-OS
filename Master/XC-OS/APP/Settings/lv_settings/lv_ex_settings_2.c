@@ -189,7 +189,7 @@ void lv_ex_settings_2(void)
 
 
     /*Create the settings menu with a root item*/
-    lv_obj_t *btn = lv_settings_create(&root_item, root_event_cb);
+    lv_obj_t *btn = lv_settings_create(lv_scr_act(), &root_item, root_event_cb);
     lv_obj_align(btn, NULL, LV_ALIGN_IN_TOP_RIGHT, 0, 0);
     lv_settings_set_max_width(lv_obj_get_width(lv_scr_act()));
 }

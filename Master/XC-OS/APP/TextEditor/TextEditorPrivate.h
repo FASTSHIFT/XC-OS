@@ -6,4 +6,6 @@
 void TextEditorSet(char* text, SdFile file);
 bool TextEditorGetLocked();
 
+#define TextBuffSize (5 * 1024)
+
 #endif

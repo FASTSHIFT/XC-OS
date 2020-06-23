@@ -4,5 +4,4 @@
 
 void LuaReg_ModuleCtrl()
 {
-    lua_tinker::def(luaScript.L, "motor", Motor_Vibrate);
 }

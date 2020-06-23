@@ -3,6 +3,7 @@
 #include "MPU6050.h"
 #include "math.h"
 #include "IMU_Private.h"
+#include "Basic/TasksManage.h"
 
 #define IMU_RAD(x) (radians(((double)x)*2000.0f/32767.0f))
 
@@ -157,11 +158,8 @@ static void Init_IMU()
   * @param  нч
   * @retval нч
   */
-void Task_IMU_Process()
+void Task_IMU_Process(TimerHandle_t xTimer)
 {
-    if(!CTRL.State.IMU)
-        return;
-
     __ExecuteOnce(Init_IMU());
 
     int16_t ax, ay, az, gx, gy, gz;

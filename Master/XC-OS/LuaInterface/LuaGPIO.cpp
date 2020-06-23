@@ -56,18 +56,4 @@ static void Lua_togglePin(uint8_t pin)
 
 void LuaReg_GPIO()
 {
-    lua_tinker::def(luaScript.L, "P", GetPin);
-    lua_tinker::def(luaScript.L, "Mode", GetPinMode);
-    lua_tinker::def(luaScript.L, "pinMode", pinMode);
-    lua_tinker::def(luaScript.L, "togglePin", Lua_togglePin);
-    lua_tinker::def(luaScript.L, "digitalWrite", digitalWrite);
-    lua_tinker::def(luaScript.L, "digitalRead", digitalRead);
-    lua_tinker::def(luaScript.L, "analogWrite", analogWrite);
-    lua_tinker::def(luaScript.L, "analogRead", analogRead);
-//    luaScript.registerFunc("pinMode", Lua_pinMode);
-//    luaScript.registerFunc("togglePin", Lua_togglePin);
-//    luaScript.registerFunc("digitalWrite", Lua_digitalWrite);
-//    luaScript.registerFunc("digitalRead", Lua_digitalRead);
-//    luaScript.registerFunc("analogWrite", Lua_analogWrite);
-//    luaScript.registerFunc("analogRead", Lua_analogRead);
 }

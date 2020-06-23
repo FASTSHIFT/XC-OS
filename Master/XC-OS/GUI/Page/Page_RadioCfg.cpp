@@ -1,6 +1,7 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "Communication/ComPrivate.h"
+#include "rng.h"
 
 #define NRF_CHANNELS 126
 /*smooths signal strength with numerical range 0 - 0x7FFF*/

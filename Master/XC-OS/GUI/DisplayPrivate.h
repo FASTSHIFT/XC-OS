@@ -17,6 +17,9 @@ extern SCREEN_CLASS screen;
 #define ScreenMid_W (screen.width()/2)
 #define ScreenMid_H (screen.height()/2)
 
+/*DisplayError*/
+void DisplayError_Init();
+
 /*LittleVGL*/
 #include "lvgl.h"
 #include "lv_conf.h"
@@ -61,15 +64,16 @@ typedef enum
     PAGE_LuaAppWin,
     PAGE_RadioCfg,
     PAGE_Settings,
-    PAGE_SetDisplay,
-    PAGE_TextEditor,
+    PAGE_SubDev,
     PAGE_Shell,
+    PAGE_TextEditor,
     PAGE_WavPlayer,
     /*±£¡Ù*/
     PAGE_MAX
 } Page_Type;
 
 extern PageManager page;
+void Page_Delay(uint32_t ms);
 
 /*Bar*/
 void Init_Bar();
@@ -78,7 +82,6 @@ lv_obj_t * BarStatus_GetObj();
 lv_coord_t BarNavigation_GetHeight();
 lv_obj_t * BarNavigation_GetObj();
 
-extern lv_obj_t * btnMenu;
 extern lv_obj_t * btnHome;
 extern lv_obj_t * btnBack;
 

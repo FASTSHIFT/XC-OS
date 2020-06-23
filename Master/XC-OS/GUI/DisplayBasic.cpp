@@ -26,9 +26,8 @@ static void Init_Pages()
     PAGE_REG(Settings);
     PAGE_REG(BattInfo);
     PAGE_REG(LuaScript);
-    PAGE_REG(LuaAppSel);
-    PAGE_REG(LuaAppWin);
-    PAGE_REG(SetDisplay);
+    //PAGE_REG(LuaAppSel);
+    //PAGE_REG(LuaAppWin);
     PAGE_REG(FileExplorer);
     PAGE_REG(TextEditor);
     PAGE_REG(WavPlayer);
@@ -38,8 +37,43 @@ static void Init_Pages()
     PAGE_REG(About);
     PAGE_REG(RadioCfg);
     PAGE_REG(Shell);
+    PAGE_REG(SubDev);
     
     page.PagePush(PAGE_Home);
+}
+
+void Page_Delay(uint32_t ms)
+{
+    vTaskDelay(ms);
+}
+
+void Task_Display(void *pvParameters)
+{
+    DisplayError_Init();
+    
+    screen.begin();
+    screen.fillScreen(screen.Black);
+    tp_dev.init();
+    
+    Backlight_SetValue(0);
+
+    lv_init();
+    lv_disp_init();
+    lv_theme_set_current(lv_theme_material_init(200, NULL));
+    lv_fsys_init();
+    SemHandle_FileSystem = xSemaphoreCreateBinary();
+    xSemaphoreGive(SemHandle_FileSystem);
+
+    Init_Bar();
+    Init_Pages();
+    
+    Backlight_SetGradual(500);
+
+    for(;;)
+    {
+        lv_task_handler();
+        vTaskDelay(10);
+    }
 }
 
 void Task_PageRun(void *pvParameters)
@@ -48,38 +82,5 @@ void Task_PageRun(void *pvParameters)
     {
         page.Running();
         vTaskDelay(20);
-    }
-}
-
-extern "C" {
-    void lv_ex_settings_2(void);
-    void lv_ex_settings_1(void);
-}
-
-void Task_Dispaly(void *pvParameters)
-{
-    screen.begin();
-    screen.fillScreen(screen.Black);
-    tp_dev.init();
-    
-    Brightness_SetValue(0);
-
-    lv_init();
-    lv_disp_init();
-    lv_theme_set_current(lv_theme_material_init(200, LV_FONT_DEFAULT));
-    lv_fsys_init();
-    SemHandle_FileSystem = xSemaphoreCreateBinary();
-    xSemaphoreGive(SemHandle_FileSystem);
-
-//    lv_ex_settings_1();
-    Init_Bar();
-    Init_Pages();
-    
-    Brightness_SetGradual(500);
-
-    for(;;)
-    {
-        lv_task_handler();
-        vTaskDelay(10);
     }
 }

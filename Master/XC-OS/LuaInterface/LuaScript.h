@@ -4,7 +4,6 @@
 #include "lua.hpp"
 #include "stdint.h"
 #include "WString.h"
-#include "lua_tinker.h"
 
 #define registerFUNC(func) registerFunc(#func,func)
 

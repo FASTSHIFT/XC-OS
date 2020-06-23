@@ -3,13 +3,13 @@
 
 void lua_string_print(const char *s)
 {
-    Serial.print(s);
-    //luaScript.printStr(s);
+    //Serial.print(s);
+    luaScript.printStr(s);
 }
 
 LuaScript::LuaScript()
 {
-    L = 0;
+    L = NULL;
     isRunning = false;
     isBegun = false;
     stringPrint = 0;
@@ -19,7 +19,7 @@ LuaScript::~LuaScript()
 {
     end();
     lua_close(L);
-    L = 0;
+    L = NULL;
 }
 
 bool LuaScript::begin()
@@ -36,7 +36,7 @@ bool LuaScript::begin()
     return false;
 }
 
-static void breakCallback(lua_State *L, lua_Debug *ar)
+static void lua_break_callback(lua_State *L, lua_Debug *ar)
 {
     lua_sethook(L, NULL, 0, 0);
     if(luaScript.isRunning)
@@ -49,7 +49,7 @@ bool LuaScript::end()
         return false;
     
     int mask = LUA_MASKCALL | LUA_MASKRET | LUA_MASKLINE | LUA_MASKCOUNT;
-    lua_sethook(L, breakCallback, mask, 1);
+    lua_sethook(L, lua_break_callback, mask, 1);
     return true;
 }
 
@@ -59,7 +59,7 @@ bool LuaScript::doFile(const char *file)
     bool error = luaL_dofile(L, file);
     isRunning = false;
     if(error)
-        lua_string_print(lua_tostring(L, -1));
+        printStr(lua_tostring(L, -1));
 
     return error;
 }
@@ -70,7 +70,7 @@ bool LuaScript::doString(const char *s)
     bool error = luaL_dostring(L, s);
     isRunning = false;
     if(error)
-        lua_string_print(lua_tostring(L, -1));
+        printStr(lua_tostring(L, -1));
 
     return error;
 }

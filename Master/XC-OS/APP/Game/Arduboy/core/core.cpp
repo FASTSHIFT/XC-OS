@@ -146,7 +146,7 @@ uint8_t ArduboyCore::getInput()
 
 uint8_t ArduboyCore::buttonsState()
 {
-    uint8_t buttons;
+    uint8_t buttons = 0;
 
     if(Game_GetButtonPressed(GAME_BUTTON_A))
     {

@@ -2,6 +2,7 @@
 #include "DisplayPrivate.h"
 #include "GamePrivate.h"
 #include "BSP/BSP.h"
+#include "Basic/TasksManage.h"
 
 static lv_obj_t * appWindow;
 static lv_obj_t * contGameDisp;

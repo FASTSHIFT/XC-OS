@@ -41,8 +41,8 @@ typedef enum {
 
 typedef struct {
     lv_settings_type_t type;
-    char * name;          /*Name or title of the item*/
-    char * value;         /*The current value as string*/
+    const char * name;          /*Name or title of the item*/
+    const char * value;         /*The current value as string*/
     int32_t state;        /*The current state, e.g. slider's value, switch state as a number */
     lv_obj_t * cont;
     union {
@@ -56,13 +56,17 @@ typedef struct {
  * GLOBAL PROTOTYPES
  **********************/
 
+void lv_settings_turn_back(void);
+void lv_settings_set_back_btn_right(bool right);
+void lv_settings_set_root_page_exit_callback(void(*func)(void));
+
 /**
  * Create a settings application
  * @param root_item descriptor of the settings button. For example:
  * `lv_settings_menu_item_t root_item = {.name = "Settings", .event_cb = root_event_cb};`
  * @return the created settings button
  */
-lv_obj_t * lv_settings_create(lv_settings_item_t * root_item, lv_event_cb_t event_cb);
+void lv_settings_create(lv_obj_t * parent);
 
 /**
  * Automatically add the item to a group to allow navigation with keypad or encoder.

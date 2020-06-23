@@ -2,7 +2,12 @@
 #include "Basic/TasksManage.h"
 #include "cm_backtrace.h"
 
-void InfoPrintf(const char *__restrict __format, ...)
+void DisplayError_Init()
+{
+    cm_backtrace_init(XC_OS_NAME, XC_VERSION_HW, XC_VERSION_SW" "__DATE__);
+}
+
+void cmb_printf_hook(const char *__restrict __format, ...)
 {
     char printf_buff[256];
 

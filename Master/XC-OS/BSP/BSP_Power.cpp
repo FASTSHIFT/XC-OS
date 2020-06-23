@@ -39,7 +39,9 @@ void Task_BattInfoUpdate(TimerHandle_t xTimer)
     static uint8_t press_cnt = 0;
     digitalRead(CHG_KEY_Pin) == LOW ? press_cnt++ : press_cnt = 0;
     if(press_cnt > 1)
-        Power_Shutdown();
+    {
+        __ExecuteOnce(Power_Shutdown());
+    }
     
     BattCurrent = charger.getBattCurrent();
     BattVoltage = charger.getBattVoltage();
@@ -50,7 +52,8 @@ void Task_BattInfoUpdate(TimerHandle_t xTimer)
 
 void Power_Shutdown()
 {
-    Brightness_SetGradual(0, 200);
+    Backlight_SetGradual(0, 200);
     pinMode(CHG_KEY_Pin, OUTPUT_OPEN_DRAIN);
-    digitalWrite(CHG_KEY_Pin, LOW);   
+    digitalWrite(CHG_KEY_Pin, LOW);
+    Motor_Vibrate(0.5f, 100);
 }

@@ -22,40 +22,6 @@
  */
 #include "HardwareSerial.h"
 
-typedef struct{
-    uint16_t WordLength;
-    uint16_t Parity;
-    uint16_t StopBits;
-}SERIAL_ConfigGrp_TypeDef;
-
-static const SERIAL_ConfigGrp_TypeDef SERIAL_ConfigGrp[SERIAL_CFG_MAX] = {
-    {USART_WordLength_8b, USART_Parity_No,   USART_StopBits_1},
-    {USART_WordLength_8b, USART_Parity_No,   USART_StopBits_2},
-    {USART_WordLength_8b, USART_Parity_Even, USART_StopBits_1},
-    {USART_WordLength_8b, USART_Parity_Even, USART_StopBits_2},
-    {USART_WordLength_8b, USART_Parity_Odd,  USART_StopBits_1},
-    {USART_WordLength_8b, USART_Parity_Odd,  USART_StopBits_2},
-    {USART_WordLength_8b, USART_Parity_No,   USART_StopBits_0_5},
-    {USART_WordLength_8b, USART_Parity_No,   USART_StopBits_1_5},
-    {USART_WordLength_8b, USART_Parity_Even, USART_StopBits_0_5},
-    {USART_WordLength_8b, USART_Parity_Even, USART_StopBits_1_5},
-    {USART_WordLength_8b, USART_Parity_Odd,  USART_StopBits_0_5},
-    {USART_WordLength_8b, USART_Parity_Odd,  USART_StopBits_1_5},
-
-    {USART_WordLength_9b, USART_Parity_No,   USART_StopBits_1},
-    {USART_WordLength_9b, USART_Parity_No,   USART_StopBits_2},
-    {USART_WordLength_9b, USART_Parity_Even, USART_StopBits_1},
-    {USART_WordLength_9b, USART_Parity_Even, USART_StopBits_2},
-    {USART_WordLength_9b, USART_Parity_Odd,  USART_StopBits_1},
-    {USART_WordLength_9b, USART_Parity_Odd,  USART_StopBits_2},
-    {USART_WordLength_9b, USART_Parity_No,   USART_StopBits_0_5},
-    {USART_WordLength_9b, USART_Parity_No,   USART_StopBits_1_5},
-    {USART_WordLength_9b, USART_Parity_Even, USART_StopBits_0_5},
-    {USART_WordLength_9b, USART_Parity_Even, USART_StopBits_1_5},
-    {USART_WordLength_9b, USART_Parity_Odd,  USART_StopBits_0_5},
-    {USART_WordLength_9b, USART_Parity_Odd,  USART_StopBits_1_5},
-};
-
 /**
   * @brief  串口对象构造函数
   * @param  串口外设地址
@@ -64,8 +30,8 @@ static const SERIAL_ConfigGrp_TypeDef SERIAL_ConfigGrp[SERIAL_CFG_MAX] = {
 HardwareSerial::HardwareSerial(USART_TypeDef *_USARTx)
 {
     this->USARTx = _USARTx;
-    serialCallback = NULL;
-    rx_buffer_head = rx_buffer_tail = 0;
+    USART_Function = 0;
+    _rx_buffer_head = _rx_buffer_tail = 0;
 }
 
 /**
@@ -78,20 +44,41 @@ void HardwareSerial::IRQHandler()
     if(USART_GetITStatus(USARTx, USART_IT_RXNE) != RESET)
     {
         uint8_t c = USART_ReceiveData(USARTx);
-        uint16_t i = (rx_buffer_index_t)(rx_buffer_head + 1) % SERIAL_RX_BUFFER_SIZE;
-        if (i != rx_buffer_tail)
+        uint16_t i = (uint16_t)(_rx_buffer_head + 1) % SERIAL_RX_BUFFER_SIZE;
+        if (i != _rx_buffer_tail)
         {
-            rx_buffer[rx_buffer_head] = c;
-            rx_buffer_head = i;
+            _rx_buffer[_rx_buffer_head] = c;
+            _rx_buffer_head = i;
         }
 
-        if(serialCallback)
+        if(USART_Function)
         {
-            serialCallback(c);
+            USART_Function();
         }
 
         USART_ClearITPendingBit(USARTx, USART_IT_RXNE);
     }
+}
+
+/**
+  * @brief  串口初始化
+  * @param  BaudRate: 波特率
+  * @retval 无
+  */
+void HardwareSerial::begin(uint32_t BaudRate)
+{
+    begin(BaudRate, SERIAL_Config_Default);
+}
+
+/**
+  * @brief  串口初始化
+  * @param  BaudRate: 波特率
+  * @param  Config: 配置参数
+  * @retval 无
+  */
+void HardwareSerial::begin(uint32_t BaudRate, SERIAL_Config Config)
+{
+    begin(BaudRate, Config, USART_PreemptionPriority_Default, USART_SubPriority_Default);
 }
 
 /**
@@ -168,9 +155,9 @@ void HardwareSerial::begin(uint32_t BaudRate, SERIAL_Config Config, uint8_t Pree
 
     //USART 初始化设置
     USART_InitStructure.USART_BaudRate = BaudRate;//串口波特率
-    USART_InitStructure.USART_WordLength = SERIAL_ConfigGrp[Config].WordLength;//字长
-    USART_InitStructure.USART_StopBits = SERIAL_ConfigGrp[Config].StopBits;//停止位
-    USART_InitStructure.USART_Parity = SERIAL_ConfigGrp[Config].Parity;//偶校验位
+    USART_InitStructure.USART_WordLength = USART_GetWordLength(Config);//字长为8位数据格式
+    USART_InitStructure.USART_StopBits = USART_GetParity(Config);//一个停止位
+    USART_InitStructure.USART_Parity = USART_GetStopBits(Config);//无奇偶校验位
     USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;//无硬件数据流控制
     USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx; //收发模式
 
@@ -194,9 +181,9 @@ void HardwareSerial::end(void)
   * @param  Function: 回调函数
   * @retval 无
   */
-void HardwareSerial::attachInterrupt(Serial_CallbackFunction_t function)
+void HardwareSerial::attachInterrupt(USART_CallbackFunction_t Function)
 {
-    serialCallback = function;
+    USART_Function = Function;
 }
 
 /**
@@ -206,7 +193,7 @@ void HardwareSerial::attachInterrupt(Serial_CallbackFunction_t function)
   */
 int HardwareSerial::available(void)
 {
-    return ((unsigned int)(SERIAL_RX_BUFFER_SIZE + rx_buffer_head - rx_buffer_tail)) % SERIAL_RX_BUFFER_SIZE;
+    return ((unsigned int)(SERIAL_RX_BUFFER_SIZE + _rx_buffer_head - _rx_buffer_tail)) % SERIAL_RX_BUFFER_SIZE;
 }
 
 /**
@@ -217,14 +204,14 @@ int HardwareSerial::available(void)
 int HardwareSerial::read(void)
 {
     // if the head isn't ahead of the tail, we don't have any characters
-    if (rx_buffer_head == rx_buffer_tail)
+    if (_rx_buffer_head == _rx_buffer_tail)
     {
         return -1;
     }
     else
     {
-        uint8_t c = rx_buffer[rx_buffer_tail];
-        rx_buffer_tail = (rx_buffer_index_t)(rx_buffer_tail + 1) % SERIAL_RX_BUFFER_SIZE;
+        unsigned char c = _rx_buffer[_rx_buffer_tail];
+        _rx_buffer_tail = (rx_buffer_index_t)(_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_SIZE;
         return c;
     }
 }
@@ -236,13 +223,13 @@ int HardwareSerial::read(void)
   */
 int HardwareSerial::peek(void)
 {
-    if (rx_buffer_head == rx_buffer_tail)
+    if (_rx_buffer_head == _rx_buffer_tail)
     {
         return -1;
     }
     else
     {
-        return rx_buffer[rx_buffer_tail];
+        return _rx_buffer[_rx_buffer_tail];
     }
 }
 
@@ -253,7 +240,7 @@ int HardwareSerial::peek(void)
   */
 void HardwareSerial::flush(void)
 {
-    rx_buffer_head = rx_buffer_tail;
+    _rx_buffer_head = _rx_buffer_tail;
 }
 
 /**

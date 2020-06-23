@@ -52,7 +52,7 @@
           <OutputName>XC-OS</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
@@ -337,7 +337,7 @@
               <MiscControls>--gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER,HSE_VALUE=8000000,PLL_M=8,ARDUINO=111,LV_CONF_INCLUDE_SIMPLE</Define>
               <Undefine></Undefine>
-              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.1.5\src;..\Libraries\SdFat\src;..\XC-OS;..\XC-OS\GUI;..\Libraries\Adafruit_GFX_Library;..\Libraries\cm_backtrace;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries;..\Libraries\lvgl</IncludePath>
+              <IncludePath>..\ArduinoAPI;..\Core;..\Libraries\lvgl\lv_examples;..\Libraries\FreeRTOS;..\Libraries\FreeRTOS\Source\include;..\Libraries\FreeRTOS\Source\portable\RVDS\ARM_CM4F;..\Libraries\lua-5.3.2\src;..\Libraries\SdFat\src;..\XC-OS;..\XC-OS\GUI;..\Libraries\Adafruit_GFX_Library;..\Libraries\cm_backtrace;..\Libraries\I2Cdev;..\Libraries\MPU6050;..\Libraries;..\Libraries\lvgl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -427,9 +427,9 @@
               <FilePath>..\XC-OS\BSP\BSP_Audio.cpp</FilePath>
             </File>
             <File>
-              <FileName>BSP_Brightness.cpp</FileName>
+              <FileName>BSP_Backlight.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\BSP\BSP_Brightness.cpp</FilePath>
+              <FilePath>..\XC-OS\BSP\BSP_Backlight.cpp</FilePath>
             </File>
             <File>
               <FileName>BSP_IMU.cpp</FileName>
@@ -447,9 +447,9 @@
               <FilePath>..\XC-OS\BSP\BSP_Power.cpp</FilePath>
             </File>
             <File>
-              <FileName>BSP_TextBuf.cpp</FileName>
+              <FileName>BSP_MemoryPool.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\XC-OS\BSP\BSP_TextBuf.cpp</FilePath>
+              <FilePath>..\XC-OS\BSP\BSP_MemoryPool.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -470,6 +470,11 @@
               <FileName>DisplayBar.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\DisplayBar.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>DisplayChinese.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\GUI\DisplayChinese.cpp</FilePath>
             </File>
             <File>
               <FileName>DisplayDropDownList.cpp</FileName>
@@ -515,21 +520,6 @@
               <FileName>lv_ext_func.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\lv_ext_func.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lv_settings.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\XC-OS\GUI\lv_settings\lv_settings.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_ex_settings_1.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\XC-OS\GUI\lv_settings\lv_ex_settings_1.c</FilePath>
-            </File>
-            <File>
-              <FileName>lv_ex_settings_2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\XC-OS\GUI\lv_settings\lv_ex_settings_2.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -593,62 +583,6 @@
               </FileOption>
             </File>
             <File>
-              <FileName>Page_BattInfo.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_BattInfo.cpp</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <uGnu>2</uGnu>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
               <FileName>Page_About.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_About.cpp</FilePath>
@@ -659,24 +593,9 @@
               <FilePath>..\XC-OS\GUI\Page\Page_BattInfoOld.cpp</FilePath>
             </File>
             <File>
-              <FileName>Page_Home.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_Home.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Page_RadioCfg.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\GUI\Page\Page_RadioCfg.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_SetDisplay.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_SetDisplay.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Page_Settings.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\GUI\Page\Page_Settings.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -692,11 +611,6 @@
               <FileName>ImgEditor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\XC-OS\GUI\IMG\ImgEditor.c</FilePath>
-            </File>
-            <File>
-              <FileName>ImgExplorer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\XC-OS\GUI\IMG\ImgExplorer.c</FilePath>
             </File>
             <File>
               <FileName>ImgFiles.c</FileName>
@@ -739,6 +653,11 @@
               <FilePath>..\XC-OS\GUI\IMG\ImgVideo.c</FilePath>
             </File>
             <File>
+              <FileName>ImgTerminal.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\IMG\ImgTerminal.c</FilePath>
+            </File>
+            <File>
               <FileName>ImgBattery.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\XC-OS\GUI\IMG\ImgBattery.c</FilePath>
@@ -763,10 +682,45 @@
               <FileType>1</FileType>
               <FilePath>..\XC-OS\GUI\IMG\ImgROM.c</FilePath>
             </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>GUI/Fonts</GroupName>
+          <Files>
             <File>
-              <FileName>ImgUSB.c</FileName>
+              <FileName>simhei.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\XC-OS\GUI\IMG\ImgUSB.c</FilePath>
+              <FilePath>..\XC-OS\GUI\Fonts\simhei.c</FilePath>
+            </File>
+            <File>
+              <FileName>FontAwesome.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\GUI\Fonts\FontAwesome.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/Home</GroupName>
+          <Files>
+            <File>
+              <FileName>HomePrivate.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\Home\HomePrivate.h</FilePath>
+            </File>
+            <File>
+              <FileName>Page_Home.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Home\Page_Home.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HomeAnim.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Home\HomeAnim.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HomeIcon.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Home\HomeIcon.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -817,6 +771,75 @@
         </Group>
         <Group>
           <GroupName>APP/LuaApp</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>0</IncludeInBuild>
+              <AlwaysBuild>0</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>0</Optim>
+                <oTime>2</oTime>
+                <SplitLS>2</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>2</Strict>
+                <EnumInt>2</EnumInt>
+                <PlainCh>2</PlainCh>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>2</uThumb>
+                <uSurpInc>2</uSurpInc>
+                <uC99>2</uC99>
+                <uGnu>2</uGnu>
+                <useXO>2</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
           <Files>
             <File>
               <FileName>Page_LuaAppSel.cpp</FileName>
@@ -839,9 +862,9 @@
               <FilePath>..\XC-OS\APP\TextEditor\Page_TextEditor.cpp</FilePath>
             </File>
             <File>
-              <FileName>TextEditor_Private.h</FileName>
+              <FileName>TextEditorPrivate.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\XC-OS\APP\TextEditor\TextEditor_Private.h</FilePath>
+              <FilePath>..\XC-OS\APP\TextEditor\TextEditorPrivate.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -937,6 +960,71 @@
               <FileName>CRC32.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\XC-OS\APP\Shell\XC_COM\CRC32.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/Settings</GroupName>
+          <Files>
+            <File>
+              <FileName>SettingsPrivate.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsPrivate.h</FilePath>
+            </File>
+            <File>
+              <FileName>Page_Settings.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\Page_Settings.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsMain.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsMain.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsDisplay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsDisplay.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsSound.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsSound.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsBattery.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsBattery.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsRadio.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsRadio.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SettingsAbout.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\Settings\SettingsAbout.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>lv_settings.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\XC-OS\APP\Settings\lv_settings\lv_settings.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP/SubDev</GroupName>
+          <Files>
+            <File>
+              <FileName>Page_SubDev.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\XC-OS\APP\SubDev\Page_SubDev.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>ShellNode.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\XC-OS\APP\SubDev\ShellNode.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1209,7 +1297,7 @@
                 <PlainCh>2</PlainCh>
                 <Ropi>2</Ropi>
                 <Rwpi>2</Rwpi>
-                <wLevel>0</wLevel>
+                <wLevel>1</wLevel>
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
@@ -1561,7 +1649,7 @@
                 <PlainCh>2</PlainCh>
                 <Ropi>2</Ropi>
                 <Rwpi>2</Rwpi>
-                <wLevel>0</wLevel>
+                <wLevel>1</wLevel>
                 <uThumb>2</uThumb>
                 <uSurpInc>2</uSurpInc>
                 <uC99>2</uC99>
@@ -1925,16 +2013,6 @@
               <FilePath>..\XC-OS\LuaInterface\LuaBasic.cpp</FilePath>
             </File>
             <File>
-              <FileName>LuaCom.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaInterface\LuaCom.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>LuaGPIO.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaInterface\LuaGPIO.cpp</FilePath>
-            </File>
-            <File>
               <FileName>LuaBSP.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\XC-OS\LuaInterface\LuaBSP.cpp</FilePath>
@@ -1959,16 +2037,6 @@
               <FileType>5</FileType>
               <FilePath>..\XC-OS\LuaInterface\LuaScript.h</FilePath>
             </File>
-            <File>
-              <FileName>lua_tinker.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\XC-OS\LuaInterface\lua_tinker.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>lua_tinker.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\XC-OS\LuaInterface\lua_tinker.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1980,8 +2048,8 @@
               <RVCTZI>0</RVCTZI>
               <RVCTOtherData>0</RVCTOtherData>
               <ModuleSelection>0</ModuleSelection>
-              <IncludeInBuild>0</IncludeInBuild>
-              <AlwaysBuild>0</AlwaysBuild>
+              <IncludeInBuild>2</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
               <GenerateAssemblyFile>2</GenerateAssemblyFile>
               <AssembleAssemblyFile>2</AssembleAssemblyFile>
               <PublicsOnly>2</PublicsOnly>
@@ -2217,171 +2285,6 @@
               <FileName>lzio.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Libraries\lua-5.3.2\src\lzio.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>lua-5.1.5</GroupName>
-          <Files>
-            <File>
-              <FileName>lapi.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lapi.c</FilePath>
-            </File>
-            <File>
-              <FileName>lauxlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lauxlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lbaselib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lbaselib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lcode.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lcode.c</FilePath>
-            </File>
-            <File>
-              <FileName>ldblib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ldblib.c</FilePath>
-            </File>
-            <File>
-              <FileName>ldebug.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ldebug.c</FilePath>
-            </File>
-            <File>
-              <FileName>ldo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ldo.c</FilePath>
-            </File>
-            <File>
-              <FileName>ldump.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ldump.c</FilePath>
-            </File>
-            <File>
-              <FileName>lfunc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lfunc.c</FilePath>
-            </File>
-            <File>
-              <FileName>lgc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lgc.c</FilePath>
-            </File>
-            <File>
-              <FileName>linit.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\linit.c</FilePath>
-            </File>
-            <File>
-              <FileName>liolib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\liolib.c</FilePath>
-            </File>
-            <File>
-              <FileName>llex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\llex.c</FilePath>
-            </File>
-            <File>
-              <FileName>lmathlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lmathlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lmem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lmem.c</FilePath>
-            </File>
-            <File>
-              <FileName>loadlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\loadlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lobject.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lobject.c</FilePath>
-            </File>
-            <File>
-              <FileName>lopcodes.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lopcodes.c</FilePath>
-            </File>
-            <File>
-              <FileName>loslib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\loslib.c</FilePath>
-            </File>
-            <File>
-              <FileName>lparser.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lparser.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstate.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lstate.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstring.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lstring.c</FilePath>
-            </File>
-            <File>
-              <FileName>lstrlib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lstrlib.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltable.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ltable.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltablib.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ltablib.c</FilePath>
-            </File>
-            <File>
-              <FileName>ltm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\ltm.c</FilePath>
-            </File>
-            <File>
-              <FileName>lua.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lua.c</FilePath>
-            </File>
-            <File>
-              <FileName>luac.c</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\luac.c</FilePath>
-            </File>
-            <File>
-              <FileName>lundump.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lundump.c</FilePath>
-            </File>
-            <File>
-              <FileName>lvm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lvm.c</FilePath>
-            </File>
-            <File>
-              <FileName>lzio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\lzio.c</FilePath>
-            </File>
-            <File>
-              <FileName>print.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Libraries\lua-5.1.5\src\print.c</FilePath>
             </File>
           </Files>
         </Group>

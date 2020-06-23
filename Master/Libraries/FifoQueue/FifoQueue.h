@@ -36,6 +36,7 @@ template <class T> FifoQueue<T>::FifoQueue(T* buffer, uint32_t bufferSize)
     BufferSize = bufferSize;
     Buffer = buffer;
     IsBufferMalloc = false;
+    Head = Tail = 0;
 }
 
 template <class T> FifoQueue<T>::FifoQueue(uint32_t bufferSize)
@@ -43,6 +44,7 @@ template <class T> FifoQueue<T>::FifoQueue(uint32_t bufferSize)
     BufferSize = bufferSize;
     Buffer = new T[BufferSize];
     IsBufferMalloc = true;
+    Head = Tail = 0;
 }
 
 template <class T> FifoQueue<T>::~FifoQueue()

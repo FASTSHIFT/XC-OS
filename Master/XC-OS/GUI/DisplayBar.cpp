@@ -1,6 +1,6 @@
 #include "Basic/FileGroup.h"
 #include "Basic/TasksManage.h"
-#include "DisplayPrivate.h"
+#include "GUI/DisplayPrivate.h"
 #include "BSP/BSP.h"
 
 /*×´Ì¬À¸*/
@@ -14,7 +14,7 @@ static lv_obj_t * labelBattUsage;
 /*µ¼º½À¸*/
 static lv_obj_t * barNavigation;
 
-lv_obj_t * btnMenu;
+static lv_obj_t * btnMenu;
 lv_obj_t * btnHome;
 lv_obj_t * btnBack;
 
@@ -123,9 +123,17 @@ static void Creat_StatusBar()
 
 static void NaviButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
 {
+//    if(event == LV_EVENT_PRESSED || event == LV_EVENT_RELEASED)
+//    {
+//        Motor_Vibrate(1, 10);
+//    }
     if(event == LV_EVENT_PRESSED)
     {
-        Motor_Vibrate(1, 20);
+        Motor_SetState(true);
+    }
+    if(event == LV_EVENT_RELEASED)
+    {
+        Motor_SetState(false);
     }
     if(event == LV_EVENT_CLICKED)
     {
@@ -154,6 +162,13 @@ static void NaviButtonEvent_Handler(lv_obj_t * obj, lv_event_t event)
     page.PageEventTransmit(event, obj);
 }
 
+LV_FONT_DECLARE(FontAwesome);
+
+#define LV_FONTAWESONE_SQUARE "\xEF\x82\x96"
+#define LV_FONTAWESONE_CIRCLE "\xEF\x87\x9B"
+#define LV_FONTAWESONE_LEFT1  "\xEF\x81\x93"
+#define LV_FONTAWESONE_LEFT2  "\xEF\x84\x84"
+
 static void Creat_NaviButtons(lv_obj_t** btn, const char *text, lv_align_t align)
 {
     static lv_style_t btnStyle_Release, btnStyle_Press;
@@ -161,11 +176,13 @@ static void Creat_NaviButtons(lv_obj_t** btn, const char *text, lv_align_t align
     btnStyle_Release.body.main_color = LV_COLOR_BLACK;
     btnStyle_Release.body.grad_color = LV_COLOR_BLACK;
     btnStyle_Release.body.opa = LV_OPA_TRANSP;
+    btnStyle_Release.text.font = &FontAwesome;
 
     lv_style_copy(&btnStyle_Press, &lv_style_plain_color);
     btnStyle_Press.body.main_color = LV_COLOR_WHITE;
     btnStyle_Press.body.grad_color = LV_COLOR_WHITE;
     btnStyle_Press.body.opa = LV_OPA_50;
+    btnStyle_Press.text.font = &FontAwesome;
 
     *btn = lv_btn_create(lv_scr_act(), NULL);
     lv_obj_set_event_cb(*btn, NaviButtonEvent_Handler);
@@ -197,9 +214,9 @@ static void Creat_NavigationBar()
     lv_obj_align(barNavigation, NULL, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
     lv_obj_set_style(barNavigation, &styleNavigationBar);
 
-    Creat_NaviButtons(&btnMenu, LV_SYMBOL_STOP, LV_ALIGN_IN_LEFT_MID);
-    Creat_NaviButtons(&btnHome, LV_SYMBOL_HOME, LV_ALIGN_CENTER);
-    Creat_NaviButtons(&btnBack, LV_SYMBOL_LEFT, LV_ALIGN_IN_RIGHT_MID);
+    Creat_NaviButtons(&btnMenu, LV_FONTAWESONE_SQUARE, LV_ALIGN_IN_LEFT_MID);
+    Creat_NaviButtons(&btnHome, LV_FONTAWESONE_CIRCLE, LV_ALIGN_CENTER);
+    Creat_NaviButtons(&btnBack, LV_FONTAWESONE_LEFT2, LV_ALIGN_IN_RIGHT_MID);
 }
 
 void Init_Bar()

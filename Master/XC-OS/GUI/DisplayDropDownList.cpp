@@ -38,7 +38,7 @@ static void DropDownListEvent_Handler(lv_obj_t * obj, lv_event_t event)
     if(event == LV_EVENT_PRESSED)
     {
         lv_obj_move_foreground(contDropDown);
-        lv_slider_set_value(sliderBright, Brightness_GetValue(), LV_ANIM_ON);
+        lv_slider_set_value(sliderBright, Backlight_GetValue(), LV_ANIM_ON);
     }
     else if(event == LV_EVENT_RELEASED || event == LV_EVENT_DRAG_END)
     {
@@ -93,7 +93,7 @@ static void SliderBright_EventHandler(lv_obj_t * obj, lv_event_t event)
     {
         int value = lv_slider_get_value(obj);
 //        lv_label_set_text_fmt(labelBright, "%d%%", value / 10);
-        Brightness_SetGradual(value);
+        Backlight_SetGradual(value);
 //        __IntervalExecute(Serial3.printf("B%dE", value), 20);
     }
 }
@@ -109,6 +109,6 @@ static void Creat_Slider()
     lv_obj_set_event_cb(sliderBright, SliderBright_EventHandler);
     
 //    labelBright = lv_label_create(contDropDown, NULL);
-//    lv_label_set_text_fmt(labelBright, "%d%%", BrightnessGet() / 10);
+//    lv_label_set_text_fmt(labelBright, "%d%%", BacklightGet() / 10);
 //    lv_obj_align(labelBright, sliderBright, LV_ALIGN_OUT_BOTTOM_MID, 0, 5);
 }

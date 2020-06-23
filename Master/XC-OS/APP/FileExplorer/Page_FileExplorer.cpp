@@ -1,6 +1,6 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
-#include "APP/TextEditor/TextEditor_Private.h"
+#include "APP/TextEditor/TextEditorPrivate.h"
 #include "LuaInterface/LuaScript.h"
 #include "BSP/BSP.h"
 #include "Basic/TasksManage.h"
@@ -9,6 +9,7 @@
 static lv_obj_t * appWindow;
 
 #define FILE_NAME_LEN_MAX LV_FS_MAX_FN_LENGTH
+#define FILE_CNT_MAX 64 
 
 /*文件根路径*/
 static SdFile root;
@@ -158,18 +159,19 @@ static void OpenTextFile(String filename)
     if(file.open(filename.c_str(), O_RDWR))
     {
         /*文件长度是否大于缓冲区长度*/
-        if(file.available() < TextBuf_GetSize())
+        if(file.available() < TextBuffSize)
         {
+            char* pText = (char*)MemPool_Malloc(TextBuffSize);
             /*清缓冲区*/
-            TextBuf_Clear();
+            memset(pText, 0, TextBuffSize);
             /*载入缓冲区*/
-            file.read(TextBuf_GetBuff(), TextBuf_GetSize());
+            file.read(pText, TextBuffSize);
             
             /*Lua解释器指向文本缓冲区*/
-            LuaCodeSet(TextBuf_GetBuff());
+            LuaCodeSet(pText);
             //page.PagePush(PAGE_LuaScript);
             /*文本编辑器指向文本缓冲区*/
-            TextEditorSet(TextBuf_GetBuff(), file);
+            TextEditorSet(pText, file);
             /*切换文本编辑器页面*/
             page.PagePush(PAGE_TextEditor);
         }
@@ -180,7 +182,7 @@ static void OpenTextFile(String filename)
             sprintf(
                 str, 
                 "file size too large!\n(%0.2fKB > buffer size(%0.2fKB))", 
-                (float)file.available() / 1024.0f, TextBuf_GetSize() / 1024.0f
+                (float)file.available() / 1024.0f, TextBuffSize / 1024.0f
             );
             MboxThorw(str);
         }
@@ -393,6 +395,7 @@ static void Creat_TabFileList(lv_obj_t * tab, lv_obj_t** list, const char *path)
     /*Loading files*/
     SdFile file;
     char fileName[FILE_NAME_LEN_MAX];
+    uint16_t FileCnt = 0;
     /*遍历目录所有项*/
     while (file.openNext(&root, O_RDONLY))
     {
@@ -409,12 +412,20 @@ static void Creat_TabFileList(lv_obj_t * tab, lv_obj_t** list, const char *path)
                 fileName
             );
             
-            /*添加按钮墨水效果*/
-            lv_btn_set_ink_in_time(list_btn, 200);
-            lv_btn_set_ink_out_time(list_btn, 200);
-            lv_obj_set_event_cb(list_btn, FileEvent_Handler);
+            if(list_btn != NULL)
+            {
+                /*添加按钮墨水效果*/
+                lv_btn_set_ink_in_time(list_btn, 200);
+                lv_btn_set_ink_out_time(list_btn, 200);
+                lv_obj_set_event_cb(list_btn, FileEvent_Handler);
+            }
         }
         file.close();
+        
+        FileCnt++;
+        /*防止文件过多*/
+        if(FileCnt >= FILE_CNT_MAX)
+            break;
     }
 }
 

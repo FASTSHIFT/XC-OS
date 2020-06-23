@@ -1,5 +1,5 @@
 #include "Basic/FileGroup.h"
-#include "DisplayPrivate.h"
+#include "GUI/DisplayPrivate.h"
 #include "LuaInterface/LuaScript.h"
 #include "BSP/BSP.h"
 

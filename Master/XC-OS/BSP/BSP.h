@@ -6,6 +6,7 @@
 /*Motor*/
 void Motor_SetEnable(bool en);
 void Motor_Vibrate(float strength, uint32_t time);
+void Motor_SetState(bool state);
 
 /*Power*/
 void Power_Shutdown();
@@ -21,14 +22,15 @@ void Audio_NoTone();
 void Audio_Tone(float freq);
 void Audio_Tone(float freq, uint32_t time);
 
-/*TextBuf*/
-char *   TextBuf_GetBuff(uint32_t start = 0);
-uint32_t TextBuf_GetSize();
-void     TextBuf_Clear(uint8_t n = 0);
+/*MemoryPool*/
+void* MemPool_Malloc(uint32_t size);
+void MemPool_Free(void* pData);
+uint32_t MemPool_GetResidueSize();
+void MemPool_Clear(uint8_t n = 0);
 
-/*Brightness*/
-uint16_t Brightness_GetValue();
-void Brightness_SetValue(int16_t val);
-void Brightness_SetGradual(uint16_t target, uint16_t time = 500);
+/*Backlight*/
+uint16_t Backlight_GetValue();
+void Backlight_SetValue(int16_t val);
+void Backlight_SetGradual(uint16_t target, uint16_t time = 500);
 
 #endif

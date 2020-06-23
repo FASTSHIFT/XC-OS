@@ -41,7 +41,7 @@ LV_IMG_DECLARE(ImgFiles);
 LV_IMG_DECLARE(ImgEditor);
 LV_IMG_DECLARE(ImgVideo);
 LV_IMG_DECLARE(ImgMusic);
-LV_IMG_DECLARE(ImgUSB);
+LV_IMG_DECLARE(ImgTerminal);
 
 /*APP组*/
 static APP_TypeDef APP_Grp[] =
@@ -54,7 +54,7 @@ static APP_TypeDef APP_Grp[] =
     {&ImgVideo,    "Video",    TYPE_PageJump, PAGE_BvPlayer},
     {&ImgEditor,   "Editor",   TYPE_PageJump, PAGE_TextEditor},
     {&ImgMusic,    "Music",    TYPE_PageJump, PAGE_WavPlayer},
-    {&ImgUSB,      "USB",      TYPE_PageJump, PAGE_Shell},
+    {&ImgTerminal, "Shell",    TYPE_PageJump, PAGE_Shell},
 };
 
 /**
@@ -268,7 +268,7 @@ static void AppSwitch_AnimClose(bool close , lv_coord_t x , lv_coord_t y ,uint16
     __LoopExecute(lv_anim_create(&(anim_grp[i])), __Sizeof(anim_grp));
 }
 
-static void FirstInit()
+static void HomeInit()
 {
     /*初始化主Tabview页面*/
     Creat_Page(&tabviewHome);
@@ -280,7 +280,7 @@ static void FirstInit()
     __LoopExecute(Creat_APP(APP_Grp[i], AppTab_Grp[tabHomeIndex].tab, i, ImgbtnEvent_Handler), __Sizeof(APP_Grp));
     
     /*Tab滑动至主页面*/
-    lv_tabview_set_tab_act(tabviewHome, tabHomeIndex, LV_ANIM_ON);
+    lv_tabview_set_tab_act(tabviewHome, tabHomeIndex, LV_ANIM_OFF);
 }
 
 /**
@@ -295,7 +295,7 @@ static void Setup()
     lv_obj_set_hidden(appWindow, false);
     
     /*创建Tab组，只初始化一次*/
-    __ExecuteOnce(FirstInit());
+    __ExecuteOnce(HomeInit());
 
     /*为上一个APP退出播放动画，但是第一次不运行*/
     static bool first = true;

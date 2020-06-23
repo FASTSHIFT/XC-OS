@@ -1,7 +1,7 @@
 #include "Basic/FileGroup.h"
 #include "DisplayPrivate.h"
 #include "BSP/BSP.h"
-#include "TextEditor_Private.h"
+#include "TextEditorPrivate.h"
 
 static lv_obj_t * appWindow;
 
@@ -236,6 +236,7 @@ static void Exit()
     if(!IsEditingLocked)
     {
         lv_obj_clean(appWindow);
+        MemPool_Free(TextBufferAddr);
         TextBufferAddr = NULL;
         TextFile.close();
     }

@@ -12,19 +12,12 @@
  *      DEFINES
  *********************/
 #define LV_SETTINGS_ANIM_TIME   300 /*[ms]*/
-#define LV_SETTINGS_MAX_WIDTH   250
+#define LV_SETTINGS_MAX_WIDTH   LV_HOR_RES_MAX
 
 /**********************
  *      TYPEDEFS
  **********************/
-
-typedef struct
-{
-    lv_btn_ext_t btn;
-    lv_settings_item_t * item;
-    lv_event_cb_t event_cb;
-}root_ext_t;
-
+ 
 typedef struct
 {
     lv_btn_ext_t btn;
@@ -69,7 +62,6 @@ static void refr_ddlist(lv_settings_item_t * item);
 static void refr_numset(lv_settings_item_t * item);
 static void refr_slider(lv_settings_item_t * item);
 
-static void root_event_cb(lv_obj_t * btn, lv_event_t e);
 static void list_btn_event_cb(lv_obj_t * btn, lv_event_t e);
 static void slider_event_cb(lv_obj_t * slider, lv_event_t e);
 static void sw_event_cb(lv_obj_t * sw, lv_event_t e);
@@ -85,13 +77,18 @@ static void old_cont_del_cb(lv_anim_t * a);
  *  STATIC VARIABLES
  **********************/
 static lv_obj_t * act_cont;
-static lv_obj_t * menu_btn;
+static lv_obj_t * header_back_btn;
 static lv_style_t style_menu_bg;
 static lv_style_t style_bg;
 static lv_style_t style_item_cont;
 static lv_ll_t history_ll;
 static lv_group_t * group;
 static lv_coord_t settings_max_width = LV_SETTINGS_MAX_WIDTH;
+static lv_obj_t * act_parent;
+static bool back_btn_right = false;
+
+typedef void(*func_callback_t)(void);
+static func_callback_t func_exit;
 
 /**********************
  *      MACROS
@@ -100,6 +97,21 @@ static lv_coord_t settings_max_width = LV_SETTINGS_MAX_WIDTH;
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
+ 
+void lv_settings_set_root_page_exit_callback(void(*func)(void))
+{
+    func_exit = func;
+}
+ 
+void lv_settings_turn_back()
+{
+    lv_event_send(header_back_btn, LV_EVENT_CLICKED, NULL);
+}
+
+void lv_settings_set_back_btn_right(bool right)
+{
+    back_btn_right = right;
+}
 
 /**
  * Create a settings application
@@ -107,8 +119,9 @@ static lv_coord_t settings_max_width = LV_SETTINGS_MAX_WIDTH;
  * `lv_settings_menu_item_t root_item = {.name = "Settings", .event_cb = root_event_cb};`
  * @return the created settings button
  */
-lv_obj_t * lv_settings_create(lv_settings_item_t * root_item, lv_event_cb_t event_cb)
+void lv_settings_create(lv_obj_t * parent)
 {
+    act_parent = parent;
     lv_theme_t *th = lv_theme_get_current();
     if(th) {
         lv_style_copy(&style_menu_bg, th->style.cont);
@@ -127,24 +140,7 @@ lv_obj_t * lv_settings_create(lv_settings_item_t * root_item, lv_event_cb_t even
     style_item_cont.body.padding.bottom = LV_DPI / 10;
     style_item_cont.body.padding.inner = LV_DPI / 20;
 
-
-    menu_btn = lv_btn_create(lv_scr_act(), NULL);
-    lv_btn_set_fit(menu_btn, LV_FIT_TIGHT);
-    root_ext_t * ext = lv_obj_allocate_ext_attr(menu_btn, sizeof(root_ext_t));
-    ext->item = root_item;
-    ext->event_cb = event_cb;
-
-    lv_obj_set_event_cb(menu_btn, root_event_cb);
-    if(group) lv_group_add_obj(group, menu_btn);
-
-    lv_obj_t * menu_label = lv_label_create(menu_btn, NULL);
-    lv_label_set_text(menu_label, LV_SYMBOL_LIST);
-
-    lv_obj_set_pos(menu_btn, 0, 0);
-
     lv_ll_init(&history_ll, sizeof(histroy_t));
-
-    return menu_btn;
 }
 
 /**
@@ -236,13 +232,13 @@ void lv_settings_refr(lv_settings_item_t * item)
  */
 static void create_page(lv_settings_item_t * parent_item, lv_event_cb_t event_cb)
 {
-    lv_coord_t w = LV_MATH_MIN(lv_obj_get_width(lv_scr_act()), settings_max_width);
+    lv_coord_t w = LV_MATH_MIN(lv_obj_get_width(act_parent), settings_max_width);
 
     lv_obj_t * old_menu_cont = act_cont;
 
-    act_cont = lv_cont_create(lv_scr_act(), NULL);
+    act_cont = lv_cont_create(act_parent, NULL);
     lv_cont_set_style(act_cont, LV_CONT_STYLE_MAIN, &style_menu_bg);
-    lv_obj_set_size(act_cont, w, lv_obj_get_height(lv_scr_act()));
+    lv_obj_set_size(act_cont, w, lv_obj_get_height(act_parent));
 
     menu_cont_ext_t * ext = lv_obj_allocate_ext_attr(act_cont, sizeof(menu_cont_ext_t));
     ext->event_cb = event_cb;
@@ -253,8 +249,10 @@ static void create_page(lv_settings_item_t * parent_item, lv_event_cb_t event_cb
     lv_cont_set_fit2(header, LV_FIT_NONE, LV_FIT_TIGHT);
     lv_obj_set_width(header, lv_obj_get_width(act_cont));
 
-    lv_obj_t * header_back_btn = lv_btn_create(header, NULL);
-    lv_btn_set_fit(header_back_btn, LV_FIT_TIGHT);
+    header_back_btn = lv_btn_create(header, NULL);
+    //lv_btn_set_fit(header_back_btn, LV_FIT_TIGHT);
+    lv_obj_set_size(header_back_btn, 45, 45);
+    lv_btn_set_style(header_back_btn, LV_BTN_STYLE_REL, &lv_style_transp);
     lv_obj_set_event_cb(header_back_btn, header_back_event_cb);
     if(group) lv_group_add_obj(group, header_back_btn);
     lv_group_focus_obj(header_back_btn);
@@ -264,9 +262,7 @@ static void create_page(lv_settings_item_t * parent_item, lv_event_cb_t event_cb
     lv_obj_t * header_title = lv_label_create(header, NULL);
     lv_label_set_text(header_title, parent_item->name);
 
-    bool menu_btn_right = lv_obj_get_x(menu_btn) >= lv_obj_get_width(lv_scr_act())/2;
-
-    if(!menu_btn_right) {
+    if(!back_btn_right) {
         lv_cont_set_layout(header, LV_LAYOUT_ROW_M);
         lv_label_set_text(header_back_label, LV_SYMBOL_LEFT);
     } else {
@@ -282,7 +278,7 @@ static void create_page(lv_settings_item_t * parent_item, lv_event_cb_t event_cb
     lv_page_set_style(page, LV_PAGE_STYLE_SCRL, &lv_style_transp_tight);
     lv_page_set_scrl_layout(page, LV_LAYOUT_COL_M);
     lv_list_set_edge_flash(page, true);
-    lv_obj_set_size(page, lv_obj_get_width(act_cont), lv_obj_get_height(lv_scr_act()) - lv_obj_get_height(header));
+    lv_obj_set_size(page, lv_obj_get_width(act_cont), lv_obj_get_height(act_parent) - lv_obj_get_height(header));
     lv_obj_align(page, header, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
 
     ext->menu_page = page;
@@ -308,9 +304,9 @@ static void create_page(lv_settings_item_t * parent_item, lv_event_cb_t event_cb
     lv_anim_init(&a);
     lv_anim_set_exec_cb(&a, act_cont, (lv_anim_exec_xcb_t)lv_obj_set_x);
     lv_coord_t w_cont = lv_obj_get_width(act_cont);
-    lv_coord_t w_scr = lv_obj_get_width(lv_scr_act());
-    uint32_t start = !menu_btn_right ? -w_cont : w_scr;
-    uint32_t end = !menu_btn_right ? 0 : w_scr-w_cont;
+    lv_coord_t w_scr = lv_obj_get_width(act_parent);
+    uint32_t start = back_btn_right ? -w_cont : w_scr;
+    uint32_t end = back_btn_right ? 0 : w_scr-w_cont;
     lv_anim_set_values(&a, start, end);
     lv_anim_set_time(&a, LV_SETTINGS_ANIM_TIME, 0);
     lv_anim_set_path_cb(&a, lv_anim_path_ease_in_out);
@@ -485,7 +481,7 @@ static void add_slider(lv_obj_t * page, lv_settings_item_t * item)
     lv_obj_align(value, NULL, LV_ALIGN_IN_TOP_RIGHT, -style_item_cont.body.padding.right,
                                                       style_item_cont.body.padding.top);
     lv_obj_t * slider = lv_slider_create(cont, NULL);
-    lv_obj_set_size(slider, lv_obj_get_width_fit(cont), LV_DPI / 4);
+    lv_obj_set_size(slider, lv_obj_get_width_fit(cont), 20);//LV_DPI / 4);
     lv_obj_align(slider, NULL, LV_ALIGN_IN_TOP_MID, 0, lv_obj_get_y(name) +
                                                        lv_obj_get_height(name) +
                                                        style_item_cont.body.padding.inner);
@@ -563,17 +559,6 @@ static void refr_slider(lv_settings_item_t * item)
     lv_label_set_text(value, item->value);
 
     if(lv_slider_get_value(slider) != item->state) lv_slider_set_value(slider, item->state, LV_ANIM_OFF);
-}
-
-static void root_event_cb(lv_obj_t * btn, lv_event_t e)
-{
-
-    if(e == LV_EVENT_CLICKED) {
-        root_ext_t * ext = lv_obj_get_ext_attr(btn);
-
-        /*Call the button's event handler to create the menu*/
-        lv_event_send_func(ext->event_cb, NULL, e,  ext->item);
-    }
 }
 
 /**
@@ -733,6 +718,15 @@ static void header_back_event_cb(lv_obj_t * btn, lv_event_t e)
     (void) btn; /*Unused*/
 
     if(e != LV_EVENT_CLICKED) return;
+    
+    if(history_ll.head == history_ll.tail) 
+    {
+        if(func_exit)
+        {
+            func_exit();
+        }
+        return;
+    }
 
     lv_obj_t * old_menu_cont = act_cont;
 
@@ -755,7 +749,7 @@ static void header_back_event_cb(lv_obj_t * btn, lv_event_t e)
         }
         else {
             /*No previous menu, so no main container*/
-            act_cont = NULL;
+            //act_cont = NULL;
         }
     }
 
@@ -764,11 +758,10 @@ static void header_back_event_cb(lv_obj_t * btn, lv_event_t e)
         lv_anim_t a;
         lv_anim_init(&a);
         lv_anim_set_exec_cb(&a, old_menu_cont, (lv_anim_exec_xcb_t)lv_obj_set_x);
-        lv_coord_t w_scr = lv_obj_get_width(lv_scr_act());
-        bool menu_btn_right = lv_obj_get_x(menu_btn) >= w_scr/2;
+        lv_coord_t w_scr = lv_obj_get_width(act_parent);
         lv_coord_t w_cont = lv_obj_get_width(old_menu_cont);
-        uint32_t start = !menu_btn_right ? 0 : w_scr-w_cont;
-        uint32_t end = !menu_btn_right ? -w_cont : w_scr;
+        uint32_t start = back_btn_right ? 0 : w_scr-w_cont;
+        uint32_t end = back_btn_right ? -w_cont : w_scr;
         lv_anim_set_values(&a, start, end);
         lv_anim_set_path_cb(&a, lv_anim_path_ease_in_out);
         lv_anim_set_time(&a, LV_SETTINGS_ANIM_TIME, 0);
@@ -781,10 +774,9 @@ static void header_back_event_cb(lv_obj_t * btn, lv_event_t e)
 
     if(act_cont) {
         lv_anim_del(act_cont, (lv_anim_exec_xcb_t)lv_obj_set_x);
-        lv_coord_t w_scr = lv_obj_get_width(lv_scr_act());
-        bool menu_btn_right = lv_obj_get_x(menu_btn) >= w_scr/2;
+        lv_coord_t w_scr = lv_obj_get_width(act_parent);
         lv_coord_t w_cont = lv_obj_get_width(act_cont);
-        lv_obj_set_x(act_cont, !menu_btn_right ? 0 : w_scr-w_cont);
+        lv_obj_set_x(act_cont, back_btn_right ? 0 : w_scr-w_cont);
     }
 }
 
