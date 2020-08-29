@@ -23,7 +23,7 @@
 * 5.文本编辑器
 * 6.音乐播放器(WAV格式; 支持同步显示xtrc、xlrc、lrc歌词; 同步FFT(256点)频谱显示)
 * 7.视频播放器[BmpVideo](https://github.com/FASTSHIFT/BvPlayer)
-* 8.[Arduboy](https://github.com/Arduboy/Arduboy)/[Arduboy2](https://github.com/MLXXXp/Arduboy2) Game System(支持多开、前后台切换)
+* 8.[Arduboy](https://github.com/Arduboy/Arduboy)/[Arduboy2](https://github.com/MLXXXp/Arduboy2) Game System(支持多开、前后台切换、独立游戏存档)
 * 9.任务管理器
 * 10.[Shell](https://github.com/geekfactory/Shell) + 文件透传协议
 * 11.待续...
