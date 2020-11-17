@@ -1,7 +1,7 @@
 # XC-OS
 > 面向MCU的小型嵌入式图形操作系统
 
-> 感谢网友[@robojkj](https://github.com/robojkj)提供的[加强版](https://github.com/robojkj/XC-OS)设计
+> 感谢网友[@robojkj](https://github.com/robojkj)提供的[增强版](https://github.com/robojkj/XC-OS)设计
 
 ## 内核
 > [FreeRTOS Kernel V10.2.0](https://www.freertos.org)
