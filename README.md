@@ -7,7 +7,7 @@
 > [FreeRTOS Kernel V10.2.0](https://www.freertos.org)
 
 ## UI框架
-> [LittlevGL V6.0](https://github.com/littlevgl/lvgl)
+> [LittlevGL V6.1](https://github.com/lvgl/lvgl/releases/tag/v6.1)
 
 ## 文件系统
 > [SdFat V1.1.0](https://github.com/greiman/SdFat)
